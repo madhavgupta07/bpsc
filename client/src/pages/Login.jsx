@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { GraduationCap, Info } from 'lucide-react';
 import LanguageToggle from '../components/layout/LanguageToggle';
+import { authApi } from '../lib/api';
 
 /**
  * Google-only sign-in screen. The account is created automatically on the
@@ -24,7 +25,7 @@ export default function Login() {
         <p className="mt-1 text-sm text-slate-500 dark:text-zinc-400">{t('auth.loginSubtitle')}</p>
 
         <a
-          href="/api/auth/google"
+          href={authApi.googleUrl}
           className="mt-6 flex h-12 w-full items-center justify-center gap-3 rounded-lg bg-white text-sm font-semibold text-slate-700 ring-1 ring-inset ring-slate-300 transition-colors hover:bg-slate-50 dark:bg-zinc-800 dark:text-zinc-200 dark:ring-zinc-700 dark:hover:bg-zinc-700"
         >
           <GoogleIcon /> {t('auth.continueGoogle')}

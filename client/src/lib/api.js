@@ -1,8 +1,9 @@
-import api from './apiClient';
+import api, { API_BASE } from './apiClient';
 
 /* ---------- Auth (Google-only, httpOnly cookie session) ---------- */
 export const authApi = {
-  googleUrl: '/api/auth/google',
+  // Absolute so the OAuth start link reaches the backend even on a split deploy.
+  googleUrl: `${API_BASE}/api/auth/google`,
   logout: () => api.post('/auth/logout').then((r) => r.data),
   me: () => api.get('/auth/me').then((r) => r.data.user),
   updateProfile: (body) => api.put('/auth/profile', body).then((r) => r.data.user),

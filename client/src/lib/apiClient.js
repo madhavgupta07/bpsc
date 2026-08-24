@@ -11,6 +11,9 @@ import axios from 'axios';
  */
 const base = import.meta.env.VITE_API_BASE ?? '';
 
+/** Absolute root of the backend — used by non-axios flows (OAuth start link). */
+export const API_BASE = base;
+
 const api = axios.create({
   baseURL: `${base}/api`,
   timeout: 20000,
