@@ -1,4 +1,9 @@
 const mongoose = require('mongoose');
+const dns = require('dns');
+
+// Resolve mongodb+srv:// SRV records via Google DNS — some ISP/Windows
+// resolvers fail or hang on SRV lookups.
+dns.setServers(['8.8.8.8', '8.8.4.4']);
 
 const connectDB = async () => {
   try {

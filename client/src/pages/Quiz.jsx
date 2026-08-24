@@ -63,7 +63,16 @@ export default function Quiz() {
       : quizApi.random(count);
     fetcher
       .then((data) => !cancelled && setQuestions(data.questions))
-      .catch(() => { if (!cancelled) { toast.error(t('common.error')); navigate('/quiz'); } });
+      .catch((err) => {
+        if (cancelled) return;
+        if (err.status === 401) {
+          toast.error(t('common.protectedTitle'));
+          navigate('/login', { state: { from: `/quiz/${mode}/${id ?? ''}` }, replace: true });
+        } else {
+          toast.error(t('common.error'));
+          navigate('/quiz');
+        }
+      });
     return () => { cancelled = true; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode, id]);

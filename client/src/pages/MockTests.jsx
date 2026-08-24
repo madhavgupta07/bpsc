@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
-import { BookMarked, Clock3, FileText, Layers3 } from 'lucide-react';
+import { BookMarked, Clock3, FileText, Layers3, LockKeyhole } from 'lucide-react';
 import Badge from '../components/ui/Badge';
 import Button from '../components/ui/Button';
 import { Skeleton } from '../components/ui/Spinner';
@@ -10,6 +10,7 @@ import { mockTestsApi } from '../lib/api';
 import { asArray } from '../lib/apiClient';
 import { usePageTitle } from '../hooks/useDocumentLocale';
 import { useLocalized, useLocaleNumber } from '../hooks/useLocalized';
+import { useAuth } from '../context/AuthContext';
 
 const TYPE_STYLES = {
   full: 'bg-brand-100 text-brand-700 ring-brand-600/20 dark:bg-brand-500/10 dark:text-brand-300 dark:ring-brand-500/30',
@@ -21,6 +22,7 @@ export default function MockTests() {
   const { t } = useTranslation();
   const pick = useLocalized();
   const fmt = useLocaleNumber();
+  const { isAuthenticated } = useAuth();
   usePageTitle(t('mockTests.title'));
 
   const { data: tests = [], isLoading } = useQuery({
@@ -94,9 +96,14 @@ export default function MockTests() {
       )}
 
       {!isLoading && tests.length === 0 && (
-        <p className="mt-12 rounded-2xl border border-dashed border-slate-300 p-10 text-center text-sm text-slate-400 dark:border-zinc-700 dark:text-zinc-500">
-          {t('common.loading')}
-        </p>
+        <div className="mt-12 rounded-lg border border-dashed border-slate-300 p-10 text-center dark:border-zinc-700">
+          <LockKeyhole className="mx-auto size-8 text-slate-300 dark:text-zinc-600" aria-hidden="true" />
+          <p className="mt-3 text-sm font-semibold text-slate-700 dark:text-zinc-300">{t('mockTests.loginRequiredTitle')}</p>
+          <p className="mx-auto mt-1 max-w-sm text-xs text-slate-500 dark:text-zinc-400">{t('mockTests.loginRequiredDesc')}</p>
+          {!isAuthenticated && (
+            <Button as={Link} to="/login" size="sm" className="mt-4">{t('nav.login')}</Button>
+          )}
+        </div>
       )}
     </div>
   );

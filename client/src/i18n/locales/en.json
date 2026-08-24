@@ -160,7 +160,9 @@
     "questionsCount": "{{count}} questions",
     "startTest": "Start Test",
     "timeLeft": "Time left",
-    "autoSubmitted": "Time is up! Your test was submitted automatically."
+    "autoSubmitted": "Time is up! Your test was submitted automatically.",
+    "loginRequiredTitle": "Sign-in required",
+    "loginRequiredDesc": "Mock tests are tied to your progress. Sign in with Google (free) to view and attempt them."
   },
   "notes": {
     "subtitle": "Detailed bilingual study notes for every chapter — with tables, diagrams and real previous-year questions.",

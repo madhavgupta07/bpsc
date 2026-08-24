@@ -22,13 +22,13 @@ api.interceptors.response.use(
   (error) => {
     const status = error.response?.status;
     const url = error.config?.url || '';
+    const wrapped = new Error(error.response?.data?.message || error.message || 'Network error');
+    wrapped.status = status; // callers can react to 401 etc.
     // Expired/invalid session — clear client state (except on auth endpoints).
     if (status === 401 && !url.includes('/auth/')) {
       window.dispatchEvent(new CustomEvent('auth:logout'));
     }
-    return Promise.reject(
-      new Error(error.response?.data?.message || error.message || 'Network error'),
-    );
+    return Promise.reject(wrapped);
   },
 );
 

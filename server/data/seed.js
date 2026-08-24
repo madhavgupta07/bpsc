@@ -1,5 +1,9 @@
 require('dotenv').config();
+const dns = require('dns');
 const mongoose = require('mongoose');
+
+// Resolve mongodb+srv:// SRV records via Google DNS.
+dns.setServers(['8.8.8.8', '8.8.4.4']);
 const { chapters: chapterData, topics: topicData } = require('./chapters');
 const questionData = require('./questions');
 const Chapter = require('../models/Chapter');
