@@ -7,6 +7,7 @@ import Badge from '../components/ui/Badge';
 import Button from '../components/ui/Button';
 import { Skeleton } from '../components/ui/Spinner';
 import { mockTestsApi } from '../lib/api';
+import { asArray } from '../lib/apiClient';
 import { usePageTitle } from '../hooks/useDocumentLocale';
 import { useLocalized, useLocaleNumber } from '../hooks/useLocalized';
 
@@ -26,6 +27,7 @@ export default function MockTests() {
     queryKey: ['mock-tests'],
     queryFn: mockTestsApi.list,
     retry: false,
+    select: asArray,
   });
 
   const typeLabel = { full: 'fullLength', section: 'sectional', chapter: 'chapterwise' };

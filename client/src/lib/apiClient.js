@@ -2,10 +2,17 @@ import axios from 'axios';
 
 /**
  * Session auth uses an httpOnly cookie set by the server on Google sign-in.
- * Same-origin requests carry it automatically; no token ever touches JS.
+ * Requests carry it automatically.
+ *
+ * Base URL resolution:
+ *  - Default: same-origin '/api'  → single-service deploy (Express serves dist)
+ *  - Set VITE_API_BASE at BUILD time (e.g. https://stet-api.onrender.com)
+ *    when frontend and backend are separate services.
  */
+const base = import.meta.env.VITE_API_BASE ?? '';
+
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: `${base}/api`,
   timeout: 20000,
   withCredentials: true,
 });
@@ -24,5 +31,8 @@ api.interceptors.response.use(
     );
   },
 );
+
+/** Guards list endpoints: never let an HTML error page become "data". */
+export const asArray = (data) => (Array.isArray(data) ? data : []);
 
 export default api;

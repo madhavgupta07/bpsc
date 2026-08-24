@@ -6,6 +6,7 @@ import { Dices, ListChecks } from 'lucide-react';
 import Button from '../components/ui/Button';
 import { Skeleton } from '../components/ui/Spinner';
 import { chaptersApi } from '../lib/api';
+import { asArray } from '../lib/apiClient';
 import { usePageTitle } from '../hooks/useDocumentLocale';
 import { useLocalized, useLocaleNumber } from '../hooks/useLocalized';
 import { cn } from '../lib/cn';
@@ -28,6 +29,7 @@ export default function QuizSetup() {
   const { data: chapters = [], isLoading } = useQuery({
     queryKey: ['chapters'],
     queryFn: chaptersApi.list,
+    select: asArray,
   });
 
   const selectedChapter = useMemo(

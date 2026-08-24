@@ -6,6 +6,7 @@ import { BookOpen } from 'lucide-react';
 import ChapterCard from '../components/chapters/ChapterCard';
 import { Skeleton } from '../components/ui/Spinner';
 import { chaptersApi } from '../lib/api';
+import { asArray } from '../lib/apiClient';
 import { usePageTitle } from '../hooks/useDocumentLocale';
 import { useAuth } from '../context/AuthContext';
 import { cn } from '../lib/cn';
@@ -21,6 +22,7 @@ export default function Syllabus() {
   const { data: chapters = [], isLoading } = useQuery({
     queryKey: ['chapters'],
     queryFn: chaptersApi.list,
+    select: asArray,
   });
 
   const filtered = filter === 'all' ? chapters : chapters.filter((c) => c.section === filter);

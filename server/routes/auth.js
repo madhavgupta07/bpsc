@@ -16,7 +16,10 @@ router.get('/google/callback',
     res.cookie('stet_token', req.user.generateToken(), {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      // 'lax' (default) = single-origin deploy.
+      // Set COOKIE_SAMESITE=none when FE/BE are on different domains
+      // (requires HTTPS + credentials:true on the client).
+      sameSite: process.env.COOKIE_SAMESITE === 'none' ? 'none' : 'lax',
       maxAge: 7 * 24 * 60 * 60 * 1000, // matches JWT_EXPIRE
       path: '/',
     });

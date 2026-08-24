@@ -10,6 +10,7 @@ import Button from '../components/ui/Button';
 import { useAuth } from '../context/AuthContext';
 import { useLocalized } from '../hooks/useLocalized';
 import { chaptersApi } from '../lib/api';
+import { asArray } from '../lib/apiClient';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 14 },
@@ -25,7 +26,7 @@ export default function Home() {
   const pick = useLocalized();
   const { user } = useAuth();
 
-  const { data: chapters = [] } = useQuery({ queryKey: ['chapters'], queryFn: chaptersApi.list });
+  const { data: chapters = [] } = useQuery({ queryKey: ['chapters'], queryFn: chaptersApi.list, select: asArray });
   const totalTopics = chapters.reduce((sum, c) => sum + (c.topicCount ?? c.topics?.length ?? 0), 0);
 
   const features = [

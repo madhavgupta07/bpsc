@@ -12,6 +12,7 @@ import Button from '../components/ui/Button';
 import NotFound from './NotFound';
 import { usePageTitle } from '../hooks/useDocumentLocale';
 import { chaptersApi } from '../lib/api';
+import { asArray } from '../lib/apiClient';
 import { cn } from '../lib/cn';
 
 export default function NoteDetail() {
@@ -24,7 +25,7 @@ export default function NoteDetail() {
   usePageTitle(note ? `${t('nav.notes')} · ${L(note.title)}` : t('common.notFoundTitle'));
 
   // DB chapter id for the "practice this chapter" CTA.
-  const { data: chapters } = useQuery({ queryKey: ['chapters'], queryFn: chaptersApi.list });
+  const { data: chapters } = useQuery({ queryKey: ['chapters'], queryFn: chaptersApi.list, select: asArray });
   const dbChapter = chapters?.find((c) => c.chapterNumber === note?.num);
 
   useEffect(() => {
