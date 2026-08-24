@@ -1,0 +1,17 @@
+{
+  "name": "bpsc-stet-platform",
+  "version": "1.0.0",
+  "description": "Bihar STET Computer Science Learning Platform",
+  "scripts": {
+    "install-all": "cd server && npm install && cd ../client && npm install",
+    "seed": "cd server && node data/seed.js",
+    "server": "cd server && npm run dev",
+    "client": "cd client && npm run dev",
+    "dev": "npx concurrently -n server,client -c cyan,yellow \"npm run server\" \"npm run client\"",
+    "start": "npm run dev",
+    "build": "cd client && npx vite build"
+  },
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

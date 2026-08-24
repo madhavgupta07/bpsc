@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+
+# Environment variables (SECRETS - never push!)
+.env
+.env.local
+.env.production
+
+# Build output
+dist/
+build/
+
+# Large PDF files (too big for GitHub)
+*.pdf
+
+# Database / data dumps
+Dbpscserverdata/
+
+# Vite cache
+.vite/
+
+# Editor & OS files
+.DS_Store
+Thumbs.db
+.vscode/
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*
+
+# Extracted data
+.extract/
