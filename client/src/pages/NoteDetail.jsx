@@ -10,7 +10,7 @@ import { getNote, NOTES } from '../data/notes';
 import { Section, useLangPicker } from '../components/notes/NoteBlocks';
 import Button from '../components/ui/Button';
 import NotFound from './NotFound';
-import { usePageTitle } from '../hooks/useDocumentLocale';
+import Seo from '../components/seo/Seo';
 import { chaptersApi } from '../lib/api';
 import { asArray } from '../lib/apiClient';
 import { cn } from '../lib/cn';
@@ -21,8 +21,6 @@ export default function NoteDetail() {
   const { t } = useTranslation();
   const L = useLangPicker();
   const [tocOpen, setTocOpen] = useState(false);
-
-  usePageTitle(note ? `${t('nav.notes')} · ${L(note.title)}` : t('common.notFoundTitle'));
 
   // DB chapter id for the "practice this chapter" CTA.
   const { data: chapters } = useQuery({ queryKey: ['chapters'], queryFn: chaptersApi.list, select: asArray });
@@ -40,6 +38,11 @@ export default function NoteDetail() {
 
   return (
     <div className="container-app py-8">
+      <Seo
+        title={`Notes · ${L(note.title)}`}
+        description={L(note.intro)}
+        path={`/notes/${num}`}
+      />
       {/* Header */}
       <header className="flex items-start justify-between gap-4">
         <button

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { GraduationCap, LogOut, Menu, User, X } from 'lucide-react';
+import { GraduationCap, LogOut, Menu, ShieldCheck, Trophy, User, X } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import LanguageToggle from './LanguageToggle';
 import ThemeToggle from './ThemeToggle';
@@ -67,6 +67,7 @@ export default function Navbar() {
           <NavLink to="/syllabus" className={navLinkClass}>{t('nav.syllabus')}</NavLink>
           <NavLink to="/notes" className={navLinkClass}>{t('nav.notes')}</NavLink>
           <NavLink to="/mock-tests" className={navLinkClass}>{t('nav.mockTests')}</NavLink>
+          <NavLink to="/leaderboard" className={navLinkClass}>{t('nav.leaderboard')}</NavLink>
         </div>
 
         <div className="flex items-center gap-1.5">
@@ -105,6 +106,15 @@ export default function Navbar() {
                     >
                       <User className="size-4" aria-hidden="true" /> {t('nav.profile')}
                     </Link>
+                    {user.role === 'admin' && (
+                      <Link
+                        to="/admin"
+                        role="menuitem"
+                        className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                      >
+                        <ShieldCheck className="size-4" aria-hidden="true" /> Admin
+                      </Link>
+                    )}
                     <button
                       role="menuitem"
                       onClick={handleLogout}
@@ -143,7 +153,7 @@ export default function Navbar() {
             className="overflow-hidden border-t border-slate-200 bg-white md:hidden dark:border-zinc-800 dark:bg-zinc-950"
           >
             <div className="container-app flex flex-col py-3">
-              {[['/', 'nav.home'], ['/syllabus', 'nav.syllabus'], ['/notes', 'nav.notes'], ['/mock-tests', 'nav.mockTests']].map(([to, key]) => (
+              {[['/', 'nav.home'], ['/syllabus', 'nav.syllabus'], ['/notes', 'nav.notes'], ['/mock-tests', 'nav.mockTests'], ['/leaderboard', 'nav.leaderboard']].map(([to, key]) => (
                 <NavLink
                   key={to}
                   to={to}

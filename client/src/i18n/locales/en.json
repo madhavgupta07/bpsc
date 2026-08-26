@@ -15,7 +15,8 @@
     "logout": "Log out",
     "menu": "Menu",
     "language": "Language",
-    "theme": "Theme"
+    "theme": "Theme",
+    "leaderboard": "Leaderboard"
   },
   "home": {
     "badge": "Bilingual · English / हिंदी",
@@ -236,5 +237,19 @@
     "protectedTitle": "Login required",
     "protectedDesc": "Please log in to access this page.",
     "footerNote": "Built for future teachers of Bihar. शिक्षा ही सबसे बड़ी ताक़त है।"
+  },
+  "leaderboard": {
+    "title": "Leaderboard",
+    "subtitle": "Top scorers across quizzes and mock tests",
+    "overall": "All time",
+    "weekly": "This week",
+    "rank": "Rank",
+    "player": "Player",
+    "score": "Score",
+    "accuracy": "Accuracy",
+    "quizzes": "Quizzes",
+    "tests": "Tests",
+    "empty": "No scores yet — be the first to set the pace!",
+    "you": "You"
   }
 }

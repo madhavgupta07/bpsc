@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { ChevronRight } from 'lucide-react';
 import { NOTES } from '../data/notes';
-import { usePageTitle } from '../hooks/useDocumentLocale';
+import Seo from '../components/seo/Seo';
 import { useLangPicker } from '../components/notes/NoteBlocks';
 import { chapterGradient } from '../components/chapters/icons';
 import { cn } from '../lib/cn';
@@ -11,10 +11,14 @@ import { cn } from '../lib/cn';
 export default function Notes() {
   const { t } = useTranslation();
   const L = useLangPicker();
-  usePageTitle(t('nav.notes'));
 
   return (
     <div className="container-app py-10">
+      <Seo
+        title="Chapter Notes"
+        description="Bilingual (English/हिंदी) chapter notes for all 17 Bihar STET Computer Science chapters — from Digital Logic to GK and Pedagogy."
+        path="/notes"
+      />
       <header className="flex items-end justify-between gap-4">
         <div>
           <h1 className="text-3xl font-extrabold tracking-tight">{t('nav.notes')}</h1>

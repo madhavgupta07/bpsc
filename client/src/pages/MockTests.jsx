@@ -8,7 +8,7 @@ import Button from '../components/ui/Button';
 import { Skeleton } from '../components/ui/Spinner';
 import { mockTestsApi } from '../lib/api';
 import { asArray } from '../lib/apiClient';
-import { usePageTitle } from '../hooks/useDocumentLocale';
+import Seo from '../components/seo/Seo';
 import { useLocalized, useLocaleNumber } from '../hooks/useLocalized';
 import { useAuth } from '../context/AuthContext';
 
@@ -23,7 +23,6 @@ export default function MockTests() {
   const pick = useLocalized();
   const fmt = useLocaleNumber();
   const { isAuthenticated } = useAuth();
-  usePageTitle(t('mockTests.title'));
 
   const { data: tests = [], isLoading } = useQuery({
     queryKey: ['mock-tests'],
@@ -36,6 +35,11 @@ export default function MockTests() {
 
   return (
     <div className="container-app py-10">
+      <Seo
+        title="Mock Tests"
+        description="Full-length (150Q), sectional (100Q) and chapter-wise mock tests for Bihar STET Computer Science — exam-style interface with timer and OMR palette."
+        path="/mock-tests"
+      />
       <header>
         <h1 className="text-3xl font-extrabold tracking-tight">{t('mockTests.title')}</h1>
         <p className="mt-2 text-sm text-slate-500 dark:text-zinc-400">{t('mockTests.subtitle')}</p>

@@ -12,7 +12,7 @@ import QuestionPalette from '../components/quiz/QuestionPalette';
 import { CountUpTimer } from '../components/quiz/Timers';
 import useExamSecurity from '../hooks/useExamSecurity';
 import { quizApi, progressApi } from '../lib/api';
-import { usePageTitle } from '../hooks/useDocumentLocale';
+import Seo from '../components/seo/Seo';
 import { difficultyKey, useDifficultyStyles, useLocalized } from '../hooks/useLocalized';
 import { useAuth } from '../context/AuthContext';
 import { cn } from '../lib/cn';
@@ -30,7 +30,6 @@ export default function Quiz() {
   const { user } = useAuth();
   const count = Number(location.state?.count) || 10;
   const storeKey = `stet.quiz.start.${mode}.${id ?? 'random'}`;
-  usePageTitle(t('quiz.title'));
 
   const [questions, setQuestions] = useState(null);
   const [answers, setAnswers] = useState({});            // questionId -> option index
@@ -184,6 +183,7 @@ export default function Quiz() {
   if (!questions) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-4">
+        <Seo title={t('quiz.title')} noIndex />
         <Spinner className="size-10" />
         <p className="text-sm text-slate-500 dark:text-zinc-400">{t('quiz.loadingQuestions')}</p>
       </div>

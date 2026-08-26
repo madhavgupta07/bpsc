@@ -12,7 +12,7 @@ import QuestionPalette from '../components/quiz/QuestionPalette';
 import { CountDownTimer } from '../components/quiz/Timers';
 import useExamSecurity from '../hooks/useExamSecurity';
 import { mockTestsApi, progressApi } from '../lib/api';
-import { usePageTitle } from '../hooks/useDocumentLocale';
+import Seo from '../components/seo/Seo';
 import { difficultyKey, useDifficultyStyles, useLocalized } from '../hooks/useLocalized';
 import { useAuth } from '../context/AuthContext';
 import { cn } from '../lib/cn';
@@ -28,7 +28,6 @@ export default function MockTestPlay() {
   const diffStyles = useDifficultyStyles();
   const { user } = useAuth();
   const storeKey = `stet.test.deadline.${id}`;
-  usePageTitle(t('mockTests.title'));
 
   const [test, setTest] = useState(null);
   const [answers, setAnswers] = useState({});
@@ -148,6 +147,7 @@ export default function MockTestPlay() {
   if (!test || deadline === null) {
     return (
       <div className="flex min-h-screen items-center justify-center">
+        <Seo title={t('mockTests.title')} noIndex />
         <Spinner className="size-10" />
       </div>
     );

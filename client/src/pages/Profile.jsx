@@ -7,7 +7,7 @@ import LanguageToggle from '../components/layout/LanguageToggle';
 import ProgressRing from '../components/ui/ProgressRing';
 import { Skeleton } from '../components/ui/Spinner';
 import { progressApi } from '../lib/api';
-import { usePageTitle } from '../hooks/useDocumentLocale';
+import Seo from '../components/seo/Seo';
 import { useAuth } from '../context/AuthContext';
 import { useLocaleDate } from '../hooks/useLocalized';
 
@@ -15,7 +15,6 @@ export default function Profile() {
   const { t } = useTranslation();
   const fmtDate = useLocaleDate();
   const { user } = useAuth();
-  usePageTitle(t('profile.title'));
 
   const { data: stats, isLoading } = useQuery({
     queryKey: ['progress', 'stats'],
@@ -27,6 +26,7 @@ export default function Profile() {
 
   return (
     <div className="container-app max-w-4xl py-10">
+      <Seo title="My Profile" noIndex path="/profile" />
       {/* Header card */}
       <header className="flex flex-col items-center gap-5 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:flex-row sm:text-left dark:border-zinc-800 dark:bg-zinc-900">
         <span className="flex size-16 shrink-0 items-center justify-center rounded-full bg-slate-900 text-2xl font-extrabold text-white dark:bg-white dark:text-zinc-900">

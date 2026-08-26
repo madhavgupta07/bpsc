@@ -13,15 +13,26 @@ passport.use(
       try {
         let user = await User.findOne({ googleId: profile.id });
         if (!user) {
+          const adminEmails = (process.env.ADMIN_EMAILS || '')
+            .split(',')
+            .map((e) => e.trim().toLowerCase())
+            .filter(Boolean);
+          const email = profile.emails[0].value;
           user = await User.create({
             name: profile.displayName,
-            email: profile.emails[0].value,
+            email,
             googleId: profile.id,
             avatar: profile.photos[0]?.value || '',
+            role: adminEmails.includes(email.toLowerCase()) ? 'admin' : 'user',
           });
           // First sign-in = account created; give it a progress doc.
           const { ensureProgressDoc } = require('../controllers/authController');
           ensureProgressDoc(user._id);
+          // Welcome email — fire-and-forget, never blocks sign-in.
+          const { sendMail, configured } = require('./mailer');
+          if (configured) {
+            sendMail(require('../utils/emailTemplates').welcomeEmail(user));
+          }
         } else {
           user.stats.lastActive = Date.now();
           await user.save();

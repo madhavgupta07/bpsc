@@ -47,6 +47,14 @@ exports.updateProgress = async (req, res) => {
 
     if (mockTestEntry) {
       progress.mockTestHistory.push(mockTestEntry);
+      // Result summary email — mock tests only (quizzes fire too often).
+      if (req.user?.email) {
+        const { sendMail, configured } = require('../config/mailer');
+        const { resultEmail } = require('../utils/emailTemplates');
+        if (configured && sendMail) {
+          sendMail(resultEmail(req.user, mockTestEntry));
+        }
+      }
     }
 
     await progress.save();

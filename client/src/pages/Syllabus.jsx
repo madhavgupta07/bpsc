@@ -7,7 +7,7 @@ import ChapterCard from '../components/chapters/ChapterCard';
 import { Skeleton } from '../components/ui/Spinner';
 import { chaptersApi } from '../lib/api';
 import { asArray } from '../lib/apiClient';
-import { usePageTitle } from '../hooks/useDocumentLocale';
+import Seo from '../components/seo/Seo';
 import { useAuth } from '../context/AuthContext';
 import { cn } from '../lib/cn';
 
@@ -15,7 +15,6 @@ const FILTERS = ['all', 'subject', 'pedagogy'];
 
 export default function Syllabus() {
   const { t } = useTranslation();
-  usePageTitle(t('nav.syllabus'));
   const [filter, setFilter] = useState('all');
   const { user } = useAuth();
 
@@ -29,6 +28,11 @@ export default function Syllabus() {
 
   return (
     <div className="container-app py-10">
+      <Seo
+        title="Syllabus — All 17 Chapters"
+        description="Complete Bihar STET Computer Science syllabus: Digital Logic, Computer Organization, Data Structures, Algorithms, OS, DBMS, Networks, Pedagogy and more — bilingual notes and quizzes for every chapter."
+        path="/syllabus"
+      />
       <header className="flex flex-col gap-2">
         <h1 className="text-3xl font-extrabold tracking-tight">{t('syllabus.title')}</h1>
         <p className="text-sm text-slate-500 dark:text-zinc-400">

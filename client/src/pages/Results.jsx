@@ -6,14 +6,13 @@ import { CheckCircle2, AlertTriangle, Home, RotateCcw, Timer, XCircle } from 'lu
 import Button from '../components/ui/Button';
 import ProgressRing from '../components/ui/ProgressRing';
 import ResultReviewItem from '../components/quiz/ResultReviewItem';
-import { usePageTitle } from '../hooks/useDocumentLocale';
+import Seo from '../components/seo/Seo';
 import { formatDuration } from '../hooks/useLocalized';
 
 export default function Results() {
   const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
-  usePageTitle(t('results.score'));
 
   const state = location.state;
 
@@ -38,6 +37,7 @@ export default function Results() {
 
   return (
     <div className="container-app max-w-3xl py-10">
+      <Seo title="Quiz Result" noIndex path="/results" />
       {/* Score hero */}
       {state.autoSubmitted && (
         <div className="mb-4 flex items-center gap-3 rounded-lg border border-amber-300 bg-amber-50 p-4 text-sm font-medium text-amber-900 dark:border-amber-500/40 dark:bg-amber-500/10 dark:text-amber-200">

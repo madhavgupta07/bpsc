@@ -7,7 +7,7 @@ import { Skeleton } from '../components/ui/Spinner';
 import ProgressBar from '../components/ui/ProgressBar';
 import { ChapterIcon, chapterGradient } from '../components/chapters/icons';
 import { chaptersApi } from '../lib/api';
-import { usePageTitle } from '../hooks/useDocumentLocale';
+import Seo from '../components/seo/Seo';
 import { difficultyKey, useDifficultyStyles, useLocalized, useLocaleNumber } from '../hooks/useLocalized';
 import { cn } from '../lib/cn';
 
@@ -22,8 +22,6 @@ export default function ChapterDetail() {
     queryKey: ['chapters', id],
     queryFn: () => chaptersApi.get(id),
   });
-
-  usePageTitle(data ? pick(data.chapter, 'title') : t('nav.syllabus'));
 
   if (isLoading) {
     return (
@@ -50,6 +48,11 @@ export default function ChapterDetail() {
 
   return (
     <div className="container-app max-w-4xl py-10">
+      <Seo
+        title={pick(chapter, 'title')}
+        description={pick(chapter, 'description')}
+        path={`/syllabus/${id}`}
+      />
       <button
         onClick={() => navigate('/syllabus')}
         className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-500 transition-colors hover:text-brand-600 dark:text-zinc-400 dark:hover:text-brand-400"

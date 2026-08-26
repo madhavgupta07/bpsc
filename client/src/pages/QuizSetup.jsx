@@ -7,7 +7,7 @@ import Button from '../components/ui/Button';
 import { Skeleton } from '../components/ui/Spinner';
 import { chaptersApi } from '../lib/api';
 import { asArray } from '../lib/apiClient';
-import { usePageTitle } from '../hooks/useDocumentLocale';
+import Seo from '../components/seo/Seo';
 import { useLocalized, useLocaleNumber } from '../hooks/useLocalized';
 import { cn } from '../lib/cn';
 
@@ -19,7 +19,6 @@ export default function QuizSetup() {
   const pick = useLocalized();
   const fmt = useLocaleNumber();
   const navigate = useNavigate();
-  usePageTitle(t('quiz.setupTitle'));
 
   const [source, setSource] = useState('random');
   const [chapterId, setChapterId] = useState('');
@@ -68,6 +67,12 @@ export default function QuizSetup() {
 
   return (
     <div className="container-app max-w-xl py-10">
+      <Seo
+        title="Practice Quiz"
+        description="Practice quizzes for Bihar STET Computer Science — pick a chapter, topic or random mode with 10-30 questions."
+        path="/quiz"
+        noIndex
+      />
       <h1 className="text-3xl font-extrabold tracking-tight">{t('quiz.setupTitle')}</h1>
       <p className="mt-2 text-sm text-slate-500 dark:text-zinc-400">{t('quiz.chooseSource')}</p>
 

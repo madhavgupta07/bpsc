@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import Spinner from '../components/ui/Spinner';
 import { useAuth } from '../context/AuthContext';
-import { usePageTitle } from '../hooks/useDocumentLocale';
+import Seo from '../components/seo/Seo';
 
 /**
  * Google OAuth landing. The server sets the session as an httpOnly cookie and
@@ -14,7 +14,6 @@ export default function AuthCallback() {
   const navigate = useNavigate();
   const { completeGoogleSignIn } = useAuth();
   const handledRef = useRef(false);
-  usePageTitle('Signing in…');
 
   useEffect(() => {
     if (handledRef.current) return;
@@ -36,6 +35,7 @@ export default function AuthCallback() {
 
   return (
     <div className="flex min-h-[60vh] flex-col items-center justify-center gap-4">
+      <Seo title="Signing in" noIndex />
       <Spinner className="size-10" />
       <p className="text-sm text-slate-500 dark:text-zinc-400">Signing you in… / साइन इन हो रहा है…</p>
     </div>

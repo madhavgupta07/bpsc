@@ -14,10 +14,12 @@ import QuizSetup from './pages/QuizSetup';
 import Quiz from './pages/Quiz';
 import MockTests from './pages/MockTests';
 import MockTestPlay from './pages/MockTestPlay';
+import Leaderboard from './pages/Leaderboard';
 import Results from './pages/Results';
 import Profile from './pages/Profile';
 import Login from './pages/Login';
 import AuthCallback from './pages/AuthCallback';
+import Admin from './pages/admin/Admin';
 import NotFound from './pages/NotFound';
 
 /** Scrolls to top on navigation — standard SPA UX practice. */
@@ -50,6 +52,7 @@ export default function App() {
           <Route path="/quiz" element={<QuizSetup />} />
           <Route path="/quiz/:mode/:id?" element={<Quiz />} />
           <Route path="/mock-tests" element={<MockTests />} />
+          <Route path="/leaderboard" element={<Leaderboard />} />
 
           {/* Authenticated routes */}
           <Route element={<ProtectedRoute />}>
@@ -61,6 +64,7 @@ export default function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Navigate to="/login" replace />} />
           <Route path="/auth/callback" element={<AuthCallback />} />
+          <Route path="/admin" element={<Admin />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>

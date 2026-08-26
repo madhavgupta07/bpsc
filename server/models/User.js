@@ -9,12 +9,14 @@ const userSchema = new mongoose.Schema({
   googleId: { type: String, sparse: true },
   avatar: { type: String, default: '' },
   preferredLanguage: { type: String, enum: ['en', 'hi'], default: 'en' },
+  role: { type: String, enum: ['user', 'admin'], default: 'user' },
   stats: {
     totalAttempted: { type: Number, default: 0 },
     totalCorrect: { type: Number, default: 0 },
     streakDays: { type: Number, default: 0 },
     longestStreak: { type: Number, default: 0 },
     lastActive: { type: Date, default: null },
+    lastReminderSent: { type: Date, default: null },
   },
   createdAt: { type: Date, default: Date.now },
 });

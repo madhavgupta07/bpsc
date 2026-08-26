@@ -52,6 +52,11 @@ app.use('/api/chapters', require('./routes/chapters'));
 app.use('/api/quiz', require('./routes/quiz'));
 app.use('/api/mock-tests', require('./routes/mockTests'));
 app.use('/api/progress', require('./routes/progress'));
+app.use('/api/leaderboard', require('./routes/leaderboard'));
+app.use('/api/admin', require('./routes/admin'));
+
+/* ---------- SEO endpoints (root-level for crawlers) ---------- */
+app.use('/', require('./routes/sitemap'));
 
 app.get('/api/health', (_, res) => res.json({ status: 'ok' }));
 
@@ -73,6 +78,9 @@ if (isProd) {
 }
 
 app.use(errorHandler);
+
+/* ---------- Background jobs (email reminders) ---------- */
+require('./jobs/streakReminder').startStreakJob();
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT} (${isProd ? 'production' : 'development'})`));

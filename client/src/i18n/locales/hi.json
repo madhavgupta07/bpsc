@@ -15,7 +15,8 @@
     "logout": "लॉग आउट",
     "menu": "मेनू",
     "language": "भाषा",
-    "theme": "थीम"
+    "theme": "थीम",
+    "leaderboard": "लीडरबोर्ड"
   },
   "home": {
     "badge": "द्विभाषी · English / हिंदी",
@@ -236,5 +237,19 @@
     "protectedTitle": "लॉग इन आवश्यक",
     "protectedDesc": "इस पृष्ठ तक पहुँचने के लिए कृपया लॉग इन करें।",
     "footerNote": "बिहार के भावी शिक्षकों के लिए बनाया गया। Education is the greatest strength."
+  },
+  "leaderboard": {
+    "title": "लीडरबोर्ड",
+    "subtitle": "क्विज़ और मॉक टेस्ट में शीर्ष स्कोरर",
+    "overall": "सभी समय",
+    "weekly": "इस सप्ताह",
+    "rank": "रैंक",
+    "player": "खिलाड़ी",
+    "score": "स्कोर",
+    "accuracy": "सटीकता",
+    "quizzes": "क्विज़",
+    "tests": "टेस्ट",
+    "empty": "अभी कोई स्कोर नहीं — पहला स्कोर आप बनाइए!",
+    "you": "आप"
   }
 }

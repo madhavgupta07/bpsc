@@ -38,3 +38,31 @@ export const progressApi = {
   stats: () => api.get('/progress/stats').then((r) => r.data),
   update: (body) => api.post('/progress', body).then((r) => r.data),
 };
+
+/* ---------- Leaderboard (public) ---------- */
+export const leaderboardApi = {
+  list: (scope = 'overall', limit = 50) =>
+    api.get('/leaderboard', { params: { scope, limit } }).then((r) => r.data),
+  byMockTest: (testId, limit = 50) =>
+    api.get(`/leaderboard/mock/${testId}`, { params: { limit } }).then((r) => r.data),
+};
+
+/* ---------- Admin (admin-only) ---------- */
+export const adminApi = {
+  stats: () => api.get('/admin/stats').then((r) => r.data),
+  users: (params) => api.get('/admin/users', { params }).then((r) => r.data),
+  setUserRole: (id, role) => api.put(`/admin/users/${id}/role`, { role }).then((r) => r.data),
+  // Chapters
+  createChapter: (body) => api.post('/admin/chapters', body).then((r) => r.data),
+  updateChapter: (id, body) => api.put(`/admin/chapters/${id}`, body).then((r) => r.data),
+  deleteChapter: (id) => api.delete(`/admin/chapters/${id}`).then((r) => r.data),
+  // Questions
+  questions: (params) => api.get('/admin/questions', { params }).then((r) => r.data),
+  createQuestion: (body) => api.post('/admin/questions', body).then((r) => r.data),
+  updateQuestion: (id, body) => api.put(`/admin/questions/${id}`, body).then((r) => r.data),
+  deleteQuestion: (id) => api.delete(`/admin/questions/${id}`).then((r) => r.data),
+  // Mock tests
+  mockTests: () => api.get('/admin/mock-tests').then((r) => r.data),
+  createMockTest: (body) => api.post('/admin/mock-tests', body).then((r) => r.data),
+  deleteMockTest: (id) => api.delete(`/admin/mock-tests/${id}`).then((r) => r.data),
+};

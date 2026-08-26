@@ -26,3 +26,11 @@ exports.protect = async (req, res, next) => {
     return res.status(401).json({ message: 'Not authorized, token failed' });
   }
 };
+
+/** Role gate — must run after `protect`. */
+exports.adminOnly = (req, res, next) => {
+  if (req.user?.role !== 'admin') {
+    return res.status(403).json({ message: 'Admin access required' });
+  }
+  next();
+};

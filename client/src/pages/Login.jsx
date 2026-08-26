@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { GraduationCap, Info } from 'lucide-react';
 import LanguageToggle from '../components/layout/LanguageToggle';
+import Seo from '../components/seo/Seo';
 import { authApi } from '../lib/api';
 
 /**
@@ -13,6 +14,7 @@ export default function Login() {
 
   return (
     <div className="flex min-h-[calc(100vh-3.5rem)] items-center justify-center px-4 py-10">
+      <Seo title="Sign in" description="Sign in to Bihar STET CS with Google to track your quiz scores, mock test history and daily streak." path="/login" />
       <div className="w-full max-w-md rounded-lg border border-slate-200 bg-white p-7 dark:border-zinc-800 dark:bg-zinc-900">
         <div className="flex items-center justify-between">
           <Link to="/" className="flex size-9 items-center justify-center rounded-md bg-slate-900 text-white dark:bg-white dark:text-zinc-900" aria-label="Home">

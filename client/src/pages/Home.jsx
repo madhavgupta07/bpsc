@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import Button from '../components/ui/Button';
+import Seo from '../components/seo/Seo';
 import { useAuth } from '../context/AuthContext';
 import { useLocalized } from '../hooks/useLocalized';
 import { chaptersApi } from '../lib/api';
@@ -47,6 +48,11 @@ export default function Home() {
 
   return (
     <div>
+      <Seo
+        title="Bihar STET Computer Science Preparation"
+        description="Free bilingual (English/हिंदी) Bihar STET Computer Science preparation: 17 chapters of notes, practice quizzes, full mock tests and progress tracking."
+        path="/"
+      />
       {/* ---------- Hero ---------- */}
       <section className="border-b border-slate-200 dark:border-zinc-800">
         <div className="container-app py-14 sm:py-20">
