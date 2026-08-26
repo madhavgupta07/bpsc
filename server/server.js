@@ -65,13 +65,15 @@ if (isProd) {
   const dist = path.resolve(__dirname, '../client/dist');
   app.use(express.static(dist, {
     index: false,
+    // Skip robots.txt from static — let the dynamic route handle it.
     setHeaders(res, filePath) {
       // Vite emits content-hashed asset names → cache hard; HTML must revalidate.
       if (!filePath.endsWith('.html')) res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
     },
   }));
   app.get('*', (req, res, next) => {
-    if (req.path.startsWith('/api')) return next();
+    // Let API and SEO routes pass through — don't serve index.html for them.
+    if (req.path.startsWith('/api') || req.path === '/sitemap.xml' || req.path === '/robots.txt') return next();
     res.setHeader('Cache-Control', 'no-cache');
     res.sendFile(path.join(dist, 'index.html'));
   });
