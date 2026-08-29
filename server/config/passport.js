@@ -34,7 +34,9 @@ passport.use(
             sendMail(require('../utils/emailTemplates').welcomeEmail(user));
           }
         } else {
-          user.stats.lastActive = Date.now();
+          // Treat sign-in as activity too — refreshes lastActive, keeps streak.
+          const { trackActivity } = require('../utils/streak');
+          trackActivity(user.stats, new Date());
           await user.save();
         }
         return done(null, user);

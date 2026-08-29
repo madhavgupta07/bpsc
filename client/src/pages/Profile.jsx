@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
-import { BookOpenCheck, FileText, Target, TrendingUp } from 'lucide-react';
+import { BookOpenCheck, FileText, Flame, Target, TrendingUp } from 'lucide-react';
 import StatCard from '../components/common/StatCard';
 import LanguageToggle from '../components/layout/LanguageToggle';
 import ProgressRing from '../components/ui/ProgressRing';
@@ -45,15 +45,33 @@ export default function Profile() {
       </header>
 
       {/* Stats */}
-      <section aria-label={t('profile.title')} className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
+      <section aria-label={t('profile.title')} className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-3">
         {isLoading ? (
-          Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-[76px]" />)
+          Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-[76px]" />)
         ) : (
           <>
             <StatCard icon={BookOpenCheck} label={t('profile.statsTotalAttempted')} value={stats?.totalAttempted ?? 0} index={0} />
             <StatCard icon={Target} label={t('profile.statsAccuracy')} value={`${accuracy}%`} index={1} />
             <StatCard icon={TrendingUp} label={t('profile.statsAvgScore')} value={`${stats?.avgScore ?? 0}%`} index={2} />
             <StatCard icon={FileText} label={t('profile.statsQuizzesTaken')} value={stats?.quizzesTaken ?? 0} index={3} />
+            <StatCard
+              icon={Flame}
+              label={t('profile.statsStreak')}
+              value={
+                user?.stats?.streakDays > 0
+                  ? user.stats.streakDays === 1
+                    ? t('profile.streakUnit', { days: 1 })
+                    : t('profile.streakUnitPlural', { days: user.stats.streakDays })
+                  : '0'
+              }
+              index={4}
+            />
+            <StatCard
+              icon={Flame}
+              label={t('profile.statsLongestStreak')}
+              value={user?.stats?.longestStreak ?? 0}
+              index={5}
+            />
           </>
         )}
       </section>

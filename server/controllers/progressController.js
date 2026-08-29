@@ -57,6 +57,16 @@ exports.updateProgress = async (req, res) => {
       }
     }
 
+    // Any real activity (attempted quiz questions, quiz entry, or mock test)
+    // counts toward the daily streak. Quiz + mock-test submissions both funnel
+    // through this endpoint from the client.
+    const hasActivity = (attempted && attempted > 0) || quizEntry || mockTestEntry;
+    if (hasActivity && req.user) {
+      const { trackActivity } = require('../utils/streak');
+      trackActivity(req.user.stats, new Date());
+      await req.user.save();
+    }
+
     await progress.save();
     res.json(progress);
   } catch (err) {

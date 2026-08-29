@@ -1,5 +1,9 @@
 const BRAND = '#4f46e5';
 
+// Canonical public base URL for CTA buttons — matches routes/sitemap.js.
+// Prefer SITE_URL (the real production URL); fall back to CLIENT_URL.
+const BASE_URL = (process.env.SITE_URL || process.env.CLIENT_URL || '').replace(/\/+$/, '');
+
 const layout = (title, bodyHtml, cta) => `
 <!DOCTYPE html>
 <html>
@@ -53,7 +57,29 @@ exports.welcomeEmail = (user) => ({
     <p style="margin:0;line-height:1.6;color:#334155;">
       Start today — consistency beats cramming!<br/>आज ही शुरू करें — निरंतरता सफलता की कुंजी है!
     </p>`,
-    { url: process.env.CLIENT_URL || '', label: 'Start Learning' },
+    { url: `${BASE_URL}`, label: 'Start Learning' },
+  ),
+});
+
+exports.correctionEmail = (user) => ({
+  to: user.email,
+  subject: 'Fixed link 🔗 / सही लिंक',
+  html: layout(
+    `Here's the correct link / सही लिंक`,
+    `
+    <p style="margin:0 0 12px;line-height:1.6;color:#334155;">
+      Sorry about that! The link in our last email didn't work properly. Here's the correct one:
+    </p>
+    <p style="margin:0 0 12px;line-height:1.6;color:#334155;">
+      पिछली ईमेल का लिंक काम नहीं कर रहा था — माफ़ी! सही लिंक नीचे है:
+    </p>
+    <p style="margin:0 0 12px;line-height:1.6;color:#334155;">
+      Jump back in and keep your exam prep going — your account and progress are all saved.
+    </p>
+    <p style="margin:0 0 12px;line-height:1.6;color:#334155;">
+      अपनी तैयारी जारी रखें — आपका खाता और प्रगति सहेजी हुई है।
+    </p>`,
+    { url: `${BASE_URL}`, label: 'Start Learning / पढ़ाई शुरू करें' },
   ),
 });
 
@@ -84,7 +110,7 @@ exports.resultEmail = (user, entry) => {
           ? 'Excellent! Keep the momentum going.'
           : 'Review your mistakes and try again — every attempt counts.'}
       </p>`,
-      { url: `${process.env.CLIENT_URL || ''}/results`, label: 'View Full Result' },
+      { url: `${BASE_URL}/results`, label: 'View Full Result' },
     ),
   };
 };
@@ -105,6 +131,6 @@ exports.streakReminderEmail = (user) => ({
     <p style="margin:0;line-height:1.6;color:#64748b;">
       Just one quick quiz takes less than 3 minutes.
     </p>`,
-    { url: `${process.env.CLIENT_URL || ''}/quiz`, label: 'Keep My Streak 🔥' },
+    { url: `${BASE_URL}/quiz`, label: 'Keep My Streak 🔥' },
   ),
 });
