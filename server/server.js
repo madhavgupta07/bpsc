@@ -83,6 +83,24 @@ app.use(errorHandler);
 
 /* ---------- Background jobs (email reminders) ---------- */
 require('./jobs/streakReminder').startStreakJob();
+require('./jobs/hourlyReport').startTelegramJob();
+
+// Surfacing unexpected crashes to Telegram helps catch silent failures.
+// We log and (in production) notify, then let the process die so the host
+// (Render) can restart it.
+process.on('uncaughtException', (err) => {
+  console.error('UNCAUGHT EXCEPTION:', err);
+  if (process.env.NODE_ENV === 'production') {
+    try {
+      const { notifyTelegram, esc } = require('./utils/telegram');
+      notifyTelegram(`💥 <b>Uncaught exception</b>\n<code>${esc(err.message || err)}</code>`);
+    } catch {}
+  }
+  process.exit(1);
+});
+process.on('unhandledRejection', (reason) => {
+  console.error('UNHANDLED REJECTION:', reason);
+});
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT} (${isProd ? 'production' : 'development'})`));
