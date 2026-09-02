@@ -6,8 +6,10 @@ import { useAuth } from '../context/AuthContext';
 import Seo from '../components/seo/Seo';
 
 /**
- * Google OAuth landing. The server sets the session as an httpOnly cookie and
- * redirects here with ?status=ok|failed — no token ever touches the URL.
+ * Google OAuth landing. The server gives this page a short-lived one-time
+ * `code` in the URL; we exchange it for the session JWT, which is stored in
+ * localStorage and sent as an Authorization header. No token or cookie ever
+ * travels between origins.
  */
 export default function AuthCallback() {
   const [params] = useSearchParams();
@@ -19,28 +21,18 @@ export default function AuthCallback() {
     if (handledRef.current) return;
     handledRef.current = true;
 
-    if (params.get('status') === 'failed') {
+    if (params.get('status') === 'failed' || !params.get('code')) {
       toast.error('Google sign-in failed');
       navigate('/login', { replace: true });
       return;
     }
-    // The auth cookie arrives on the OAuth callback redirect. Browsers can
-    // commit it a tick later than this page mounts, so the first /me probe
-    // occasionally 401s with "Not authorized, no token". Retry briefly.
-    const maxAttempts = 3;
-    const attempt = (i = 0) =>
-      completeGoogleSignIn()
-        .then(() => navigate('/', { replace: true }))
-        .catch((err) => {
-          const status = err && err.status;
-          if (status === 401 && i < maxAttempts - 1) {
-            setTimeout(() => attempt(i + 1), 400);
-            return;
-          }
-          toast.error('Google sign-in failed');
-          navigate('/login', { replace: true });
-        });
-    attempt();
+
+    completeGoogleSignIn(params.get('code'))
+      .then(() => navigate('/', { replace: true }))
+      .catch((err) => {
+        toast.error(err?.message || 'Google sign-in failed');
+        navigate('/login', { replace: true });
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

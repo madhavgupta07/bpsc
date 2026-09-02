@@ -1,11 +1,13 @@
 import api, { API_BASE } from './apiClient';
 
-/* ---------- Auth (Google-only, httpOnly cookie session) ---------- */
+/* ---------- Auth (Google-only, JWT via header) ---------- */
 export const authApi = {
   // Absolute so the OAuth start link reaches the backend even on a split deploy.
   googleUrl: `${API_BASE}/api/auth/google`,
   logout: () => api.post('/auth/logout').then((r) => r.data),
   me: () => api.get('/auth/me').then((r) => r.data.user),
+  // Swap the one-time login code from the OAuth callback for a session JWT.
+  exchange: (code) => api.post('/auth/exchange', { code }).then((r) => r.data),
   updateProfile: (body) => api.put('/auth/profile', body).then((r) => r.data.user),
 };
 

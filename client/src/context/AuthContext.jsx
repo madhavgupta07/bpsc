@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { authApi } from '../lib/api';
+import { getSessionToken, setSessionToken, clearSessionToken } from '../lib/apiClient';
 
 const AuthContext = createContext(null);
 
@@ -7,13 +8,17 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [initializing, setInitializing] = useState(true);
 
-  // The session lives in an httpOnly cookie — probe it once on mount.
+  // Session JWT lives in localStorage — probe identity once on mount.
   useEffect(() => {
     let cancelled = false;
+    if (!getSessionToken()) {
+      setInitializing(false);
+      return undefined;
+    }
     authApi
       .me()
       .then((u) => !cancelled && setUser(u))
-      .catch(() => {})
+      .catch(() => clearSessionToken())
       .finally(() => !cancelled && setInitializing(false));
     return () => {
       cancelled = true;
@@ -27,20 +32,22 @@ export function AuthProvider({ children }) {
     return () => window.removeEventListener('auth:logout', onForcedLogout);
   }, []);
 
-  /** Called by the OAuth callback page once the cookie is set. */
-  const completeGoogleSignIn = useCallback(async () => {
-    const u = await authApi.me();
-    setUser(u);
-    return u;
+  /** Called by the OAuth callback page with the one-time login code. */
+  const completeGoogleSignIn = useCallback(async (code) => {
+    const { token, user: signedInUser } = await authApi.exchange(code);
+    setSessionToken(token);
+    setUser(signedInUser);
+    return signedInUser;
   }, []);
 
-  /** Clears the server cookie and local state. */
+  /** Drops the stored JWT and local state. */
   const logout = useCallback(async () => {
     try {
       await authApi.logout();
     } catch {
-      /* cookie may already be gone */
+      /* server session is stateless — nothing to clear */
     }
+    clearSessionToken();
     setUser(null);
   }, []);
 
