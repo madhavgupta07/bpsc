@@ -35,7 +35,7 @@ passport.use(
           }
           const { notifyTelegram, esc } = require('../utils/telegram');
           notifyTelegram(
-            `🆕 <b>New user signed up</b>\n👤 ${esc(user.name || '—')}\n📧 ${esc(user.email || '—')}\n📈 Total users: ${await User.countDocuments()}`
+            `🆕 <b>New user signed up</b>\n👤 ${esc(user.name || '—')}\n📧 ${esc(user.email || '—')}`
           );
         } else {
           // Treat sign-in as activity too — refreshes lastActive, keeps streak.

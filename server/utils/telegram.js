@@ -12,14 +12,22 @@ const TelegramBot = require('node-telegram-bot-api');
  *   TELEGRAM_CHAT_ID     your personal chat id (from @userinfobot)
  *
  * If either is missing this module silently no-ops (logs a skip) so the app
- * keeps running without Telegram configured. All sends are fire-and-forget and
- * never throw into request handlers, cron jobs, or error paths.
+ * keeps running without Telegram configured.
+ *
+ * IMPORTANT: the bot is created LAZILY (on first send) rather than at require
+ * time, so that merely requiring this module can never throw into a caller's
+ * critical path (e.g. the Google OAuth handler). notifyTelegram always swallows
+ * its own errors and never rejects into unrelated request handlers.
  */
 const token = process.env.TELEGRAM_BOT_TOKEN;
 const chatId = process.env.TELEGRAM_CHAT_ID && process.env.TELEGRAM_CHAT_ID.trim();
 const configured = Boolean(token && chatId);
 
-const bot = configured ? new TelegramBot(token, { polling: false }) : null;
+let bot = null;
+function getBot() {
+  if (!bot) bot = new TelegramBot(token, { polling: false });
+  return bot;
+}
 
 if (!configured) {
   console.warn('[telegram] Not configured (set TELEGRAM_BOT_TOKEN + TELEGRAM_CHAT_ID) — notifications off.');
@@ -39,13 +47,14 @@ function burstKey(text) {
 
 /**
  * Send a plain-text message to the configured chat. Fire-and-forget.
+ * NEVER throws — failures are logged only, so this is safe in any hot path.
  * @param {string} text
  * @param {object} [opts]  { burstLimit: max identical repeats per window (default 5) }
  */
 async function notifyTelegram(text) {
   if (!configured || !text) return;
   try {
-    await bot.sendMessage(chatId, text, { parse_mode: 'HTML', disable_web_page_preview: true });
+    await getBot().sendMessage(chatId, text, { parse_mode: 'HTML', disable_web_page_preview: true });
   } catch (err) {
     // Telegram failures must never take down the server or mask the original error.
     console.error(`[telegram:error] ${err.message}`);

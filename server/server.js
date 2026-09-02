@@ -85,9 +85,8 @@ app.use(errorHandler);
 require('./jobs/streakReminder').startStreakJob();
 require('./jobs/hourlyReport').startTelegramJob();
 
-// Surfacing unexpected crashes to Telegram helps catch silent failures.
-// We log and (in production) notify, then let the process die so the host
-// (Render) can restart it.
+// Surface unexpected crashes to Telegram, but keep the process alive so a
+// single uncaught error cannot take the whole server down on Render.
 process.on('uncaughtException', (err) => {
   console.error('UNCAUGHT EXCEPTION:', err);
   if (process.env.NODE_ENV === 'production') {
@@ -96,7 +95,6 @@ process.on('uncaughtException', (err) => {
       notifyTelegram(`💥 <b>Uncaught exception</b>\n<code>${esc(err.message || err)}</code>`);
     } catch {}
   }
-  process.exit(1);
 });
 process.on('unhandledRejection', (reason) => {
   console.error('UNHANDLED REJECTION:', reason);
