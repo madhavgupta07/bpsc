@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
@@ -15,6 +16,7 @@ const FILTERS = ['all', 'subject', 'pedagogy'];
 
 export default function Syllabus() {
   const { t } = useTranslation();
+  const lang = document.documentElement.lang === 'hi' ? 'hi' : 'en';
   const [filter, setFilter] = useState('all');
   const { user } = useAuth();
 
@@ -29,15 +31,26 @@ export default function Syllabus() {
   return (
     <div className="container-app py-10">
       <Seo
-        title="Syllabus — All 17 Chapters"
-        description="Complete Bihar STET Computer Science syllabus: Digital Logic, Computer Organization, Data Structures, Algorithms, OS, DBMS, Networks, Pedagogy and more — bilingual notes and quizzes for every chapter."
+        title="Bihar STET Computer Science Syllabus — All 17 Chapters | बिहार STET सिलेबस"
+        description="Complete Bihar STET Computer Science (Paper II) syllabus: 17 chapters covering Digital Logic, Data Structures, OS, DBMS, Networks, Pedagogy and more — bilingual notes & quizzes for every chapter. बिहार STET कंप्यूटर साइंस का पूरा सिलेबस।"
         path="/syllabus"
+        keywords="Bihar STET syllabus, STET Computer Science syllabus, Bihar STET Paper 2 syllabus, STET CS chapters, बिहार STET सिलेबस, STET ka syllabus, Bihar STET computer teacher syllabus"
       />
       <header className="flex flex-col gap-2">
-        <h1 className="text-3xl font-extrabold tracking-tight">{t('syllabus.title')}</h1>
-        <p className="text-sm text-slate-500 dark:text-zinc-400">
-          {t('syllabus.subtitle', { count: chapters.length })}
-        </p>
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h1 className="text-3xl font-extrabold tracking-tight">{t('syllabus.title')}</h1>
+            <p className="mt-1 text-sm text-slate-500 dark:text-zinc-400">
+              {t('syllabus.subtitle', { count: chapters.length })}
+            </p>
+          </div>
+          <Link
+            to="/exam-info"
+            className="inline-flex items-center gap-1.5 self-start rounded-xl border border-brand-200 bg-brand-50 px-4 py-2 text-xs font-bold text-brand-700 transition-all hover:bg-brand-100 dark:border-brand-500/30 dark:bg-brand-500/10 dark:text-brand-300 dark:hover:bg-brand-500/20"
+          >
+            📋 {lang === 'hi' ? 'परीक्षा पैटर्न, भारांक व नोटिफिकेशन देखें' : 'View Exam Pattern, Weightage & Notification'} →
+          </Link>
+        </div>
       </header>
 
       {/* Section filter */}

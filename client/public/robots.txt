@@ -7,3 +7,7 @@ Disallow: /test/
 Disallow: /profile
 Disallow: /results
 Disallow: /auth/
+Disallow: /admin
+
+# Crawl-delay for polite crawling
+Crawl-delay: 2

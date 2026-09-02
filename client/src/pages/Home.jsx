@@ -49,9 +49,50 @@ export default function Home() {
   return (
     <div>
       <Seo
-        title="Bihar STET Computer Science Preparation"
-        description="Free bilingual (English/हिंदी) Bihar STET Computer Science preparation: 17 chapters of notes, practice quizzes, full mock tests and progress tracking."
+        title="Bihar STET Computer Science Preparation — Free Notes, Quizzes & Mock Tests"
+        description="Free bilingual (English/हिंदी) Bihar STET Computer Science preparation: 17 chapters of notes, 700+ practice questions, full-length mock tests and progress tracking. बिहार STET कंप्यूटर साइंस की तैयारी।"
         path="/"
+        keywords="Bihar STET, STET Computer Science, Bihar STET preparation, STET mock test, Bihar STET syllabus, STET CS notes, बिहार STET, कंप्यूटर साइंस, STET practice, BSEB STET 2025"
+        jsonLd={[
+          {
+            '@context': 'https://schema.org',
+            '@type': 'WebSite',
+            name: 'Bihar STET CS',
+            url: window.location.origin,
+            description: 'Free bilingual Bihar STET Computer Science preparation platform.',
+            inLanguage: ['en', 'hi'],
+          },
+          {
+            '@context': 'https://schema.org',
+            '@type': 'Course',
+            name: 'Bihar STET Computer Science Complete Preparation',
+            description: 'Comprehensive free study material for Bihar STET Paper II Computer Science — 17 chapters, notes, quizzes, and mock tests.',
+            provider: { '@type': 'Organization', name: 'Bihar STET CS' },
+            inLanguage: ['en', 'hi'],
+            isAccessibleForFree: true,
+          },
+          {
+            '@context': 'https://schema.org',
+            '@type': 'FAQPage',
+            mainEntity: [
+              {
+                '@type': 'Question',
+                name: 'What is Bihar STET Computer Science exam?',
+                acceptedAnswer: { '@type': 'Answer', text: 'Bihar STET Paper II Computer Science is a state-level exam conducted by BSEB for recruiting computer science teachers in Bihar. It covers 17 chapters including Digital Logic, Data Structures, OS, DBMS, Networks and Pedagogy.' },
+              },
+              {
+                '@type': 'Question',
+                name: 'How many questions are in Bihar STET Paper 2?',
+                acceptedAnswer: { '@type': 'Answer', text: 'Bihar STET Paper II has 150 MCQs: 100 from Computer Science (100 marks) and 50 from pedagogy/GK (50 marks). Duration: 2 hours 30 minutes.' },
+              },
+              {
+                '@type': 'Question',
+                name: 'Is there negative marking in Bihar STET?',
+                acceptedAnswer: { '@type': 'Answer', text: 'Yes, 0.25 marks are deducted for each wrong answer. Unanswered questions carry no penalty.' },
+              },
+            ],
+          },
+        ]}
       />
       {/* ---------- Hero ---------- */}
       <section className="border-b border-slate-200 dark:border-zinc-800">

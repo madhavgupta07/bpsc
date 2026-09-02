@@ -64,6 +64,7 @@ export default function Navbar() {
 
         <div className="hidden h-full items-center gap-6 md:flex">
           <NavLink to="/" end className={navLinkClass}>{t('nav.home')}</NavLink>
+          <NavLink to="/exam-info" className={navLinkClass}>{t('nav.examInfo')}</NavLink>
           <NavLink to="/syllabus" className={navLinkClass}>{t('nav.syllabus')}</NavLink>
           <NavLink to="/notes" className={navLinkClass}>{t('nav.notes')}</NavLink>
           <NavLink to="/mock-tests" className={navLinkClass}>{t('nav.mockTests')}</NavLink>
@@ -153,7 +154,7 @@ export default function Navbar() {
             className="overflow-hidden border-t border-slate-200 bg-white md:hidden dark:border-zinc-800 dark:bg-zinc-950"
           >
             <div className="container-app flex flex-col py-3">
-              {[['/', 'nav.home'], ['/syllabus', 'nav.syllabus'], ['/notes', 'nav.notes'], ['/mock-tests', 'nav.mockTests'], ['/leaderboard', 'nav.leaderboard']].map(([to, key]) => (
+              {[['/', 'nav.home'], ['/exam-info', 'nav.examInfo'], ['/syllabus', 'nav.syllabus'], ['/notes', 'nav.notes'], ['/mock-tests', 'nav.mockTests'], ['/leaderboard', 'nav.leaderboard']].map(([to, key]) => (
                 <NavLink
                   key={to}
                   to={to}

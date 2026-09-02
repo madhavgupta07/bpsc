@@ -6,6 +6,7 @@ import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import ProtectedRoute from './components/layout/ProtectedRoute';
 import Home from './pages/Home';
+import ExamInfo from './pages/ExamInfo';
 import Syllabus from './pages/Syllabus';
 import ChapterDetail from './pages/ChapterDetail';
 import Notes from './pages/Notes';
@@ -45,6 +46,7 @@ export default function App() {
       <main className="flex-1">
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/exam-info" element={<ExamInfo />} />
           <Route path="/syllabus" element={<Syllabus />} />
           <Route path="/syllabus/:id" element={<ChapterDetail />} />
           <Route path="/notes" element={<Notes />} />

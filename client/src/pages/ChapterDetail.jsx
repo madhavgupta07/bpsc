@@ -49,9 +49,19 @@ export default function ChapterDetail() {
   return (
     <div className="container-app max-w-4xl py-10">
       <Seo
-        title={pick(chapter, 'title')}
-        description={pick(chapter, 'description')}
+        title={`${pick(chapter, 'title')} — Bihar STET CS Chapter ${chapter.chapterNumber}`}
+        description={`${pick(chapter, 'description') || pick(chapter, 'title')} — ${topics.length} topics, ${totalQuestions} practice questions. Complete notes & quizzes for Bihar STET Computer Science.`}
         path={`/syllabus/${id}`}
+        keywords={`${chapter.title_en}, ${chapter.title_hi}, Bihar STET ${chapter.title_en}, STET CS Chapter ${chapter.chapterNumber}, ${chapter.title_en} notes`}
+        jsonLd={[{
+          '@context': 'https://schema.org',
+          '@type': 'Course',
+          name: `${chapter.title_en} — Bihar STET CS`,
+          description: chapter.description_en || `Study material for ${chapter.title_en}`,
+          provider: { '@type': 'Organization', name: 'Bihar STET CS' },
+          inLanguage: ['en', 'hi'],
+          isAccessibleForFree: true,
+        }]}
       />
       <button
         onClick={() => navigate('/syllabus')}

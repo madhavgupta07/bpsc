@@ -62,7 +62,14 @@ app.get('/api/health', (_, res) => res.json({ status: 'ok' }));
 
 /* ---------- Production: serve built SPA + API fallback ---------- */
 if (isProd) {
+  const fs = require('fs');
   const dist = path.resolve(__dirname, '../client/dist');
+  const { createSeoMiddleware } = require('./middleware/seoPrerender');
+
+  // Read index.html once at startup — the SEO middleware injects per-route meta.
+  const htmlTemplate = fs.readFileSync(path.join(dist, 'index.html'), 'utf-8');
+  const seoMiddleware = createSeoMiddleware(htmlTemplate);
+
   app.use(express.static(dist, {
     index: false,
     // Skip robots.txt from static — let the dynamic route handle it.
@@ -74,8 +81,8 @@ if (isProd) {
   app.get('*', (req, res, next) => {
     // Let API and SEO routes pass through — don't serve index.html for them.
     if (req.path.startsWith('/api') || req.path === '/sitemap.xml' || req.path === '/robots.txt') return next();
-    res.setHeader('Cache-Control', 'no-cache');
-    res.sendFile(path.join(dist, 'index.html'));
+    // Serve SPA with injected SEO meta tags, JSON-LD and noscript content.
+    seoMiddleware(req, res).catch(next);
   });
 }
 

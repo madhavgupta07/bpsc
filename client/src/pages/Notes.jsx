@@ -15,9 +15,10 @@ export default function Notes() {
   return (
     <div className="container-app py-10">
       <Seo
-        title="Chapter Notes"
-        description="Bilingual (English/हिंदी) chapter notes for all 17 Bihar STET Computer Science chapters — from Digital Logic to GK and Pedagogy."
+        title="Bihar STET Computer Science Notes — Free Chapter-wise Study Material in Hindi & English"
+        description="Bilingual (English/हिंदी) chapter notes for all 17 Bihar STET Computer Science chapters — Digital Logic, Data Structures, OS, DBMS, Networks to Pedagogy. Free study material for STET Paper II. बिहार STET नोट्स हिंदी में।"
         path="/notes"
+        keywords="Bihar STET notes, STET Computer Science notes, STET CS study material, Bihar STET notes in Hindi, बिहार STET नोट्स, STET preparation notes, STET chapter notes"
       />
       <header className="flex items-end justify-between gap-4">
         <div>

@@ -39,9 +39,10 @@ export default function NoteDetail() {
   return (
     <div className="container-app py-8">
       <Seo
-        title={`Notes · ${L(note.title)}`}
-        description={L(note.intro)}
+        title={`${L(note.title)} Notes — Bihar STET CS Chapter ${note.num}`}
+        description={`${L(note.intro)} Complete chapter ${note.num} notes in Hindi & English for Bihar STET Computer Science with explanations and practice tips.`}
         path={`/notes/${num}`}
+        keywords={`${note.title[0]} notes, ${note.title[1]} नोट्स, Bihar STET Chapter ${note.num} notes, STET CS ${note.title[0]}`}
       />
       {/* Header */}
       <header className="flex items-start justify-between gap-4">
