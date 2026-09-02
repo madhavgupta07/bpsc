@@ -27,8 +27,17 @@ router.get('/google/callback',
   }
 );
 
+// Cookie attributes must match how it was set, or browsers ignore the
+// clear (especially for secure/sameSite=none cookies).
+const COOKIE_OPTS = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === 'production',
+  sameSite: process.env.COOKIE_SAMESITE === 'none' ? 'none' : 'lax',
+  path: '/',
+};
+
 router.post('/logout', (req, res) => {
-  res.clearCookie('stet_token', { path: '/' });
+  res.clearCookie('stet_token', COOKIE_OPTS);
   res.json({ message: 'Logged out' });
 });
 

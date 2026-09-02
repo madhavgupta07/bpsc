@@ -24,12 +24,23 @@ export default function AuthCallback() {
       navigate('/login', { replace: true });
       return;
     }
-    completeGoogleSignIn()
-      .then(() => navigate('/', { replace: true }))
-      .catch(() => {
-        toast.error('Google sign-in failed');
-        navigate('/login', { replace: true });
-      });
+    // The auth cookie arrives on the OAuth callback redirect. Browsers can
+    // commit it a tick later than this page mounts, so the first /me probe
+    // occasionally 401s with "Not authorized, no token". Retry briefly.
+    const maxAttempts = 3;
+    const attempt = (i = 0) =>
+      completeGoogleSignIn()
+        .then(() => navigate('/', { replace: true }))
+        .catch((err) => {
+          const status = err && err.status;
+          if (status === 401 && i < maxAttempts - 1) {
+            setTimeout(() => attempt(i + 1), 400);
+            return;
+          }
+          toast.error('Google sign-in failed');
+          navigate('/login', { replace: true });
+        });
+    attempt();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
