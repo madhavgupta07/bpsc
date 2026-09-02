@@ -88,7 +88,7 @@ export default function Home() {
               {
                 '@type': 'Question',
                 name: 'Is there negative marking in Bihar STET?',
-                acceptedAnswer: { '@type': 'Answer', text: 'Yes, 0.25 marks are deducted for each wrong answer. Unanswered questions carry no penalty.' },
+                acceptedAnswer: { '@type': 'Answer', text: 'No. There is NO negative marking in Bihar STET. Each correct answer carries 1 mark.' },
               },
             ],
           },

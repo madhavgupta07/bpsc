@@ -144,7 +144,7 @@ async function getSeoData(pathname) {
             name: 'Is there negative marking in Bihar STET?',
             acceptedAnswer: {
               '@type': 'Answer',
-              text: 'Yes, Bihar STET has negative marking. For each wrong answer, 0.25 marks are deducted. Unanswered questions carry no penalty.',
+              text: 'No. There is NO negative marking in Bihar STET. Every correct answer gives +1 mark, and no marks are deducted for incorrect or unanswered questions.',
             },
           },
         ],
@@ -156,14 +156,15 @@ async function getSeoData(pathname) {
     if (pathname === '/exam-info') {
       const chapters = await Chapter.find({}, 'chapterNumber title_en title_hi weightage section').sort('order').lean();
       result.title = 'Bihar STET Computer Science Syllabus 2025 — Detailed Chapter-wise Syllabus, Exam Pattern & Notification';
-      result.description = 'Complete Bihar STET Paper II Computer Science (Code 226) syllabus 2025 with chapter-wise weightage, exam pattern, eligibility criteria, and official notification links. बिहार STET कंप्यूटर साइंस सिलेबस 2025 — पूरा विवरण।';
-      result.keywords = 'Bihar STET syllabus 2025, STET Computer Science syllabus, Bihar STET exam pattern, Bihar STET notification, Bihar STET eligibility, STET Paper 2 syllabus, बिहार STET सिलेबस, STET ka syllabus, Bihar STET computer teacher syllabus, STET syllabus pdf in hindi, Bihar STET weightage';
+      result.description = 'Complete Bihar STET Paper II Computer Science (Code 226) syllabus 2025 with chapter-wise weightage, exam pattern, eligibility criteria (B.Tech/MCA/BCA eligible, B.Ed exempted), and official notification links.';
+      result.keywords = 'Bihar STET syllabus 2025, STET Computer Science syllabus, Bihar STET exam pattern, Bihar STET notification, Bihar STET eligibility, B.Tech in Bihar STET, B.Ed exemption STET CS, बिहार STET सिलेबस, STET ka syllabus';
       result.noscript = noscriptBlock(
         'Bihar STET Computer Science — Detailed Syllabus, Exam Pattern & Official Notification',
         [
-          'Exam: Bihar STET Paper II Computer Science (Code 226) — 150 MCQs, 150 Marks, 2.5 Hours, Negative marking -0.25',
+          'Exam: Bihar STET Paper II Computer Science (Code 226) — 150 MCQs, 150 Marks, 2.5 Hours, NO Negative Marking',
           'Exam Pattern: Subject Content (100 Qs / 100 Marks), Art of Teaching (30 Qs / 30 Marks), General Knowledge & Reasoning (20 Qs / 20 Marks)',
-          'Eligibility: Post Graduation (M.Sc/MCA/M.Tech) in CS with B.Ed (50% for Gen, 45% for SC/ST)',
+          'Eligibility: B.E./B.Tech (CS/IT), MCA, M.Sc (CS), BCA + PG, or PGDCA + PG (Min 50% for Gen, 45% for SC/ST/EBC/BC). Note: B.Ed is NOT mandatory for Computer Science.',
+          'Qualifying Cutoff: General (50% / 75 marks), BC (45.5% / 68.25 marks), EBC (42.5% / 63.75 marks), SC/ST/Women/PwD (40% / 60 marks)',
           ...chapters.map((c) => `Chapter ${c.chapterNumber}: ${c.title_en} (${c.title_hi}) — Weightage: ${c.weightage}%`),
         ],
       );
@@ -173,18 +174,35 @@ async function getSeoData(pathname) {
         mainEntity: [
           {
             '@type': 'Question',
-            name: 'Bihar STET Computer Science ka syllabus kya hai?',
-            acceptedAnswer: { '@type': 'Answer', text: 'Bihar STET Paper II Computer Science (Code 226) mein 17 chapters hain — Digital Logic, Computer Organization, Data Structures, Algorithms, OS, DBMS, Computer Networks, Software Engineering, OOP, Web Technologies, Theory of Computation, IoT, AI, E-Commerce, Multimedia, Pedagogy aur GK. Total 150 questions, 150 marks, 2.5 hours.' },
+            name: 'Are B.Tech / B.E. students eligible for Bihar STET Computer Science?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Yes! Candidates with B.E. or B.Tech in Computer Science / Information Technology (with at least 50% marks) are fully eligible for Bihar STET Paper II Computer Science. B.Tech in any stream with a PGDCA is also eligible.',
+            },
           },
           {
             '@type': 'Question',
-            name: 'What is the exam pattern for Bihar STET Paper 2?',
-            acceptedAnswer: { '@type': 'Answer', text: 'Bihar STET Paper II has 150 MCQs: 100 from Computer Science (100 marks), 30 from Pedagogy (30 marks), and 20 from GK/Environment/Reasoning (20 marks). Duration: 2 hours 30 minutes. Negative marking: -0.25 per wrong answer.' },
+            name: 'Is B.Ed compulsory for Bihar STET Computer Science?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'No. B.Ed is NOT required or mandatory for Computer Science (Subject Code 226) in Bihar STET. Candidates with B.Tech (CS/IT), MCA, M.Sc (CS), or BCA + PG can apply without B.Ed.',
+            },
           },
           {
             '@type': 'Question',
-            name: 'Bihar STET ke liye eligibility kya hai?',
-            acceptedAnswer: { '@type': 'Answer', text: 'Post-Graduation (M.Sc/MCA/M.Tech) in Computer Science with B.Ed. General: 50% marks, SC/ST/PwD: 45%. Age: 21-40 years.' },
+            name: 'Is there negative marking in Bihar STET?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'No. There is NO negative marking in Bihar STET. Every correct answer gives +1 mark, and no marks are deducted for incorrect or unanswered questions.',
+            },
+          },
+          {
+            '@type': 'Question',
+            name: 'What are the qualifying / passing marks in Bihar STET?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'General (UR): 50% (75 marks out of 150), Backward Class (BC): 45.5% (68.25 marks), Extremely Backward Class (EBC): 42.5% (63.75 marks), SC / ST / Divyang / All Female Candidates: 40% (60 marks).',
+            },
           },
         ],
       });

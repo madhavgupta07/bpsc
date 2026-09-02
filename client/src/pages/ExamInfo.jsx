@@ -25,28 +25,74 @@ const EXAM_HIGHLIGHTS = [
   { icon: FileText, label: 'Exam', value: 'Bihar STET Paper II' },
   { icon: GraduationCap, label: 'Subject', value: 'Computer Science (Code 226)' },
   { icon: Target, label: 'Total Questions', value: '150 MCQs' },
-  { icon: Scale, label: 'Total Marks', value: '150' },
-  { icon: Clock3, label: 'Duration', value: '2 hours 30 minutes' },
-  { icon: BadgeInfo, label: 'Negative Marking', value: '−0.25 per wrong answer' },
+  { icon: Scale, label: 'Total Marks', value: '150 Marks' },
+  { icon: Clock3, label: 'Duration', value: '150 mins (2.5 hours)' },
+  { icon: BadgeInfo, label: 'Negative Marking', value: 'No Negative Marking (0)' },
 ];
 
 const EXAM_PATTERN = [
-  { section: 'Subject Content (Computer Science)', questions: 100, marks: 100, percent: '66.7%' },
-  { section: 'Art of Teaching / Pedagogy', questions: 30, marks: 30, percent: '20%' },
-  { section: 'GK, Environment & Reasoning', questions: 20, marks: 20, percent: '13.3%' },
+  { section: 'Specified Subject: Computer Science (कंप्यूटर साइंस)', questions: 100, marks: 100, percent: '66.7%' },
+  { section: 'Art of Teaching (शिक्षण कला)', questions: 30, marks: 30, percent: '20.0%' },
+  { section: 'Other Skills: GK, Env, Reasoning, Math (अन्य दक्षता)', questions: 20, marks: 20, percent: '13.3%' },
 ];
 
-const ELIGIBILITY = [
-  { label: 'Qualification', en: 'Post-Graduation (M.Sc / MCA / M.Tech) in Computer Science or equivalent with B.Ed', hi: 'कंप्यूटर साइंस में पोस्ट ग्रेजुएशन (M.Sc/MCA/M.Tech) + B.Ed' },
-  { label: 'Minimum Marks', en: 'General: 50% in PG | SC/ST/PwD: 45%', hi: 'सामान्य: PG में 50% | SC/ST/PwD: 45%' },
-  { label: 'Age Limit', en: '21–40 years (relaxation as per Bihar Govt rules)', hi: '21–40 वर्ष (बिहार सरकार नियमानुसार छूट)' },
-  { label: 'Conducting Body', en: 'Bihar School Examination Board (BSEB)', hi: 'बिहार विद्यालय परीक्षा समिति (BSEB)' },
+const QUALIFYING_MARKS = [
+  { category: 'General (UR)', percent: '50.0%', marks: '75.0 / 150' },
+  { category: 'Backward Class (BC)', percent: '45.5%', marks: '68.25 / 150' },
+  { category: 'Extremely Backward Class (EBC)', percent: '42.5%', marks: '63.75 / 150' },
+  { category: 'SC / ST / Divyang (PwD) / All Women', percent: '40.0%', marks: '60.0 / 150' },
+];
+
+const AGE_LIMITS = [
+  { category: 'General (UR) Male', limit: '37 Years' },
+  { category: 'General (UR) Female', limit: '40 Years' },
+  { category: 'BC / EBC (Male & Female)', limit: '40 Years' },
+  { category: 'SC / ST (Male & Female)', limit: '42 Years' },
+  { category: 'Divyang (PwD Candidates)', limit: '+10 Years Relaxation' },
+];
+
+const ELIGIBILITY_PATHWAYS = [
+  {
+    title: 'B.E. / B.Tech in CS / IT',
+    en: 'B.E. or B.Tech in Computer Science / Information Technology or equivalent degree from a recognized university (Min 50% marks).',
+    hi: 'मान्यता प्राप्त विश्वविद्यालय से कंप्यूटर साइंस / IT में B.E. या B.Tech या समकक्ष डिग्री (न्यूनतम 50% अंक)।',
+  },
+  {
+    title: 'B.E. / B.Tech (Any Stream) + PGDCA',
+    en: 'B.E. or B.Tech in any stream from a recognized university + Post Graduate Diploma in Computer Science / PGDCA (Min 50% marks).',
+    hi: 'किसी भी स्ट्रीम में B.E./B.Tech + कंप्यूटर में पोस्ट ग्रेजुएट डिप्लोमा (PGDCA) (न्यूनतम 50% अंक)।',
+  },
+  {
+    title: 'M.Sc (CS) / MCA',
+    en: 'M.Sc in Computer Science or MCA from a recognized university (Min 50% marks).',
+    hi: 'मान्यता प्राप्त विश्वविद्यालय से कंप्यूटर साइंस में M.Sc या MCA (न्यूनतम 50% अंक)।',
+  },
+  {
+    title: 'B.Sc (CS) / BCA + Post Graduation (Any Stream)',
+    en: 'B.Sc in Computer Science or BCA + Post Graduate Degree in any subject from a recognized university (Min 50% marks).',
+    hi: 'B.Sc (कंप्यूटर साइंस) या BCA + किसी भी विषय में पोस्ट ग्रेजुएशन (न्यूनतम 50% अंक)।',
+  },
+  {
+    title: 'PGDCA + Post Graduation (Any Stream)',
+    en: 'Post Graduate Diploma in Computer (PGDCA) + Post Graduate Degree in any subject (Min 50% marks).',
+    hi: 'कंप्यूटर में पोस्ट ग्रेजुएट डिप्लोमा (PGDCA) + किसी भी विषय में पोस्ट ग्रेजुएशन (न्यूनतम 50% अंक)।',
+  },
+  {
+    title: 'DOEACC / NIELIT "B" Level + PG',
+    en: 'DOEACC / NIELIT "B" Level Certificate + Post Graduate Degree in any subject (Min 50% marks).',
+    hi: 'DOEACC / NIELIT से "B" लेवल + किसी भी विषय में पोस्ट ग्रेजुएशन (न्यूनतम 50% अंक)।',
+  },
+  {
+    title: 'DOEACC / NIELIT "C" Level',
+    en: 'DOEACC / NIELIT "C" Level Certificate with Graduation in any stream from a recognized university.',
+    hi: 'DOEACC / NIELIT से "C" लेवल प्रमाण पत्र + किसी भी विषय में स्नातक।',
+  },
 ];
 
 const IMPORTANT_LINKS = [
-  { label: 'BSEB Official Website', url: 'https://secondary.biharboardonline.com' },
-  { label: 'Bihar STET Notification PDF', url: 'https://secondary.biharboardonline.com/Stet.html' },
-  { label: 'Admit Card / Results', url: 'https://secondary.biharboardonline.com' },
+  { label: 'BSEB Official Website (बिहार विद्यालय परीक्षा समिति)', url: 'https://secondary.biharboardonline.com' },
+  { label: 'Bihar STET Official Portal & Updates', url: 'https://secondary.biharboardonline.com' },
+  { label: 'Official Syllabus (Paper II - Computer Science)', url: 'https://secondary.biharboardonline.com' },
 ];
 
 /* Detailed syllabus breakdown with topics per chapter */
@@ -98,28 +144,43 @@ export default function ExamInfo() {
             mainEntity: [
               {
                 '@type': 'Question',
+                name: 'Are B.Tech / B.E. students eligible for Bihar STET Computer Science?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'Yes! Candidates with B.E. or B.Tech in Computer Science / Information Technology (with at least 50% marks) are fully eligible for Bihar STET Paper II Computer Science. B.Tech in any stream with a PGDCA is also eligible.',
+                },
+              },
+              {
+                '@type': 'Question',
+                name: 'Is B.Ed compulsory for Bihar STET Computer Science?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'No. B.Ed is NOT required or mandatory for Computer Science (Subject Code 226) in Bihar STET. Candidates with B.Tech (CS/IT), MCA, M.Sc (CS), or BCA + PG can apply without B.Ed.',
+                },
+              },
+              {
+                '@type': 'Question',
+                name: 'Is there negative marking in Bihar STET?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'No. There is NO negative marking in Bihar STET. Every correct answer gives +1 mark, and no marks are deducted for incorrect or unanswered questions.',
+                },
+              },
+              {
+                '@type': 'Question',
+                name: 'What are the qualifying / passing marks in Bihar STET?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'General (UR): 50% (75 marks out of 150), Backward Class (BC): 45.5% (68.25 marks), Extremely Backward Class (EBC): 42.5% (63.75 marks), SC / ST / Divyang / All Female Candidates: 40% (60 marks).',
+                },
+              },
+              {
+                '@type': 'Question',
                 name: 'Bihar STET Computer Science ka syllabus kya hai?',
-                acceptedAnswer: { '@type': 'Answer', text: 'Bihar STET Paper II Computer Science (Code 226) mein 17 chapters hain — Digital Logic, Computer Organization, Data Structures, Algorithms, OS, DBMS, Computer Networks, Software Engineering, OOP, Web Technologies, Theory of Computation, IoT, AI, E-Commerce, Multimedia, Pedagogy aur GK. Total 150 questions, 150 marks, 2.5 hours.' },
-              },
-              {
-                '@type': 'Question',
-                name: 'What is the exam pattern for Bihar STET Paper 2?',
-                acceptedAnswer: { '@type': 'Answer', text: 'Bihar STET Paper II has 150 MCQs: 100 from Computer Science (100 marks), 30 from Pedagogy (30 marks), and 20 from GK/Environment/Reasoning (20 marks). Duration: 2 hours 30 minutes. Negative marking: -0.25 per wrong answer.' },
-              },
-              {
-                '@type': 'Question',
-                name: 'Bihar STET ke liye eligibility kya hai?',
-                acceptedAnswer: { '@type': 'Answer', text: 'Post-Graduation (M.Sc/MCA/M.Tech) in Computer Science with B.Ed. General: 50% marks, SC/ST/PwD: 45%. Age: 21-40 years.' },
-              },
-              {
-                '@type': 'Question',
-                name: 'Bihar STET mein negative marking hai?',
-                acceptedAnswer: { '@type': 'Answer', text: 'Haan, har galat answer ke liye 0.25 marks kate jaate hain. Unanswered questions mein koi penalty nahi hai.' },
-              },
-              {
-                '@type': 'Question',
-                name: 'What is the chapter-wise weightage in Bihar STET CS?',
-                acceptedAnswer: { '@type': 'Answer', text: 'Subject Content (Computer Science) carries 100 marks (15 chapters), Pedagogy carries 30 marks, and GK/Environment/Reasoning carries 20 marks. Among CS chapters, Data Structures, Algorithms, OS, DBMS and Networks typically carry the highest weightage.' },
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'Bihar STET Paper II Computer Science (Code 226) mein 17 chapters hain — Digital Logic, Computer Organization, Data Structures, Algorithms, OS, DBMS, Computer Networks, Software Engineering, OOP, Web Technologies, Theory of Computation, IoT, AI, E-Commerce, Multimedia, Art of Teaching (Pedagogy) aur GK/Reasoning. Total 150 questions, 150 marks, 2.5 hours.',
+                },
               },
             ],
           },
@@ -131,17 +192,17 @@ export default function ExamInfo() {
         <div className="container-app py-12 sm:py-16">
           <motion.p variants={fadeUp} initial="hidden" animate="show" custom={0}
             className="text-[11px] font-bold uppercase tracking-[0.18em] text-brand-600 dark:text-brand-400">
-            Bihar STET · Paper II · Computer Science · Code 226
+            Bihar STET · Paper II · Computer Science · Subject Code 226
           </motion.p>
           <motion.h1 variants={fadeUp} initial="hidden" animate="show" custom={1}
             className="mt-3 max-w-3xl text-3xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-4xl dark:text-zinc-50">
-            {lang === 'hi' ? 'बिहार STET कंप्यूटर साइंस — परीक्षा जानकारी और सिलेबस' : 'Bihar STET Computer Science — Exam Info & Detailed Syllabus'}
+            {lang === 'hi' ? 'बिहार STET कंप्यूटर साइंस — परीक्षा जानकारी, पात्रता व सिलेबस' : 'Bihar STET Computer Science — Exam Info, Eligibility & Detailed Syllabus'}
           </motion.h1>
           <motion.p variants={fadeUp} initial="hidden" animate="show" custom={2}
             className="mt-4 max-w-2xl text-base leading-relaxed text-slate-600 sm:text-lg dark:text-zinc-400">
             {lang === 'hi'
-              ? 'पूरा सिलेबस, अध्यायवार भारांक, परीक्षा पैटर्न, पात्रता मानदंड और आधिकारिक नोटिफिकेशन — सब कुछ एक जगह।'
-              : 'Complete syllabus, chapter-wise weightage, exam pattern, eligibility criteria and official notification — everything in one place.'}
+              ? 'आधिकारिक पात्रता नियम (B.Tech / MCA / BCA मान्य, B.Ed अनिवार्य नहीं), परीक्षा पैटर्न, न्यूनतम उत्तीर्णांक, अध्यायवार भारांक और संपूर्ण सिलेबस।'
+              : 'Official eligibility criteria (B.Tech/MCA/BCA eligible, B.Ed exempted), exam pattern, qualifying cutoff marks, chapter-wise weightage and detailed syllabus.'}
           </motion.p>
         </div>
       </section>
@@ -149,7 +210,7 @@ export default function ExamInfo() {
       {/* ========== Exam Highlights ========== */}
       <section className="container-app py-10 sm:py-12">
         <h2 className="text-xl font-extrabold tracking-tight">
-          {lang === 'hi' ? 'परीक्षा विवरण' : 'Exam Overview'}
+          {lang === 'hi' ? 'मुख्य परीक्षा विवरण' : 'Exam Highlights'}
         </h2>
         <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {EXAM_HIGHLIGHTS.map((item, i) => (
@@ -170,41 +231,157 @@ export default function ExamInfo() {
         </div>
       </section>
 
+      {/* ========== Eligibility Section with B.Ed Exemption Alert ========== */}
+      <section className="border-t border-slate-200 bg-white py-10 sm:py-12 dark:border-zinc-800 dark:bg-zinc-900/40">
+        <div className="container-app">
+          <div className="flex flex-col gap-2">
+            <h2 className="text-xl font-extrabold tracking-tight">
+              {lang === 'hi' ? 'शैक्षणिक योग्यता एवं पात्रता (Eligibility Criteria)' : 'Educational Eligibility Criteria'}
+            </h2>
+            <p className="text-sm text-slate-500 dark:text-zinc-400">
+              {lang === 'hi'
+                ? 'कंप्यूटर साइंस शिक्षक (कक्षा 11-12) के लिए निम्नलिखित में से कोई एक योग्यता अनिवार्य है (न्यूनतम 50% अंक, आरक्षित वर्ग को 5% छूट):'
+                : 'Candidates must possess ANY of the following qualifications with at least 50% marks (5% relaxation for SC/ST/EBC/BC/PwD candidates):'}
+            </p>
+          </div>
+
+          {/* B.Ed Exemption Banner */}
+          <div className="mt-5 flex items-start gap-3.5 rounded-xl border border-emerald-200 bg-emerald-50/80 p-4 dark:border-emerald-500/30 dark:bg-emerald-500/10">
+            <CheckCircle2 className="mt-0.5 size-5 shrink-0 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
+            <div>
+              <p className="text-sm font-bold text-emerald-900 dark:text-emerald-200">
+                {lang === 'hi'
+                  ? 'विशेष सूचना: कंप्यूटर साइंस के लिए B.Ed अनिवार्य नहीं है (B.Ed Exemption)'
+                  : 'Important: B.Ed is NOT mandatory for Computer Science (Paper II - Code 226)'}
+              </p>
+              <p className="mt-0.5 text-xs leading-relaxed text-emerald-800/90 dark:text-emerald-300/90">
+                {lang === 'hi'
+                  ? 'BSEB बिहार STET नियमावली के अनुसार कंप्यूटर साइंस विषय के शिक्षकों के लिए B.Ed की डिग्री अनिवार्य नहीं है। B.Tech (CS/IT), MCA, M.Sc (CS), BCA + PG आदि अभ्यर्थी सीधे आवेदन के पात्र हैं।'
+                  : 'As per official BSEB rules, B.Ed is not required for Computer Science. Candidates holding B.E./B.Tech (CS/IT), MCA, M.Sc (CS), or BCA+PG are directly eligible.'}
+              </p>
+            </div>
+          </div>
+
+          {/* Eligibility Pathways */}
+          <div className="mt-6 grid gap-3.5 sm:grid-cols-2">
+            {ELIGIBILITY_PATHWAYS.map((pathway, idx) => (
+              <div
+                key={pathway.title}
+                className="flex flex-col rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition-all hover:border-brand-200 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-brand-500/30"
+              >
+                <div className="flex items-center gap-2">
+                  <span className="flex size-6 items-center justify-center rounded-full bg-brand-50 text-xs font-bold text-brand-700 dark:bg-brand-500/20 dark:text-brand-300">
+                    {idx + 1}
+                  </span>
+                  <h3 className="text-sm font-bold text-slate-900 dark:text-zinc-100">{pathway.title}</h3>
+                </div>
+                <p className="mt-2 text-xs leading-relaxed text-slate-600 dark:text-zinc-400">
+                  {lang === 'hi' ? pathway.hi : pathway.en}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ========== Qualifying Marks & Age Limits ========== */}
+      <section className="container-app py-10 sm:py-12">
+        <div className="grid gap-8 lg:grid-cols-2">
+          {/* Qualifying Marks Table */}
+          <div>
+            <h2 className="text-lg font-extrabold tracking-tight">
+              {lang === 'hi' ? 'न्यूनतम उत्तीर्णांक (Qualifying Passing Marks)' : 'Qualifying / Passing Cutoff Marks'}
+            </h2>
+            <p className="mt-1 text-xs text-slate-500 dark:text-zinc-400">
+              {lang === 'hi' ? 'बिहार STET पात्रता परीक्षा पास करने हेतु श्रेणीवार न्यूनतम अंक:' : 'Minimum passing percentage & marks required out of 150:'}
+            </p>
+            <div className="mt-4 overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+              <table className="w-full text-xs sm:text-sm">
+                <thead>
+                  <tr className="border-b border-slate-200 bg-slate-50/75 text-left dark:border-zinc-700 dark:bg-zinc-800/60">
+                    <th className="py-2.5 px-3.5 font-bold text-slate-900 dark:text-zinc-100">{lang === 'hi' ? 'श्रेणी (Category)' : 'Category'}</th>
+                    <th className="py-2.5 px-3 text-center font-bold text-slate-900 dark:text-zinc-100">{lang === 'hi' ? 'प्रतिशत' : 'Percentage'}</th>
+                    <th className="py-2.5 px-3.5 text-right font-bold text-slate-900 dark:text-zinc-100">{lang === 'hi' ? 'न्यूनतम अंक' : 'Cutoff Marks'}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {QUALIFYING_MARKS.map((row, i) => (
+                    <tr key={row.category} className={cn('border-b border-slate-100 dark:border-zinc-800', i === 0 && 'bg-brand-50/20 dark:bg-brand-500/5')}>
+                      <td className="py-2.5 px-3.5 font-semibold text-slate-700 dark:text-zinc-300">{row.category}</td>
+                      <td className="py-2.5 px-3 text-center tabular-nums font-bold text-brand-700 dark:text-brand-400">{row.percent}</td>
+                      <td className="py-2.5 px-3.5 text-right tabular-nums font-bold text-slate-900 dark:text-zinc-100">{row.marks}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Age Limits Table */}
+          <div>
+            <h2 className="text-lg font-extrabold tracking-tight">
+              {lang === 'hi' ? 'आयु सीमा (Age Limits)' : 'Category-wise Age Limits'}
+            </h2>
+            <p className="mt-1 text-xs text-slate-500 dark:text-zinc-400">
+              {lang === 'hi' ? 'न्यूनतम आयु 21 वर्ष है। श्रेणीवार अधिकतम आयु सीमा नीचे दी गई है:' : 'Minimum age is 21 years. Maximum age criteria as per Bihar rules:'}
+            </p>
+            <div className="mt-4 overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+              <table className="w-full text-xs sm:text-sm">
+                <thead>
+                  <tr className="border-b border-slate-200 bg-slate-50/75 text-left dark:border-zinc-700 dark:bg-zinc-800/60">
+                    <th className="py-2.5 px-3.5 font-bold text-slate-900 dark:text-zinc-100">{lang === 'hi' ? 'श्रेणी (Category)' : 'Category'}</th>
+                    <th className="py-2.5 px-3.5 text-right font-bold text-slate-900 dark:text-zinc-100">{lang === 'hi' ? 'अधिकतम आयु' : 'Max Age Limit'}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {AGE_LIMITS.map((row) => (
+                    <tr key={row.category} className="border-b border-slate-100 dark:border-zinc-800">
+                      <td className="py-2.5 px-3.5 font-semibold text-slate-700 dark:text-zinc-300">{row.category}</td>
+                      <td className="py-2.5 px-3.5 text-right tabular-nums font-bold text-slate-900 dark:text-zinc-100">{row.limit}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ========== Exam Pattern ========== */}
       <section className="border-y border-slate-200 bg-white py-10 sm:py-12 dark:border-zinc-800 dark:bg-zinc-900/40">
         <div className="container-app">
           <h2 className="text-xl font-extrabold tracking-tight">
-            {lang === 'hi' ? 'परीक्षा पैटर्न' : 'Exam Pattern'}
+            {lang === 'hi' ? 'परीक्षा पैटर्न एवं अंक योजना (Exam Pattern)' : 'Exam Pattern & Marks Scheme'}
           </h2>
           <p className="mt-2 text-sm text-slate-500 dark:text-zinc-400">
             {lang === 'hi'
-              ? 'बिहार STET Paper II में कुल 150 बहुविकल्पीय प्रश्न होते हैं। प्रत्येक गलत उत्तर पर 0.25 अंक की कटौती होती है।'
-              : 'Bihar STET Paper II consists of 150 MCQs. Each wrong answer deducts 0.25 marks. No penalty for unanswered questions.'}
+              ? 'बिहार STET Paper II में कुल 150 बहुविकल्पीय प्रश्न (MCQs) होते हैं। प्रत्येक प्रश्न 1 अंक का होता है और कोई नकारात्मक अंकन (No Negative Marking) नहीं है।'
+              : 'Bihar STET Paper II consists of 150 MCQs of 1 mark each (Total: 150 Marks). There is NO negative marking for incorrect or unanswered questions.'}
           </p>
-          <div className="mt-6 overflow-x-auto">
+          <div className="mt-6 overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-slate-200 text-left dark:border-zinc-700">
-                  <th className="py-3 pr-4 font-bold text-slate-900 dark:text-zinc-100">{lang === 'hi' ? 'खंड' : 'Section'}</th>
-                  <th className="py-3 px-4 text-center font-bold text-slate-900 dark:text-zinc-100">{lang === 'hi' ? 'प्रश्न' : 'Questions'}</th>
-                  <th className="py-3 px-4 text-center font-bold text-slate-900 dark:text-zinc-100">{lang === 'hi' ? 'अंक' : 'Marks'}</th>
-                  <th className="py-3 pl-4 text-center font-bold text-slate-900 dark:text-zinc-100">{lang === 'hi' ? 'भारांक' : 'Weightage'}</th>
+                <tr className="border-b border-slate-200 bg-slate-50/75 text-left dark:border-zinc-700 dark:bg-zinc-800/60">
+                  <th className="py-3 px-4 font-bold text-slate-900 dark:text-zinc-100">{lang === 'hi' ? 'खंड (Section)' : 'Section'}</th>
+                  <th className="py-3 px-4 text-center font-bold text-slate-900 dark:text-zinc-100">{lang === 'hi' ? 'प्रश्न (Questions)' : 'Questions'}</th>
+                  <th className="py-3 px-4 text-center font-bold text-slate-900 dark:text-zinc-100">{lang === 'hi' ? 'अंक (Marks)' : 'Marks'}</th>
+                  <th className="py-3 px-4 text-center font-bold text-slate-900 dark:text-zinc-100">{lang === 'hi' ? 'भारांक' : 'Weightage'}</th>
                 </tr>
               </thead>
               <tbody>
                 {EXAM_PATTERN.map((row, i) => (
                   <tr key={row.section} className={cn('border-b border-slate-100 dark:border-zinc-800', i === 0 && 'bg-brand-50/30 dark:bg-brand-500/5')}>
-                    <td className="py-3 pr-4 font-semibold text-slate-700 dark:text-zinc-300">{row.section}</td>
+                    <td className="py-3 px-4 font-semibold text-slate-700 dark:text-zinc-300">{row.section}</td>
                     <td className="py-3 px-4 text-center tabular-nums font-bold text-slate-900 dark:text-zinc-100">{row.questions}</td>
                     <td className="py-3 px-4 text-center tabular-nums font-bold text-slate-900 dark:text-zinc-100">{row.marks}</td>
-                    <td className="py-3 pl-4 text-center font-bold text-brand-700 dark:text-brand-400">{row.percent}</td>
+                    <td className="py-3 px-4 text-center font-bold text-brand-700 dark:text-brand-400">{row.percent}</td>
                   </tr>
                 ))}
                 <tr className="bg-slate-50 font-bold dark:bg-zinc-800/50">
-                  <td className="py-3 pr-4 text-slate-900 dark:text-zinc-100">Total</td>
+                  <td className="py-3 px-4 text-slate-900 dark:text-zinc-100">{lang === 'hi' ? 'कुल योग (Total)' : 'Total'}</td>
                   <td className="py-3 px-4 text-center tabular-nums text-slate-900 dark:text-zinc-100">150</td>
                   <td className="py-3 px-4 text-center tabular-nums text-slate-900 dark:text-zinc-100">150</td>
-                  <td className="py-3 pl-4 text-center text-brand-700 dark:text-brand-400">100%</td>
+                  <td className="py-3 px-4 text-center text-brand-700 dark:text-brand-400">100%</td>
                 </tr>
               </tbody>
             </table>
@@ -217,11 +394,11 @@ export default function ExamInfo() {
         <div className="flex items-baseline justify-between gap-4">
           <div>
             <h2 className="text-xl font-extrabold tracking-tight">
-              {lang === 'hi' ? 'विस्तृत सिलेबस — सभी 17 अध्याय' : 'Detailed Syllabus — All 17 Chapters'}
+              {lang === 'hi' ? 'विस्तृत 17-अध्याय सिलेबस (Chapter-wise Topics)' : 'Detailed 17-Chapter Syllabus Topics'}
             </h2>
             <p className="mt-2 text-sm text-slate-500 dark:text-zinc-400">
               {lang === 'hi'
-                ? 'प्रत्येक अध्याय के मुख्य टॉपिक्स नीचे दिए गए हैं। नोट्स पढ़ने और प्रैक्टिस करने के लिए अध्याय पर क्लिक करें।'
+                ? 'प्रत्येक अध्याय के आधिकारिक मुख्य टॉपिक्स नीचे दिए गए हैं। नोट्स पढ़ने और प्रैक्टिस करने के लिए अध्याय पर क्लिक करें।'
                 : 'Key topics for each chapter are listed below. Click any chapter to read notes and practice.'}
             </p>
           </div>
@@ -244,8 +421,8 @@ export default function ExamInfo() {
                     <div className="min-w-0 flex-1">
                       <h3 className="text-sm font-bold text-slate-900 dark:text-zinc-100">{lang === 'hi' ? item.hi : item.en}</h3>
                       <p className="text-[11px] font-medium text-slate-400 dark:text-zinc-500">
-                        {item.section === 'subject' ? (lang === 'hi' ? 'विषय' : 'Subject') : (lang === 'hi' ? 'शिक्षाशास्त्र' : 'Pedagogy')}
-                        {dbChapter?.weightage ? ` · ${dbChapter.weightage}%` : ''}
+                        {item.section === 'subject' ? (lang === 'hi' ? 'विषय खंड' : 'Subject Content') : (lang === 'hi' ? 'शिक्षाशास्त्र / सामान्य' : 'Pedagogy / Other')}
+                        {dbChapter?.weightage ? ` · ~${dbChapter.weightage}%` : ''}
                       </p>
                     </div>
                   </div>
@@ -282,12 +459,12 @@ export default function ExamInfo() {
         <section className="border-y border-slate-200 bg-white py-10 sm:py-12 dark:border-zinc-800 dark:bg-zinc-900/40">
           <div className="container-app">
             <h2 className="text-xl font-extrabold tracking-tight">
-              {lang === 'hi' ? 'अध्यायवार भारांक' : 'Chapter-wise Weightage'}
+              {lang === 'hi' ? 'अध्यायवार अनुमानित भारांक (Weightage Distribution)' : 'Estimated Chapter-wise Weightage'}
             </h2>
             <p className="mt-2 text-sm text-slate-500 dark:text-zinc-400">
               {lang === 'hi'
-                ? 'पिछले वर्षों के प्रश्नपत्रों के विश्लेषण के आधार पर अनुमानित भारांक।'
-                : 'Estimated weightage based on analysis of previous year papers.'}
+                ? 'पिछले वर्षों के प्रश्नपत्रों के आधार पर अध्यायवार अनुमानित अंक वितरण:'
+                : 'Estimated weightage distribution based on past examination patterns:'}
             </p>
             <div className="mt-6 space-y-2.5">
               {chapters
@@ -325,76 +502,59 @@ export default function ExamInfo() {
             </div>
             <div className="mt-4 flex gap-6 text-xs font-medium text-slate-500 dark:text-zinc-400">
               <span className="flex items-center gap-2">
-                <span className="h-2.5 w-6 rounded-full bg-gradient-to-r from-brand-400 to-brand-600" /> Subject
+                <span className="h-2.5 w-6 rounded-full bg-gradient-to-r from-brand-400 to-brand-600" /> Subject (विषय)
               </span>
               <span className="flex items-center gap-2">
-                <span className="h-2.5 w-6 rounded-full bg-gradient-to-r from-violet-400 to-violet-600" /> Pedagogy / GK
+                <span className="h-2.5 w-6 rounded-full bg-gradient-to-r from-violet-400 to-violet-600" /> Pedagogy & GK (शिक्षण कला व सामान्य)
               </span>
             </div>
           </div>
         </section>
       )}
 
-      {/* ========== Eligibility ========== */}
+      {/* ========== Official Notification & Board Links ========== */}
       <section className="container-app py-10 sm:py-12">
         <h2 className="text-xl font-extrabold tracking-tight">
-          {lang === 'hi' ? 'पात्रता मानदंड' : 'Eligibility Criteria'}
+          {lang === 'hi' ? 'आधिकारिक नोटिफिकेशन और लिंक (Official Links)' : 'Official Notification & Board Links'}
         </h2>
-        <div className="mt-6 grid gap-3 sm:grid-cols-2">
-          {ELIGIBILITY.map((item) => (
-            <div key={item.label} className="rounded-xl border border-slate-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
-              <p className="text-xs font-bold uppercase tracking-wide text-brand-600 dark:text-brand-400">{item.label}</p>
-              <p className="mt-1.5 text-sm font-semibold text-slate-900 dark:text-zinc-100">{lang === 'hi' ? item.hi : item.en}</p>
-            </div>
+        <p className="mt-2 text-sm text-slate-500 dark:text-zinc-400">
+          {lang === 'hi'
+            ? 'BSEB की आधिकारिक वेबसाइट से नोटिफिकेशन, आवेदन और उत्तर कुंजी से संबंधित अपडेट प्राप्त करें।'
+            : 'Access official BSEB portals for notification updates, application forms, and results.'}
+        </p>
+        <div className="mt-6 space-y-3">
+          {IMPORTANT_LINKS.map((link) => (
+            <a
+              key={link.label}
+              href={link.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-4 transition-all hover:border-brand-300 hover:shadow-sm dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-brand-500/30"
+            >
+              <span className="flex size-10 items-center justify-center rounded-lg bg-brand-50 text-brand-700 dark:bg-brand-500/10 dark:text-brand-400">
+                <ExternalLink className="size-5" aria-hidden="true" />
+              </span>
+              <div className="flex-1">
+                <p className="text-sm font-bold text-slate-900 group-hover:text-brand-700 dark:text-zinc-100 dark:group-hover:text-brand-400">{link.label}</p>
+                <p className="text-xs text-slate-500 dark:text-zinc-400">{link.url}</p>
+              </div>
+              <ArrowRight className="size-4 text-slate-300 transition-transform group-hover:translate-x-0.5 group-hover:text-brand-600 dark:text-zinc-600" aria-hidden="true" />
+            </a>
           ))}
         </div>
       </section>
 
-      {/* ========== Important Links / Notification ========== */}
-      <section className="border-t border-slate-200 bg-white py-10 sm:py-12 dark:border-zinc-800 dark:bg-zinc-900/40">
-        <div className="container-app">
-          <h2 className="text-xl font-extrabold tracking-tight">
-            {lang === 'hi' ? 'आधिकारिक नोटिफिकेशन और लिंक' : 'Official Notification & Links'}
-          </h2>
-          <p className="mt-2 text-sm text-slate-500 dark:text-zinc-400">
-            {lang === 'hi'
-              ? 'नवीनतम जानकारी और अपडेट के लिए BSEB की आधिकारिक वेबसाइट देखें।'
-              : 'Visit the official BSEB website for the latest updates, notifications and admit cards.'}
-          </p>
-          <div className="mt-6 space-y-3">
-            {IMPORTANT_LINKS.map((link) => (
-              <a
-                key={link.label}
-                href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-4 transition-all hover:border-brand-300 hover:shadow-sm dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-brand-500/30"
-              >
-                <span className="flex size-10 items-center justify-center rounded-lg bg-brand-50 text-brand-700 dark:bg-brand-500/10 dark:text-brand-400">
-                  <ExternalLink className="size-5" aria-hidden="true" />
-                </span>
-                <div className="flex-1">
-                  <p className="text-sm font-bold text-slate-900 group-hover:text-brand-700 dark:text-zinc-100 dark:group-hover:text-brand-400">{link.label}</p>
-                  <p className="text-xs text-slate-500 dark:text-zinc-400">{link.url}</p>
-                </div>
-                <ArrowRight className="size-4 text-slate-300 transition-transform group-hover:translate-x-0.5 group-hover:text-brand-600 dark:text-zinc-600" aria-hidden="true" />
-              </a>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ========== CTA ========== */}
-      <section className="container-app py-10 sm:py-14">
+      <section className="container-app pb-14 sm:pb-16">
         <div className="flex flex-col items-start justify-between gap-5 rounded-lg bg-slate-900 px-6 py-8 sm:flex-row sm:items-center sm:px-10 dark:bg-zinc-900">
           <div>
             <h2 className="text-lg font-extrabold tracking-tight text-white sm:text-xl">
-              {lang === 'hi' ? 'अभी तैयारी शुरू करें — बिल्कुल मुफ्त' : 'Start preparing now — completely free'}
+              {lang === 'hi' ? 'आज ही तैयारी शुरू करें — 100% फ्री' : 'Start your preparation today — 100% Free'}
             </h2>
             <p className="mt-1 max-w-md text-sm text-slate-300">
               {lang === 'hi'
-                ? '17 अध्यायों के नोट्स, 700+ प्रश्न और मॉक टेस्ट। हिंदी और English दोनों में।'
-                : '17 chapters of notes, 700+ questions and mock tests. Available in Hindi & English.'}
+                ? '17 अध्यायों के द्विभाषी नोट्स, 700+ प्रश्न और वास्तविक परीक्षा आधारित मॉक टेस्ट।'
+                : '17 chapters of bilingual notes, 700+ practice MCQs and CBT-style mock tests.'}
             </p>
           </div>
           <div className="flex shrink-0 gap-3">
@@ -408,7 +568,7 @@ export default function ExamInfo() {
               to="/quiz"
               className="inline-flex items-center gap-2 rounded-lg bg-brand-600 px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-brand-700"
             >
-              <Target className="size-4" aria-hidden="true" /> {lang === 'hi' ? 'प्रैक्टिस करें' : 'Practice Quiz'}
+              <Target className="size-4" aria-hidden="true" /> {lang === 'hi' ? 'क्विज़ लगाएं' : 'Practice Quiz'}
             </Link>
           </div>
         </div>
