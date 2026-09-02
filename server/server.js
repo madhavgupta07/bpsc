@@ -64,26 +64,32 @@ app.get('/api/health', (_, res) => res.json({ status: 'ok' }));
 if (isProd) {
   const fs = require('fs');
   const dist = path.resolve(__dirname, '../client/dist');
+  const indexPath = path.join(dist, 'index.html');
   const { createSeoMiddleware } = require('./middleware/seoPrerender');
 
-  // Read index.html once at startup — the SEO middleware injects per-route meta.
-  const htmlTemplate = fs.readFileSync(path.join(dist, 'index.html'), 'utf-8');
-  const seoMiddleware = createSeoMiddleware(htmlTemplate);
+  if (fs.existsSync(indexPath)) {
+    // Read index.html once at startup — the SEO middleware injects per-route meta.
+    const htmlTemplate = fs.readFileSync(indexPath, 'utf-8');
+    const seoMiddleware = createSeoMiddleware(htmlTemplate);
 
-  app.use(express.static(dist, {
-    index: false,
-    // Skip robots.txt from static — let the dynamic route handle it.
-    setHeaders(res, filePath) {
-      // Vite emits content-hashed asset names → cache hard; HTML must revalidate.
-      if (!filePath.endsWith('.html')) res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
-    },
-  }));
-  app.get('*', (req, res, next) => {
-    // Let API and SEO routes pass through — don't serve index.html for them.
-    if (req.path.startsWith('/api') || req.path === '/sitemap.xml' || req.path === '/robots.txt') return next();
-    // Serve SPA with injected SEO meta tags, JSON-LD and noscript content.
-    seoMiddleware(req, res).catch(next);
-  });
+    app.use(express.static(dist, {
+      index: false,
+      setHeaders(res, filePath) {
+        if (!filePath.endsWith('.html')) res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+      },
+    }));
+
+    app.get('*', (req, res, next) => {
+      if (req.path.startsWith('/api') || req.path === '/sitemap.xml' || req.path === '/robots.txt') return next();
+      seoMiddleware(req, res).catch(next);
+    });
+  } else {
+    console.warn(`[WARN] Client dist index.html not found at ${indexPath}. Serving API-only mode.`);
+    app.get('*', (req, res, next) => {
+      if (req.path.startsWith('/api') || req.path === '/sitemap.xml' || req.path === '/robots.txt') return next();
+      res.status(503).send('Application is starting or client build is missing. Please check build configuration.');
+    });
+  }
 }
 
 app.use(errorHandler);
