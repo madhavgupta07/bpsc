@@ -1,8 +1,8 @@
 {
   "app": {
-    "name": "Bihar STET CS",
-    "fullName": "Bihar STET — Computer Science",
-    "tagline": "Master Computer Science for Bihar STET with bilingual learning"
+    "name": "Bihar STET & BPSC CS",
+    "fullName": "Bihar STET & BPSC TRE — Computer Science",
+    "tagline": "Master Computer Science for Bihar STET & BPSC TRE with bilingual learning"
   },
   "nav": {
     "home": "Home",
@@ -17,26 +17,26 @@
     "language": "Language",
     "theme": "Theme",
     "leaderboard": "Leaderboard",
-    "examInfo": "Exam Pattern"
+    "examInfo": "Exam Pattern & Info"
   },
   "home": {
     "badge": "Bilingual · English / हिंदी",
     "title1": "Master",
-    "title2": "Bihar STET Computer Science",
-    "subtitle": "Bilingual chapter notes with tables and diagrams, 700+ questions drawn from real STET shifts, strictly proctored mock tests that mirror the exam — and progress tracking on every chapter.",
+    "title2": "Bihar STET & BPSC TRE Computer Science",
+    "subtitle": "Bilingual chapter notes with tables and diagrams, 700+ questions drawn from real STET & BPSC TRE shifts, CBT mock tests mirroring official patterns — and progress tracking on every chapter.",
     "startQuiz": "Start practising",
     "exploreSyllabus": "Browse syllabus",
     "statsChapters": "Chapters",
     "statsTopics": "Topics",
     "statsQuestions": "Practice questions",
     "featuresEyebrow": "What you get",
-    "featuresTitle": "Built around how the exam actually works",
+    "featuresTitle": "Built around how the exams actually work",
     "f1t": "Truly bilingual",
     "f1d": "Every question, explanation and note in English and Hindi — switch anytime, even mid-exam.",
     "f2t": "Detailed notes",
     "f2d": "Chapter-wise study notes with comparison tables, SVG diagrams and memory hooks.",
     "f3t": "Real previous-year MCQs",
-    "f3d": "Solved questions from actual Bihar STET 2023–24 shifts, cited with exam dates.",
+    "f3d": "Solved questions from actual Bihar STET & BPSC TRE shifts, cited with exam dates.",
     "f4t": "Chapter-wise practice",
     "f4d": "Topic-level and chapter-level quizzes with instant answer review.",
     "f5t": "Proctored mock tests",
@@ -50,17 +50,17 @@
     "s2t": "Practise quizzes",
     "s2d": "Attempt topic, chapter or random mixes and review every explanation.",
     "s3t": "Take mock tests",
-    "s3d": "Simulate the real 150-question paper under monitored conditions.",
+    "s3d": "Simulate the real exam paper under monitored conditions.",
     "s4t": "Track your progress",
     "s4d": "Watch accuracy climb; chapters auto-complete at 70%.",
     "ctaTitle": "Start today — it's free",
-    "ctaSubtitle": "Create an account to save every attempt and track all 17 chapters.",
+    "ctaSubtitle": "Create an account to save every attempt and track all 17 chapters for STET & BPSC TRE.",
     "ctaButton": "Get started free",
     "syllabusEyebrow": "Syllabus"
   },
   "syllabus": {
     "title": "Syllabus",
-    "subtitle": "{{count}} chapters aligned to the official Bihar STET Computer Science pattern.",
+    "subtitle": "{{count}} chapters aligned to the official Bihar STET & BPSC TRE Computer Science pattern.",
     "all": "All",
     "subject": "Subject",
     "pedagogy": "Pedagogy",
@@ -167,7 +167,7 @@
     "loginRequiredDesc": "Mock tests are tied to your progress. Sign in with Google (free) to view and attempt them."
   },
   "notes": {
-    "subtitle": "Detailed bilingual study notes for every chapter — with tables, diagrams and real previous-year questions.",
+    "subtitle": "Detailed bilingual study notes for every chapter — with tables, diagrams and real STET & BPSC TRE questions.",
     "sectionsCount": "{{count}} sections",
     "readChapter": "Read notes",
     "toc": "On this page",
@@ -241,7 +241,7 @@
     "hindi": "हिंदी",
     "protectedTitle": "Login required",
     "protectedDesc": "Please log in to access this page.",
-    "footerNote": "Built for future teachers of Bihar. शिक्षा ही सबसे बड़ी ताक़त है।"
+    "footerNote": "Built for Bihar STET & BPSC TRE Computer Science aspirants. शिक्षा ही सबसे बड़ी ताक़त है।"
   },
   "leaderboard": {
     "title": "Leaderboard",

@@ -47,10 +47,10 @@ export default function Leaderboard() {
   return (
     <div className="container-app max-w-3xl py-10">
       <Seo
-        title="Leaderboard — Bihar STET CS Top Scorers"
-        description="See the top scorers of Bihar STET Computer Science practice quizzes and mock tests. Compete, climb the ranks and keep your streak alive."
+        title="Leaderboard — Bihar STET & BPSC CS Top Scorers"
+        description="See the top scorers of Bihar STET & BPSC TRE Computer Science practice quizzes and mock tests. Compete, climb the ranks and keep your streak alive."
         path="/leaderboard"
-        keywords="Bihar STET leaderboard, STET CS rankings, STET mock test results, Bihar STET top scorers"
+        keywords="Bihar STET leaderboard, BPSC TRE CS rankings, STET CS leaderboard, mock test results, Bihar STET top scorers"
       />
 
       {/* Header */}

@@ -69,7 +69,7 @@ export default function QuizSetup() {
     <div className="container-app max-w-xl py-10">
       <Seo
         title="Practice Quiz"
-        description="Practice quizzes for Bihar STET Computer Science — pick a chapter, topic or random mode with 10-30 questions."
+        description="Practice quizzes for Bihar STET & BPSC TRE Computer Science — pick a chapter, topic or random mode with 10-30 questions."
         path="/quiz"
         noIndex
       />

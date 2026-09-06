@@ -11,10 +11,10 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['robots.txt', 'icons/icon.svg'],
       manifest: {
-        name: 'Bihar STET CS — Learning Platform',
-        short_name: 'STET CS',
+        name: 'Bihar STET & BPSC CS — Learning Platform',
+        short_name: 'STET & BPSC CS',
         description:
-          'Bilingual (English/हिंदी) Bihar STET Computer Science preparation — chapter notes, quizzes, mock tests and progress tracking.',
+          'Bilingual (English/हिंदी) Bihar STET Paper II & BPSC TRE Computer Science preparation — chapter notes, quizzes, mock tests and progress tracking.',
         lang: 'en',
         start_url: '/',
         scope: '/',

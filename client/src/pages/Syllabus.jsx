@@ -31,10 +31,10 @@ export default function Syllabus() {
   return (
     <div className="container-app py-10">
       <Seo
-        title="Bihar STET Computer Science Syllabus — All 17 Chapters | बिहार STET सिलेबस"
-        description="Complete Bihar STET Computer Science (Paper II) syllabus: 17 chapters covering Digital Logic, Data Structures, OS, DBMS, Networks, Pedagogy and more — bilingual notes & quizzes for every chapter. बिहार STET कंप्यूटर साइंस का पूरा सिलेबस।"
+        title="Bihar STET & BPSC TRE Computer Science Syllabus — All 17 Chapters | बिहार STET व BPSC सिलेबस"
+        description="Complete Bihar STET Paper II & BPSC TRE Computer Science syllabus: 17 chapters covering Digital Logic, Data Structures, OS, DBMS, Networks, Python, C++, Pedagogy and more. बिहार STET एवं BPSC TRE कंप्यूटर साइंस का पूरा सिलेबस।"
         path="/syllabus"
-        keywords="Bihar STET syllabus, STET Computer Science syllabus, Bihar STET Paper 2 syllabus, STET CS chapters, बिहार STET सिलेबस, STET ka syllabus, Bihar STET computer teacher syllabus"
+        keywords="Bihar STET syllabus, BPSC TRE Computer Science syllabus, BPSC TRE 3.0 CS syllabus, Bihar STET Paper 2 syllabus, STET CS chapters, बिहार STET सिलेबस, BPSC कंप्यूटर शिक्षक सिलेबस"
       />
       <header className="flex flex-col gap-2">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">

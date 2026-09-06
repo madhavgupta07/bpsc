@@ -163,7 +163,7 @@ export default function MockTestPlay() {
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-4">
           <div className="min-w-0">
             <p className="truncate text-[11px] font-bold uppercase tracking-widest text-slate-400">
-              Bihar STET · {t('mockTests.title')}
+              STET & BPSC TRE · {t('mockTests.title')}
             </p>
             <h1 className="truncate text-sm font-bold">{pick(test, 'title')}</h1>
           </div>

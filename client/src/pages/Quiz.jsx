@@ -211,7 +211,7 @@ export default function Quiz() {
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-4">
           <div className="min-w-0">
             <p className="truncate text-[11px] font-bold uppercase tracking-widest text-slate-400">
-              Bihar STET · {t('quiz.title')}
+              STET & BPSC CS · {t('quiz.title')}
             </p>
             <h1 className="truncate text-sm font-bold">{user?.name ?? 'Candidate'}</h1>
           </div>

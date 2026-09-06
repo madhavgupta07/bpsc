@@ -13,7 +13,7 @@ const layout = (title, bodyHtml, cta) => `
       <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width:560px;background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 1px 4px rgba(15,23,42,.08);">
         <tr>
           <td style="background:${BRAND};padding:20px 28px;color:#fff;font-size:18px;font-weight:700;">
-            🎓 Bihar STET CS
+            🎓 Bihar STET & BPSC CS
           </td>
         </tr>
         <tr>
@@ -28,7 +28,7 @@ const layout = (title, bodyHtml, cta) => `
         </tr>
         <tr>
           <td style="padding:16px 28px;background:#f8fafc;color:#94a3b8;font-size:12px;">
-            You are receiving this because you have an account on Bihar STET CS.
+            You are receiving this because you have an account on Bihar STET & BPSC CS.
           </td>
         </tr>
       </table>
@@ -41,12 +41,12 @@ const pct = (score, total) => (total > 0 ? Math.round((score / total) * 100) : 0
 
 exports.welcomeEmail = (user) => ({
   to: user.email,
-  subject: 'Welcome to Bihar STET CS 🎓 / स्वागत है',
+  subject: 'Welcome to Bihar STET & BPSC CS 🎓 / स्वागत है',
   html: layout(
     `Welcome, ${user.name}! / स्वागत है`,
     `
     <p style="margin:0 0 12px;line-height:1.6;color:#334155;">
-      Your account is ready. Prepare for the Bihar STET Computer Science exam with:
+      Your account is ready. Prepare for Bihar STET & BPSC TRE Computer Science exams with:
     </p>
     <ul style="margin:0 0 12px;line-height:1.8;color:#334155;">
       <li>📘 Bilingual chapter notes — द्विभाषी नोट्स</li>

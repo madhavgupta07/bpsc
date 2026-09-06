@@ -1,11 +1,11 @@
 import { Helmet } from 'react-helmet-async';
 
-const SITE_NAME = 'Bihar STET CS';
-const DEFAULT_TITLE = 'Bihar STET Computer Science — Free Notes, Quizzes & Mock Tests | बिहार STET कंप्यूटर साइंस';
+const SITE_NAME = 'Bihar STET & BPSC CS';
+const DEFAULT_TITLE = 'Bihar STET & BPSC TRE Computer Science — Free Notes, Quizzes & Mock Tests | बिहार STET व BPSC कंप्यूटर साइंस';
 const DEFAULT_DESCRIPTION =
-  'Free bilingual (English/हिंदी) preparation platform for Bihar STET Computer Science: 17 chapter notes, 700+ practice questions, full-length mock tests, and progress tracking. बिहार STET कंप्यूटर साइंस की पूरी तैयारी।';
+  'Free bilingual (English/हिंदी) preparation platform for Bihar STET Paper II & BPSC TRE (Class 11-12) Computer Science: 17 chapter notes, 700+ practice questions, CBT mock tests, and progress tracking. बिहार STET एवं BPSC TRE कंप्यूटर साइंस की पूरी तैयारी।';
 const DEFAULT_KEYWORDS =
-  'Bihar STET, STET Computer Science, Bihar STET syllabus, STET mock test, Bihar STET preparation, STET CS notes, बिहार STET, कंप्यूटर साइंस, STET practice quiz, BSEB STET';
+  'Bihar STET, BPSC TRE, BPSC Computer Science, BPSC TRE 3.0, BPSC TRE 4.0, STET Computer Science, Bihar STET syllabus, STET mock test, Bihar STET preparation, STET CS notes, बिहार STET, BPSC कंप्यूटर शिक्षक';
 
 /**
  * Per-page meta tags for SEO + social sharing (Open Graph / Twitter).

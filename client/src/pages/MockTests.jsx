@@ -36,10 +36,10 @@ export default function MockTests() {
   return (
     <div className="container-app py-10">
       <Seo
-        title="Bihar STET Mock Tests — Free Online Practice Tests | Full-length & Chapter-wise"
-        description="Free Bihar STET Computer Science mock tests — full-length (150Q), sectional (100Q) and chapter-wise. Exam-style interface with timer, OMR palette and instant results. बिहार STET मॉक टेस्ट ऑनलाइन।"
+        title="Bihar STET & BPSC TRE Mock Tests — Free Online Practice Tests | Full-length & Chapter-wise"
+        description="Free Bihar STET & BPSC TRE Computer Science mock tests — full-length, sectional, and chapter-wise. Exam-style CBT interface with timer, OMR palette and instant results. बिहार STET एवं BPSC TRE मॉक टेस्ट ऑनलाइन।"
         path="/mock-tests"
-        keywords="Bihar STET mock test, STET online test, Bihar STET practice test, STET CS mock test, बिहार STET मॉक टेस्ट, Bihar STET mock test paper 2, STET computer science mock test"
+        keywords="Bihar STET mock test, BPSC TRE Computer Science mock test, BPSC TRE 3.0 mock test, STET online test, BPSC CS test series, बिहार STET मॉक टेस्ट, BPSC कंप्यूटर शिक्षक टेस्ट"
       />
       <header>
         <h1 className="text-3xl font-extrabold tracking-tight">{t('mockTests.title')}</h1>

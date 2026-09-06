@@ -1,18 +1,17 @@
 /**
- * Server-side SEO middleware — injects per-route meta tags, JSON-LD structured
- * data, and pre-rendered content hints into the SPA shell HTML so that
- * search-engine crawlers (Googlebot, Bingbot, etc.) see rich, indexable content
- * instead of a blank <div id="root"></div>.
+ * SEO Pre-rendering & Metadata Injection Middleware.
  *
- * This replaces the placeholders in the built index.html at request time.
- * Only active in production mode (when serving the SPA from /client/dist).
+ * Intercepts GET requests for HTML pages (from crawlers or browser entry hits)
+ * and dynamically injects accurate, route-specific Open Graph, Twitter cards,
+ * meta tags, JSON-LD structured data, and <noscript> content into the SPA HTML
+ * shell before returning it to the client.
  */
 
 const Chapter = require('../models/Chapter');
 const Topic = require('../models/Topic');
 const MockTest = require('../models/MockTest');
 
-const SITE_NAME = 'Bihar STET CS';
+const SITE_NAME = 'Bihar STET & BPSC CS';
 const SITE_URL = (process.env.SITE_URL || process.env.CLIENT_URL || '').replace(/\/$/, '');
 
 /* ------------------------------------------------------------------ */
@@ -52,7 +51,7 @@ function baseSchemas() {
       '@type': 'WebSite',
       name: SITE_NAME,
       url: SITE_URL || undefined,
-      description: 'Free bilingual Bihar STET Computer Science preparation platform — chapter notes, quizzes, mock tests and progress tracking.',
+      description: 'Free bilingual Bihar STET Paper II & BPSC TRE Computer Science preparation platform — chapter notes, quizzes, mock tests and progress tracking.',
       inLanguage: ['en', 'hi'],
       potentialAction: {
         '@type': 'SearchAction',
@@ -63,9 +62,9 @@ function baseSchemas() {
     {
       '@context': 'https://schema.org',
       '@type': 'EducationalOrganization',
-      name: 'Bihar STET CS',
+      name: 'Bihar STET & BPSC CS',
       url: SITE_URL || undefined,
-      description: 'Free preparation platform for Bihar STET Computer Science exam.',
+      description: 'Free preparation platform for Bihar STET & BPSC TRE Computer Science exams.',
     },
   ];
 }
@@ -80,12 +79,12 @@ function baseSchemas() {
  */
 async function getSeoData(pathname) {
   const result = {
-    title: 'Bihar STET Computer Science — Free Notes, Quizzes & Mock Tests | बिहार STET कंप्यूटर साइंस',
-    description: 'Free bilingual (English/हिंदी) Bihar STET Computer Science preparation: 17 chapters of notes, 700+ practice questions, full-length mock tests and progress tracking. बिहार STET कंप्यूटर साइंस की पूरी तैयारी।',
+    title: 'Bihar STET & BPSC TRE Computer Science — Free Notes, Quizzes & Mock Tests | बिहार STET व BPSC कंप्यूटर साइंस',
+    description: 'Free bilingual (English/हिंदी) Bihar STET Paper II & BPSC TRE Computer Science preparation: 17 chapters of notes, 700+ practice questions, CBT mock tests and progress tracking. बिहार STET एवं BPSC TRE कंप्यूटर साइंस की पूरी तैयारी।',
     jsonLd: baseSchemas(),
     noscript: '',
     canonical: pathname,
-    keywords: 'Bihar STET, STET Computer Science, Bihar STET syllabus, STET mock test, Bihar STET preparation, STET CS notes, बिहार STET, कंप्यूटर साइंस, STET practice quiz',
+    keywords: 'Bihar STET, BPSC TRE, BPSC Computer Science, BPSC TRE 3.0, BPSC TRE 4.0, STET Computer Science, Bihar STET syllabus, STET mock test, Bihar STET preparation, STET CS notes, बिहार STET, BPSC कंप्यूटर शिक्षक',
   };
 
   try {
@@ -93,15 +92,15 @@ async function getSeoData(pathname) {
     if (pathname === '/') {
       const chapters = await Chapter.find({}, 'chapterNumber title_en title_hi').sort('order').lean();
       result.noscript = noscriptBlock(
-        'Bihar STET Computer Science — Free Notes, Quizzes & Mock Tests',
+        'Bihar STET & BPSC TRE Computer Science — Free Notes, Quizzes & Mock Tests',
         chapters.map((c) => `Chapter ${c.chapterNumber}: ${c.title_en} / ${c.title_hi}`),
       );
       result.jsonLd.push({
         '@context': 'https://schema.org',
         '@type': 'Course',
-        name: 'Bihar STET Computer Science Complete Preparation',
-        description: 'Comprehensive study material for Bihar STET Paper II Computer Science — 17 chapters, chapter-wise notes, practice quizzes, and full-length mock tests.',
-        provider: { '@type': 'Organization', name: 'Bihar STET CS' },
+        name: 'Bihar STET & BPSC TRE Computer Science Complete Preparation',
+        description: 'Comprehensive study material for Bihar STET Paper II & BPSC TRE Computer Science — 17 chapters, chapter-wise notes, practice quizzes, and CBT mock tests.',
+        provider: { '@type': 'Organization', name: 'Bihar STET & BPSC CS' },
         inLanguage: ['en', 'hi'],
         isAccessibleForFree: true,
         hasCourseInstance: {
@@ -117,34 +116,34 @@ async function getSeoData(pathname) {
         mainEntity: [
           {
             '@type': 'Question',
-            name: 'What is Bihar STET Computer Science exam?',
+            name: 'What is Bihar STET & BPSC TRE Computer Science exam?',
             acceptedAnswer: {
               '@type': 'Answer',
-              text: 'Bihar STET (State Teacher Eligibility Test) Paper II Computer Science is a state-level exam conducted by BSEB for recruiting computer science teachers in Bihar. It covers 17 chapters including Digital Logic, Computer Organization, Data Structures, OS, DBMS, Networks and Pedagogy.',
+              text: 'Bihar STET Paper II is the state-level teacher eligibility test conducted by BSEB, and BPSC TRE is the recruitment examination conducted by BPSC for appointing Computer Science teachers in Bihar higher secondary schools.',
             },
           },
           {
             '@type': 'Question',
-            name: 'Bihar STET Computer Science syllabus kya hai?',
+            name: 'What is the syllabus for STET and BPSC TRE Computer Science?',
             acceptedAnswer: {
               '@type': 'Answer',
-              text: 'Bihar STET CS syllabus mein 17 chapters hain: Digital Logic, Computer Organization, Data Structures, Algorithms, Programming (C/Java), OS, DBMS, Computer Networks, Software Engineering, Web Technologies, Computer Graphics, AI/ML, Cyber Security, ICT in Education, Teaching Methods aur GK.',
+              text: 'The syllabus covers 17 chapters: Digital Logic, Computer Organization, Data Structures, Algorithms, Programming (C++/Python/Java), OS, DBMS, SQL, Computer Networks, Software Engineering, Web Technologies, TOC, IoT, AI, Pedagogy, and General Studies.',
             },
           },
           {
             '@type': 'Question',
-            name: 'How many questions are in Bihar STET Paper 2?',
+            name: 'Is B.Ed required for Computer Science in STET or BPSC TRE?',
             acceptedAnswer: {
               '@type': 'Answer',
-              text: 'Bihar STET Paper II has 150 multiple-choice questions: 100 from the subject (Computer Science) worth 100 marks and 50 from pedagogy/GK sections worth 50 marks. Total duration is 2 hours 30 minutes.',
+              text: 'No. B.Ed is NOT mandatory for Computer Science in either Bihar STET or BPSC TRE. Candidates with B.Tech (CS/IT), MCA, M.Sc (CS), or BCA + PG can apply without B.Ed.',
             },
           },
           {
             '@type': 'Question',
-            name: 'Is there negative marking in Bihar STET?',
+            name: 'Is there negative marking in Bihar STET or BPSC TRE?',
             acceptedAnswer: {
               '@type': 'Answer',
-              text: 'No. There is NO negative marking in Bihar STET. Every correct answer gives +1 mark, and no marks are deducted for incorrect or unanswered questions.',
+              text: 'No. There is NO negative marking in Bihar STET and BPSC TRE Computer Science exams.',
             },
           },
         ],
@@ -155,16 +154,15 @@ async function getSeoData(pathname) {
     /* ---------- Exam Info (Pattern, Weightage, Notification) ---------- */
     if (pathname === '/exam-info') {
       const chapters = await Chapter.find({}, 'chapterNumber title_en title_hi weightage section').sort('order').lean();
-      result.title = 'Bihar STET Computer Science Syllabus 2025 — Detailed Chapter-wise Syllabus, Exam Pattern & Notification';
-      result.description = 'Complete Bihar STET Paper II Computer Science (Code 226) syllabus 2025 with chapter-wise weightage, exam pattern, eligibility criteria (B.Tech/MCA/BCA eligible, B.Ed exempted), and official notification links.';
-      result.keywords = 'Bihar STET syllabus 2025, STET Computer Science syllabus, Bihar STET exam pattern, Bihar STET notification, Bihar STET eligibility, B.Tech in Bihar STET, B.Ed exemption STET CS, बिहार STET सिलेबस, STET ka syllabus';
+      result.title = 'Bihar STET & BPSC TRE Computer Science — Exam Pattern, Eligibility, Syllabus & Roadmap';
+      result.description = 'Comprehensive guide for Bihar STET Paper II & BPSC TRE (Class 11-12) Computer Science: exam patterns, eligibility criteria (B.Tech/MCA/BCA eligible, B.Ed exempted), qualifying marks, and official portals.';
+      result.keywords = 'Bihar STET syllabus, BPSC TRE Computer Science, BPSC TRE 3.0 CS, BPSC TRE 4.0 CS syllabus, Bihar STET exam pattern, BPSC computer teacher exam pattern, Bihar STET eligibility, B.Tech in Bihar STET, बिहार STET सिलेबस';
       result.noscript = noscriptBlock(
-        'Bihar STET Computer Science — Detailed Syllabus, Exam Pattern & Official Notification',
+        'Bihar STET & BPSC TRE Computer Science — Detailed Syllabus, Exam Pattern & Roadmap',
         [
-          'Exam: Bihar STET Paper II Computer Science (Code 226) — 150 MCQs, 150 Marks, 2.5 Hours, NO Negative Marking',
-          'Exam Pattern: Subject Content (100 Qs / 100 Marks), Art of Teaching (30 Qs / 30 Marks), General Knowledge & Reasoning (20 Qs / 20 Marks)',
-          'Eligibility: B.E./B.Tech (CS/IT), MCA, M.Sc (CS), BCA + PG, or PGDCA + PG (Min 50% for Gen, 45% for SC/ST/EBC/BC). Note: B.Ed is NOT mandatory for Computer Science.',
-          'Qualifying Cutoff: General (50% / 75 marks), BC (45.5% / 68.25 marks), EBC (42.5% / 63.75 marks), SC/ST/Women/PwD (40% / 60 marks)',
+          'Bihar STET Paper II: 150 MCQs (100 CS + 30 Art of Teaching + 20 GK), 150 Marks, 2.5 Hours, NO Negative Marking',
+          'BPSC TRE (Class 11-12): 150 MCQs (Part I Language 30Q + Part II GS 40Q + Part III CS 80Q), Merit from 120 Marks',
+          'Eligibility: B.E./B.Tech (CS/IT), MCA, M.Sc (CS), BCA + PG, or PGDCA + PG (Min 50% for Gen, 45% for reserved categories). Note: B.Ed is NOT mandatory for Computer Science.',
           ...chapters.map((c) => `Chapter ${c.chapterNumber}: ${c.title_en} (${c.title_hi}) — Weightage: ${c.weightage}%`),
         ],
       );
@@ -174,34 +172,26 @@ async function getSeoData(pathname) {
         mainEntity: [
           {
             '@type': 'Question',
-            name: 'Are B.Tech / B.E. students eligible for Bihar STET Computer Science?',
+            name: 'Are B.Tech / B.E. students eligible for Bihar STET and BPSC TRE CS without B.Ed?',
             acceptedAnswer: {
               '@type': 'Answer',
-              text: 'Yes! Candidates with B.E. or B.Tech in Computer Science / Information Technology (with at least 50% marks) are fully eligible for Bihar STET Paper II Computer Science. B.Tech in any stream with a PGDCA is also eligible.',
+              text: 'Yes! Candidates with B.E. or B.Tech in Computer Science / IT (with at least 50% marks) are fully eligible without B.Ed.',
             },
           },
           {
             '@type': 'Question',
-            name: 'Is B.Ed compulsory for Bihar STET Computer Science?',
+            name: 'How does STET connect to BPSC TRE Computer Science?',
             acceptedAnswer: {
               '@type': 'Answer',
-              text: 'No. B.Ed is NOT required or mandatory for Computer Science (Subject Code 226) in Bihar STET. Candidates with B.Tech (CS/IT), MCA, M.Sc (CS), or BCA + PG can apply without B.Ed.',
+              text: 'Qualifying Bihar STET Paper II CS is the mandatory eligibility step required to apply for BPSC TRE (Class 11-12) Computer Science teacher recruitment.',
             },
           },
           {
             '@type': 'Question',
-            name: 'Is there negative marking in Bihar STET?',
+            name: 'What is the BPSC TRE CS exam pattern?',
             acceptedAnswer: {
               '@type': 'Answer',
-              text: 'No. There is NO negative marking in Bihar STET. Every correct answer gives +1 mark, and no marks are deducted for incorrect or unanswered questions.',
-            },
-          },
-          {
-            '@type': 'Question',
-            name: 'What are the qualifying / passing marks in Bihar STET?',
-            acceptedAnswer: {
-              '@type': 'Answer',
-              text: 'General (UR): 50% (75 marks out of 150), Backward Class (BC): 45.5% (68.25 marks), Extremely Backward Class (EBC): 42.5% (63.75 marks), SC / ST / Divyang / All Female Candidates: 40% (60 marks).',
+              text: 'BPSC TRE CS has 150 MCQs: Part I Language (30 marks, qualifying min 30%), Part II General Studies (40 marks), and Part III Computer Science (80 marks). Merit is calculated on 120 marks.',
             },
           },
         ],
@@ -212,17 +202,17 @@ async function getSeoData(pathname) {
     /* ---------- Syllabus listing ---------- */
     if (pathname === '/syllabus') {
       const chapters = await Chapter.find({}, 'chapterNumber title_en title_hi weightage section').sort('order').lean();
-      result.title = 'Bihar STET Computer Science Syllabus — All 17 Chapters | Complete Chapter List';
-      result.description = `Complete Bihar STET Computer Science (Paper II) syllabus: ${chapters.length} chapters covering Digital Logic, Data Structures, OS, DBMS, Networks, Pedagogy and more — bilingual notes & quizzes for every chapter.`;
-      result.keywords = 'Bihar STET syllabus, STET Computer Science syllabus, Bihar STET Paper 2 syllabus, STET CS chapters, बिहार STET सिलेबस';
+      result.title = 'Bihar STET & BPSC TRE Computer Science Syllabus — All 17 Chapters | Complete Chapter List';
+      result.description = `Complete Bihar STET Paper II & BPSC TRE Computer Science syllabus: ${chapters.length} chapters covering Digital Logic, Data Structures, OS, DBMS, Networks, Python, C++, Pedagogy and more — bilingual notes & quizzes for every chapter.`;
+      result.keywords = 'Bihar STET syllabus, BPSC TRE Computer Science syllabus, BPSC TRE 3.0 CS syllabus, Bihar STET Paper 2 syllabus, STET CS chapters, बिहार STET सिलेबस';
       result.noscript = noscriptBlock(
-        'Bihar STET Computer Science Syllabus — All Chapters',
+        'Bihar STET & BPSC TRE Computer Science Syllabus — All Chapters',
         chapters.map((c) => `Ch ${c.chapterNumber}: ${c.title_en} (${c.title_hi}) — Weightage: ${c.weightage}%`),
       );
       result.jsonLd.push({
         '@context': 'https://schema.org',
         '@type': 'ItemList',
-        name: 'Bihar STET Computer Science Syllabus',
+        name: 'Bihar STET & BPSC TRE Computer Science Syllabus',
         numberOfItems: chapters.length,
         itemListElement: chapters.map((c, i) => ({
           '@type': 'ListItem',
@@ -241,9 +231,9 @@ async function getSeoData(pathname) {
       if (chapter) {
         const topics = await Topic.find({ chapter: chapter._id }, 'name_en name_hi questionCount').sort('order').lean();
         const totalQ = topics.reduce((s, t) => s + (t.questionCount || 0), 0);
-        result.title = `${chapter.title_en} — Bihar STET CS Chapter ${chapter.chapterNumber} | ${chapter.title_hi}`;
-        result.description = `${chapter.description_en || chapter.title_en} — ${topics.length} topics, ${totalQ} practice questions. Complete notes & quizzes for Bihar STET Computer Science Chapter ${chapter.chapterNumber}.`;
-        result.keywords = `${chapter.title_en}, ${chapter.title_hi}, Bihar STET ${chapter.title_en}, STET CS Chapter ${chapter.chapterNumber}`;
+        result.title = `${chapter.title_en} — Bihar STET & BPSC CS Chapter ${chapter.chapterNumber} | ${chapter.title_hi}`;
+        result.description = `${chapter.description_en || chapter.title_en} — ${topics.length} topics, ${totalQ} practice questions. Complete notes & quizzes for Bihar STET & BPSC TRE Computer Science Chapter ${chapter.chapterNumber}.`;
+        result.keywords = `${chapter.title_en}, ${chapter.title_hi}, Bihar STET ${chapter.title_en}, BPSC TRE CS ${chapter.title_en}, STET CS Chapter ${chapter.chapterNumber}`;
         result.noscript = noscriptBlock(
           `Chapter ${chapter.chapterNumber}: ${chapter.title_en} / ${chapter.title_hi}`,
           topics.map((t) => `${t.name_en} / ${t.name_hi} (${t.questionCount} questions)`),
@@ -251,9 +241,9 @@ async function getSeoData(pathname) {
         result.jsonLd.push({
           '@context': 'https://schema.org',
           '@type': 'Course',
-          name: `${chapter.title_en} — Bihar STET CS`,
+          name: `${chapter.title_en} — Bihar STET & BPSC CS`,
           description: chapter.description_en || `Study material for ${chapter.title_en}`,
-          provider: { '@type': 'Organization', name: 'Bihar STET CS' },
+          provider: { '@type': 'Organization', name: 'Bihar STET & BPSC CS' },
           inLanguage: ['en', 'hi'],
           isAccessibleForFree: true,
           hasPart: topics.map((t) => ({
@@ -267,9 +257,9 @@ async function getSeoData(pathname) {
 
     /* ---------- Notes listing ---------- */
     if (pathname === '/notes') {
-      result.title = 'Bihar STET Computer Science Notes — Free Chapter-wise Study Material in Hindi & English';
-      result.description = 'Bilingual (English/हिंदी) chapter notes for all 17 Bihar STET Computer Science chapters — from Digital Logic to Pedagogy. Free study material for STET Paper II preparation.';
-      result.keywords = 'Bihar STET notes, STET Computer Science notes, STET CS study material, Bihar STET notes in Hindi, बिहार STET नोट्स';
+      result.title = 'Bihar STET & BPSC TRE Computer Science Notes — Free Chapter-wise Study Material in Hindi & English';
+      result.description = 'Bilingual (English/हिंदी) chapter notes for all 17 Bihar STET & BPSC TRE Computer Science chapters — Digital Logic, Data Structures, OS, DBMS, Networks, Python, C++ to Pedagogy.';
+      result.keywords = 'Bihar STET notes, BPSC TRE CS notes, BPSC Computer Science notes, STET CS study material, Bihar STET notes in Hindi, बिहार STET नोट्स';
       return result;
     }
 
@@ -279,9 +269,9 @@ async function getSeoData(pathname) {
       const chapNum = parseInt(notesMatch[1], 10);
       const chapter = await Chapter.findOne({ chapterNumber: chapNum }, 'title_en title_hi chapterNumber description_en').lean();
       if (chapter) {
-        result.title = `${chapter.title_en} Notes — Bihar STET CS Chapter ${chapter.chapterNumber} | ${chapter.title_hi} नोट्स`;
-        result.description = `Complete ${chapter.title_en} notes in Hindi & English for Bihar STET Computer Science. Chapter ${chapter.chapterNumber} study material with explanations, tables and practice tips.`;
-        result.keywords = `${chapter.title_en} notes, ${chapter.title_hi} नोट्स, Bihar STET Chapter ${chapter.chapterNumber} notes`;
+        result.title = `${chapter.title_en} Notes — Bihar STET & BPSC TRE CS Chapter ${chapter.chapterNumber} | ${chapter.title_hi} नोट्स`;
+        result.description = `Complete ${chapter.title_en} notes in Hindi & English for Bihar STET & BPSC TRE Computer Science. Chapter ${chapter.chapterNumber} study material with explanations, tables and practice tips.`;
+        result.keywords = `${chapter.title_en} notes, ${chapter.title_hi} नोट्स, Bihar STET Chapter ${chapter.chapterNumber} notes, BPSC TRE CS ${chapter.title_en}`;
       }
       return result;
     }
@@ -289,17 +279,17 @@ async function getSeoData(pathname) {
     /* ---------- Mock tests ---------- */
     if (pathname === '/mock-tests') {
       const tests = await MockTest.find({ isActive: true }, 'title_en type duration totalMarks').lean();
-      result.title = 'Bihar STET Mock Tests — Free Online Practice Tests | Full-length & Chapter-wise';
-      result.description = `${tests.length} free Bihar STET Computer Science mock tests — full-length (150Q), sectional and chapter-wise. Exam-style interface with timer, OMR palette and instant results.`;
-      result.keywords = 'Bihar STET mock test, STET online test, Bihar STET practice test, STET CS mock test, बिहार STET मॉक टेस्ट';
+      result.title = 'Bihar STET & BPSC TRE Mock Tests — Free Online Practice Tests | Full-length & Chapter-wise';
+      result.description = `${tests.length} free Bihar STET & BPSC TRE Computer Science mock tests — full-length, sectional and chapter-wise. Exam-style CBT interface with timer, OMR palette and instant results.`;
+      result.keywords = 'Bihar STET mock test, BPSC TRE Computer Science mock test, BPSC TRE 3.0 mock test, STET online test, BPSC CS test series, बिहार STET मॉक टेस्ट';
       result.noscript = noscriptBlock(
-        'Bihar STET Computer Science Mock Tests',
+        'Bihar STET & BPSC TRE Computer Science Mock Tests',
         tests.map((t) => `${t.title_en} (${t.type}, ${t.duration} min, ${t.totalMarks} marks)`),
       );
       result.jsonLd.push({
         '@context': 'https://schema.org',
         '@type': 'ItemList',
-        name: 'Bihar STET Computer Science Mock Tests',
+        name: 'Bihar STET & BPSC TRE Computer Science Mock Tests',
         numberOfItems: tests.length,
         itemListElement: tests.map((t, i) => ({
           '@type': 'ListItem',
@@ -312,16 +302,16 @@ async function getSeoData(pathname) {
 
     /* ---------- Leaderboard ---------- */
     if (pathname === '/leaderboard') {
-      result.title = 'Leaderboard — Bihar STET CS Top Scorers';
-      result.description = 'See the top performers on Bihar STET Computer Science mock tests. Track your ranking and compare with other aspirants.';
-      result.keywords = 'Bihar STET leaderboard, STET CS rankings, STET mock test results';
+      result.title = 'Leaderboard — Bihar STET & BPSC CS Top Scorers';
+      result.description = 'See the top performers on Bihar STET & BPSC TRE Computer Science practice quizzes and mock tests. Track your ranking and compare with other aspirants.';
+      result.keywords = 'Bihar STET leaderboard, BPSC TRE CS leaderboard, STET CS rankings, STET mock test results';
       return result;
     }
 
     /* ---------- Login ---------- */
     if (pathname === '/login') {
-      result.title = 'Sign In — Bihar STET CS';
-      result.description = 'Sign in with Google to track your Bihar STET preparation progress, save quiz scores, and appear on the leaderboard.';
+      result.title = 'Sign In — Bihar STET & BPSC CS';
+      result.description = 'Sign in with Google to track your Bihar STET & BPSC TRE preparation progress, save quiz scores, and appear on the leaderboard.';
       return result;
     }
 

@@ -49,25 +49,25 @@ export default function Home() {
   return (
     <div>
       <Seo
-        title="Bihar STET Computer Science Preparation — Free Notes, Quizzes & Mock Tests"
-        description="Free bilingual (English/हिंदी) Bihar STET Computer Science preparation: 17 chapters of notes, 700+ practice questions, full-length mock tests and progress tracking. बिहार STET कंप्यूटर साइंस की तैयारी।"
+        title="Bihar STET & BPSC TRE Computer Science — Free Notes, Quizzes & Mock Tests"
+        description="Free bilingual (English/हिंदी) Bihar STET Paper II & BPSC TRE Computer Science preparation: 17 chapters of notes, 700+ practice questions, CBT mock tests and progress tracking. बिहार STET एवं BPSC TRE कंप्यूटर साइंस की तैयारी।"
         path="/"
-        keywords="Bihar STET, STET Computer Science, Bihar STET preparation, STET mock test, Bihar STET syllabus, STET CS notes, बिहार STET, कंप्यूटर साइंस, STET practice, BSEB STET 2025"
+        keywords="Bihar STET, BPSC TRE, BPSC Computer Science, BPSC TRE 3.0, BPSC TRE 4.0, STET Computer Science, Bihar STET preparation, STET mock test, Bihar STET syllabus, STET CS notes, बिहार STET, BPSC कंप्यूटर शिक्षक"
         jsonLd={[
           {
             '@context': 'https://schema.org',
             '@type': 'WebSite',
-            name: 'Bihar STET CS',
+            name: 'Bihar STET & BPSC CS',
             url: window.location.origin,
-            description: 'Free bilingual Bihar STET Computer Science preparation platform.',
+            description: 'Free bilingual Bihar STET & BPSC TRE Computer Science preparation platform.',
             inLanguage: ['en', 'hi'],
           },
           {
             '@context': 'https://schema.org',
             '@type': 'Course',
-            name: 'Bihar STET Computer Science Complete Preparation',
-            description: 'Comprehensive free study material for Bihar STET Paper II Computer Science — 17 chapters, notes, quizzes, and mock tests.',
-            provider: { '@type': 'Organization', name: 'Bihar STET CS' },
+            name: 'Bihar STET & BPSC TRE Computer Science Complete Preparation',
+            description: 'Comprehensive free study material for Bihar STET Paper II & BPSC TRE (Class 11-12) Computer Science — 17 chapters, notes, quizzes, and mock tests.',
+            provider: { '@type': 'Organization', name: 'Bihar STET & BPSC CS' },
             inLanguage: ['en', 'hi'],
             isAccessibleForFree: true,
           },
@@ -77,18 +77,18 @@ export default function Home() {
             mainEntity: [
               {
                 '@type': 'Question',
-                name: 'What is Bihar STET Computer Science exam?',
-                acceptedAnswer: { '@type': 'Answer', text: 'Bihar STET Paper II Computer Science is a state-level exam conducted by BSEB for recruiting computer science teachers in Bihar. It covers 17 chapters including Digital Logic, Data Structures, OS, DBMS, Networks and Pedagogy.' },
+                name: 'What is Bihar STET & BPSC TRE Computer Science exam?',
+                acceptedAnswer: { '@type': 'Answer', text: 'Bihar STET Paper II Computer Science is the state-level eligibility exam conducted by BSEB, and BPSC TRE is the recruitment exam conducted by BPSC for appointing Higher Secondary (Class 11-12) Computer Science teachers in Bihar schools.' },
               },
               {
                 '@type': 'Question',
-                name: 'How many questions are in Bihar STET Paper 2?',
-                acceptedAnswer: { '@type': 'Answer', text: 'Bihar STET Paper II has 150 MCQs: 100 from Computer Science (100 marks) and 50 from pedagogy/GK (50 marks). Duration: 2 hours 30 minutes.' },
+                name: 'Is B.Ed compulsory for Computer Science in STET or BPSC TRE?',
+                acceptedAnswer: { '@type': 'Answer', text: 'No. B.Ed is NOT mandatory for Computer Science in Bihar STET or BPSC TRE. Candidates with B.Tech (CS/IT), MCA, M.Sc (CS), or BCA + PG are directly eligible.' },
               },
               {
                 '@type': 'Question',
-                name: 'Is there negative marking in Bihar STET?',
-                acceptedAnswer: { '@type': 'Answer', text: 'No. There is NO negative marking in Bihar STET. Each correct answer carries 1 mark.' },
+                name: 'How many questions are in BPSC TRE Computer Science?',
+                acceptedAnswer: { '@type': 'Answer', text: 'BPSC TRE Computer Science has 150 MCQs (150 marks, 2.5 hours): Part I Language (30 marks qualifying), Part II General Studies (40 marks), and Part III Computer Science (80 marks).' },
               },
             ],
           },
@@ -99,7 +99,7 @@ export default function Home() {
         <div className="container-app py-14 sm:py-20">
           <motion.p variants={fadeUp} initial="hidden" animate="show" custom={0}
             className="text-[11px] font-bold uppercase tracking-[0.18em] text-brand-600 dark:text-brand-400">
-            Bihar STET · Paper II · Computer Science
+            Bihar STET · BPSC TRE · Computer Science (Class 11-12)
           </motion.p>
 
           <motion.h1 variants={fadeUp} initial="hidden" animate="show" custom={1}
