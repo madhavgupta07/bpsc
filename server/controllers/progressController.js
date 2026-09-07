@@ -43,10 +43,18 @@ exports.updateProgress = async (req, res) => {
 
     if (quizEntry) {
       progress.quizHistory.push(quizEntry);
+      try {
+        const { notifyQuiz } = require('../utils/eventNotify');
+        notifyQuiz(req.user, quizEntry);
+      } catch {}
     }
 
     if (mockTestEntry) {
       progress.mockTestHistory.push(mockTestEntry);
+      try {
+        const { notifyMock } = require('../utils/eventNotify');
+        notifyMock(req.user, mockTestEntry);
+      } catch {}
       // Result summary email — mock tests only (quizzes fire too often).
       if (req.user?.email) {
         const { sendMail, configured } = require('../config/mailer');

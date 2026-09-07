@@ -10,6 +10,7 @@ const rateLimit = require('express-rate-limit');
 const passport = require('./config/passport');
 const connectDB = require('./config/db');
 const errorHandler = require('./middleware/errorHandler');
+const notifyErrorResponses = require('./middleware/notifyResponses');
 
 const isProd = process.env.NODE_ENV === 'production';
 
@@ -27,6 +28,10 @@ app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 app.use(passport.initialize());
+
+// Telegram alerts for every error response — patched before routes so it
+// catches errors controllers swallow with res.status().json().
+app.use(notifyErrorResponses);
 
 /* ---------- Rate limiting ---------- */
 // Global ceiling per IP — generous enough for normal app usage.
