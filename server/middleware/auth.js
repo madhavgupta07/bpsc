@@ -34,3 +34,26 @@ exports.adminOnly = (req, res, next) => {
   }
   next();
 };
+
+/**
+ * Best-effort auth — attaches `req.user` if a valid JWT is present,
+ * but never rejects. Used for public endpoints that optionally
+ * personalise the response (e.g. leaderboard "your rank").
+ */
+exports.optionalAuth = async (req, _res, next) => {
+  let token;
+  if (req.headers.authorization?.startsWith('Bearer')) {
+    token = req.headers.authorization.split(' ')[1];
+  } else if (req.cookies?.[COOKIE_NAME]) {
+    token = req.cookies[COOKIE_NAME];
+  }
+  if (token) {
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      req.user = await User.findById(decoded.id);
+    } catch {
+      /* invalid / expired — proceed anonymously */
+    }
+  }
+  next();
+};

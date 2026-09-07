@@ -255,6 +255,21 @@
     "quizzes": "Quizzes",
     "tests": "Tests",
     "empty": "No scores yet — be the first to set the pace!",
-    "you": "You"
+    "you": "You",
+    "viewProfile": "Click to view profile",
+    "profileTitle": "Player Stats",
+    "totalScore": "Total Score",
+    "totalQuestions": "Total Questions",
+    "avgQuizScore": "Avg Quiz Score",
+    "streak": "Current Streak",
+    "longestStreak": "Longest Streak",
+    "recentQuizzes": "Recent Quizzes",
+    "recentMockTests": "Recent Mock Tests",
+    "noQuizzes": "No quizzes attempted yet",
+    "noMockTests": "No mock tests attempted yet",
+    "close": "Close",
+    "scoreOf": "{{score}}/{{total}}",
+    "days": "days",
+    "yourRank": "Your Rank"
   }
 }

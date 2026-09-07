@@ -43,10 +43,12 @@ export const progressApi = {
 
 /* ---------- Leaderboard (public) ---------- */
 export const leaderboardApi = {
-  list: (scope = 'overall', limit = 50) =>
+  list: (scope = 'overall', limit = 10) =>
     api.get('/leaderboard', { params: { scope, limit } }).then((r) => r.data),
   byMockTest: (testId, limit = 50) =>
     api.get(`/leaderboard/mock/${testId}`, { params: { limit } }).then((r) => r.data),
+  userProfile: (userId) =>
+    api.get(`/leaderboard/user/${userId}`).then((r) => r.data),
 };
 
 /* ---------- Admin (admin-only) ---------- */
