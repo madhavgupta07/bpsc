@@ -2,6 +2,92 @@ const mongoose = require('mongoose');
 const UserProgress = require('../models/UserProgress');
 
 /**
+ * Shared ranking aggregation — used by the public top-N endpoint and the
+ * admin full-leaderboard view. Returns every user with activity, sorted by
+ * total score desc (+ accuracy as tiebreaker). No rank is attached here.
+ *
+ * @param {boolean} isWeekly restrict entries to the last 7 days
+ * @returns {Promise<Array>} ranked rows
+ */
+async function buildRanks(isWeekly) {
+  const since = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+
+  const withinWindow = (field) => ({
+    $filter: {
+      input: { $ifNull: [field, []] },
+      cond: isWeekly ? { $gte: ['$$this.date', since] } : true,
+    },
+  });
+
+  return UserProgress.aggregate([
+    {
+      $project: {
+        user: 1,
+        quizzes: withinWindow('$quizHistory'),
+        mocks: withinWindow('$mockTestHistory'),
+      },
+    },
+    {
+      $project: {
+        user: 1,
+        quizzesTaken: { $size: '$quizzes' },
+        testsTaken: { $size: '$mocks' },
+        quizScore: { $sum: '$quizzes.score' },
+        quizTotal: { $sum: '$quizzes.total' },
+        mockScore: { $sum: '$mocks.score' },
+        mockTotal: { $sum: '$mocks.total' },
+      },
+    },
+    {
+      $group: {
+        _id: '$user',
+        quizzesTaken: { $sum: '$quizzesTaken' },
+        testsTaken: { $sum: '$testsTaken' },
+        totalScore: { $sum: { $add: ['$quizScore', '$mockScore'] } },
+        totalQuestions: { $sum: { $add: ['$quizTotal', '$mockTotal'] } },
+      },
+    },
+    { $match: { totalQuestions: { $gt: 0 } } },
+    {
+      $addFields: {
+        accuracy: {
+          $round: [
+            { $multiply: [{ $divide: ['$totalScore', '$totalQuestions'] }, 100] },
+            1,
+          ],
+        },
+      },
+    },
+    { $sort: { totalScore: -1, accuracy: -1 } },
+    {
+      $lookup: {
+        from: 'users',
+        localField: '_id',
+        foreignField: '_id',
+        as: 'user',
+        pipeline: [{ $project: { name: 1, avatar: 1, 'stats.streakDays': 1, email: 1 } }],
+      },
+    },
+    { $unwind: '$user' },
+    {
+      $project: {
+        _id: 0,
+        userId: '$_id',
+        name: '$user.name',
+        avatar: '$user.avatar',
+        email: '$user.email',
+        streakDays: '$user.stats.streakDays',
+        quizzesTaken: 1,
+        testsTaken: 1,
+        totalScore: 1,
+        totalQuestions: 1,
+        accuracy: 1,
+      },
+    },
+  ]);
+}
+
+/**
  * Aggregates quizHistory + mockTestHistory into per-user totals.
  *
  * GET /api/leaderboard?scope=overall|weekly&limit=10
@@ -16,83 +102,17 @@ exports.getLeaderboard = async (req, res) => {
   try {
     const TOP_N = Math.min(parseInt(req.query.limit) || 10, 100);
     const isWeekly = req.query.scope === 'weekly';
-    const since = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
 
-    const withinWindow = (field) => ({
-      $filter: {
-        input: { $ifNull: [field, []] },
-        cond: isWeekly ? { $gte: ['$$this.date', since] } : true,
-      },
-    });
+    const allRows = await buildRanks(isWeekly);
 
-    // Full ranked list (no $limit) so we can locate the current user.
-    const allRows = await UserProgress.aggregate([
-      {
-        $project: {
-          user: 1,
-          quizzes: withinWindow('$quizHistory'),
-          mocks: withinWindow('$mockTestHistory'),
-        },
-      },
-      {
-        $project: {
-          user: 1,
-          quizzesTaken: { $size: '$quizzes' },
-          testsTaken: { $size: '$mocks' },
-          quizScore: { $sum: '$quizzes.score' },
-          quizTotal: { $sum: '$quizzes.total' },
-          mockScore: { $sum: '$mocks.score' },
-          mockTotal: { $sum: '$mocks.total' },
-        },
-      },
-      {
-        $group: {
-          _id: '$user',
-          quizzesTaken: { $sum: '$quizzesTaken' },
-          testsTaken: { $sum: '$testsTaken' },
-          totalScore: { $sum: { $add: ['$quizScore', '$mockScore'] } },
-          totalQuestions: { $sum: { $add: ['$quizTotal', '$mockTotal'] } },
-        },
-      },
-      { $match: { totalQuestions: { $gt: 0 } } },
-      {
-        $addFields: {
-          accuracy: {
-            $round: [
-              { $multiply: [{ $divide: ['$totalScore', '$totalQuestions'] }, 100] },
-              1,
-            ],
-          },
-        },
-      },
-      { $sort: { totalScore: -1, accuracy: -1 } },
-      {
-        $lookup: {
-          from: 'users',
-          localField: '_id',
-          foreignField: '_id',
-          as: 'user',
-          pipeline: [{ $project: { name: 1, avatar: 1, 'stats.streakDays': 1 } }],
-        },
-      },
-      { $unwind: '$user' },
-      {
-        $project: {
-          _id: 0,
-          userId: '$_id',
-          name: '$user.name',
-          avatar: '$user.avatar',
-          streakDays: '$user.stats.streakDays',
-          quizzesTaken: 1,
-          testsTaken: 1,
-          totalScore: 1,
-          totalQuestions: 1,
-          accuracy: 1,
-        },
-      },
-    ]);
+    // Public view never exposes emails even though the shared builder
+    // fetches them for the admin section.
+    const stripEmail = (r) => {
+      const { email, ...rest } = r;
+      return rest;
+    };
 
-    const leaderboard = allRows.slice(0, TOP_N);
+    const leaderboard = allRows.slice(0, TOP_N).map(stripEmail);
 
     // If the caller is authenticated, find their rank in the full list.
     let currentUser = null;
@@ -100,7 +120,7 @@ exports.getLeaderboard = async (req, res) => {
       const uid = req.user._id.toString();
       const idx = allRows.findIndex((r) => r.userId.toString() === uid);
       if (idx !== -1) {
-        currentUser = { ...allRows[idx], rank: idx + 1 };
+        currentUser = { ...stripEmail(allRows[idx]), rank: idx + 1 };
       }
     }
 
@@ -253,4 +273,11 @@ exports.getUserProfile = async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
+};
+
+module.exports = {
+  getLeaderboard: exports.getLeaderboard,
+  getMockLeaderboard: exports.getMockLeaderboard,
+  getUserProfile: exports.getUserProfile,
+  buildRanks,
 };

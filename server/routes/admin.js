@@ -7,6 +7,9 @@ router.use(protect, adminOnly);
 /* Stats */
 router.get('/stats', admin.getStats);
 
+/* Leaderboard (all users) */
+router.get('/leaderboard', admin.getFullLeaderboard);
+
 /* Users */
 router.get('/users', admin.listUsers);
 router.put('/users/:id/role', admin.setUserRole);

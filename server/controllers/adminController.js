@@ -5,6 +5,30 @@ const Question = require('../models/Question');
 const MockTest = require('../models/MockTest');
 const User = require('../models/User');
 const UserProgress = require('../models/UserProgress');
+const { buildRanks } = require('./leaderboardController');
+
+/* ---------------- Leaderboard (all users) ---------------- */
+
+/**
+ * Full ranking of every user — unlike the public top-10 endpoint, admins
+ * see the complete rating list, including emails.
+ *
+ * GET /api/admin/leaderboard?scope=overall|weekly
+ */
+exports.getFullLeaderboard = async (req, res) => {
+  try {
+    const isWeekly = req.query.scope === 'weekly';
+    const rows = await buildRanks(isWeekly);
+
+    res.json({
+      scope: isWeekly ? 'weekly' : 'overall',
+      leaderboard: rows.map((row, i) => ({ ...row, rank: i + 1 })),
+      total: rows.length,
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
 
 /* ---------------- Dashboard stats ---------------- */
 

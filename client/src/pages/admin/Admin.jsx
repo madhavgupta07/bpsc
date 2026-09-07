@@ -4,7 +4,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import {
   BookOpen, FileText, HelpCircle, ListChecks, Plus, Search,
-  ShieldCheck, Trash2, Users,
+  ShieldCheck, Trash2, Trophy, Users,
 } from 'lucide-react';
 import Seo from '../../components/seo/Seo';
 import Button from '../../components/ui/Button';
@@ -16,6 +16,7 @@ import { cn } from '../../lib/cn';
 
 const TABS = [
   ['overview', 'Overview', ListChecks],
+  ['leaderboard', 'Leaderboard', Trophy],
   ['chapters', 'Chapters', BookOpen],
   ['questions', 'Questions', HelpCircle],
   ['tests', 'Mock Tests', FileText],
@@ -77,11 +78,92 @@ export default function Admin() {
 
       <div className="mt-6">
         {tab === 'overview' && <Overview />}
+        {tab === 'leaderboard' && <LeaderboardPanel />}
         {tab === 'chapters' && <Chapters />}
         {tab === 'questions' && <Questions />}
         {tab === 'tests' && <MockTestsPanel />}
         {tab === 'users' && <UsersPanel />}
       </div>
+    </div>
+  );
+}
+
+/* ================= Leaderboard (all users) ================= */
+
+const RANK_BADGE = [
+  'bg-gradient-to-br from-amber-400 to-yellow-500 text-amber-950',
+  'bg-gradient-to-br from-slate-300 to-slate-400 text-slate-900',
+  'bg-gradient-to-br from-orange-300 to-amber-600 text-orange-950',
+];
+
+function LeaderboardPanel() {
+  const [scope, setScope] = useState('overall');
+  const { data, isLoading } = useQuery({
+    queryKey: ['admin', 'leaderboard', scope],
+    queryFn: () => adminApi.leaderboard(scope),
+  });
+
+  const rows = asArray(data?.leaderboard);
+
+  return (
+    <div className="space-y-4">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex w-fit rounded-xl border border-slate-200 bg-white p-1 dark:border-zinc-700 dark:bg-zinc-900">
+          {['overall', 'weekly'].map((s) => (
+            <button
+              key={s}
+              onClick={() => setScope(s)}
+              aria-pressed={scope === s}
+              className={cn(
+                'rounded-lg px-4 py-1.5 text-sm font-semibold transition-all',
+                scope === s
+                  ? 'bg-brand-600 text-white shadow-sm'
+                  : 'text-slate-500 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-zinc-100',
+              )}
+            >
+              {s === 'overall' ? 'Overall' : 'Weekly'}
+            </button>
+          ))}
+        </div>
+        <span className="text-xs tabular-nums text-slate-400">{rows.length} user(s) with activity</span>
+      </div>
+
+      {isLoading ? (
+        <Skeleton className="h-64" />
+      ) : rows.length === 0 ? (
+        <p className="rounded-2xl border border-dashed border-slate-300 p-10 text-center text-sm text-slate-400 dark:border-zinc-700 dark:text-zinc-500">
+          No activity yet in this scope.
+        </p>
+      ) : (
+        <ol className="divide-y divide-slate-100 overflow-hidden rounded-2xl border border-slate-200 bg-white dark:divide-zinc-800 dark:border-zinc-800 dark:bg-zinc-900">
+          {rows.map((row) => (
+            <li key={row.userId} className="flex flex-wrap items-center gap-x-4 gap-y-1 px-4 py-3">
+              <span
+                className={cn(
+                  'flex size-7 shrink-0 items-center justify-center rounded-lg text-xs font-extrabold tabular-nums',
+                  row.rank <= 3
+                    ? RANK_BADGE[row.rank - 1]
+                    : 'bg-slate-100 text-slate-500 dark:bg-zinc-800 dark:text-zinc-400',
+                )}
+              >
+                {row.rank}
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm font-semibold">{row.name}</p>
+                <p className="truncate text-xs text-slate-400">{row.email}</p>
+              </div>
+              <span className="shrink-0 text-xs tabular-nums text-orange-500">🔥 {row.streakDays || 0}</span>
+              <span className="hidden shrink-0 text-xs tabular-nums text-slate-400 sm:block">
+                {row.quizzesTaken} Q · {row.testsTaken} T
+              </span>
+              <div className="shrink-0 text-right">
+                <p className="text-sm font-extrabold tabular-nums">{row.totalScore}</p>
+                <p className="text-[11px] tabular-nums text-slate-400">{row.accuracy}%</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      )}
     </div>
   );
 }

@@ -54,6 +54,8 @@ export const leaderboardApi = {
 /* ---------- Admin (admin-only) ---------- */
 export const adminApi = {
   stats: () => api.get('/admin/stats').then((r) => r.data),
+  leaderboard: (scope = 'overall') =>
+    api.get('/admin/leaderboard', { params: { scope } }).then((r) => r.data),
   users: (params) => api.get('/admin/users', { params }).then((r) => r.data),
   setUserRole: (id, role) => api.put(`/admin/users/${id}/role`, { role }).then((r) => r.data),
   // Chapters
