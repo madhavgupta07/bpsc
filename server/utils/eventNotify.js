@@ -52,6 +52,9 @@ function percentile(score, total) {
  * also catches errors that controllers swallow with res.status().json().
  * Repeated identical errors collapse into one burst-counted message.
  */
+/** Known bot User-Agent patterns. */
+const BOT_UA_RE = /bot|crawl|spider|slurp|wget|curl|python|axios|node-fetch|headless|phantom|lighthouse|pagespeed|prerender/i;
+
 function notifyError(err, req = {}) {
   const status = Number(err?.statusCode || err?.status || 500);
   if (!configured || !errorEnabled(status)) return;
@@ -61,6 +64,11 @@ function notifyError(err, req = {}) {
   const user = req.user?.email || req.user?.name || 'anonymous';
   const message = (err?.message || err?.stack || String(err)).slice(0, 300);
 
+  const ua = (req.headers?.['user-agent'] || '').slice(0, 150);
+  const ip = req.headers?.['x-forwarded-for']?.split(',')[0]?.trim()
+    || req.socket?.remoteAddress || '';
+  const isBot = BOT_UA_RE.test(ua);
+
   const icon = status >= 500 ? '🔴' : status === 401 || status === 403 ? '🔒' : '🟠';
   const label = status >= 500 ? 'ERROR' : status === 401 || status === 403 ? 'ACCESS' : 'CLIENT';
 
@@ -69,7 +77,9 @@ function notifyError(err, req = {}) {
   safeSend(() =>
     notifyWithBurst(
       `${icon} <b>${label} ${status}</b> — <code>${esc(method)} ${esc(url)}</code>\n` +
-        `<i>${esc(message)}</i>\n👤 ${esc(user)}`,
+        `<i>${esc(message)}</i>\n` +
+        `👤 ${esc(user)} · 🌐 <code>${esc(ip)}</code>\n` +
+        `${isBot ? '🤖 BOT' : '🧑 Human'} · <code>${esc(ua || 'no UA')}</code>`,
       status >= 500 ? 5 : 15
     )
   );
