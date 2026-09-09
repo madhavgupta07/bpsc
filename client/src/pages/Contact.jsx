@@ -144,7 +144,7 @@ export default function Contact() {
         {/* Direct channels */}
         <div className="space-y-4 lg:col-span-2">
           <a
-            href={`mailto:support@biharstetcs.com`}
+            href={`mailto:madhavgupta5555@gmail.com`}
             className="group flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 transition-colors hover:border-brand-300 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-brand-500/50"
           >
             <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-700 ring-1 ring-brand-100 dark:bg-brand-500/10 dark:text-brand-400 dark:ring-brand-500/20">

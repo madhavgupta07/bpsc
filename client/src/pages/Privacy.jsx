@@ -20,10 +20,10 @@ export default function Privacy() {
           <p className="mt-1 text-sm text-slate-500 dark:text-zinc-400">{t('privacy.contactDesc')}</p>
         </div>
         <a
-          href="mailto:support@biharstetcs.com"
+          href="mailto:madhavgupta5555@gmail.com"
           className="inline-flex items-center gap-2 rounded-xl bg-brand-50 px-4 py-2.5 text-sm font-semibold text-brand-700 ring-1 ring-brand-100 transition-colors hover:bg-brand-100 dark:bg-brand-500/10 dark:text-brand-300 dark:ring-brand-500/20 dark:hover:bg-brand-500/20"
         >
-          <Mail className="size-4" aria-hidden="true" /> support@biharstetcs.com
+          <Mail className="size-4" aria-hidden="true" /> madhavgupta5555@gmail.com
         </a>
       </section>
     </LegalArticle>
