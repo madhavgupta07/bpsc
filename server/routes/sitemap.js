@@ -15,6 +15,11 @@ const STATIC_ROUTES = [
   { path: '/notes',       freq: 'weekly',  priority: '0.9' },
   { path: '/mock-tests',  freq: 'weekly',  priority: '0.8' },
   { path: '/leaderboard', freq: 'monthly', priority: '0.5' },
+  { path: '/forum',       freq: 'weekly',  priority: '0.6' },
+  { path: '/about',       freq: 'monthly', priority: '0.4' },
+  { path: '/contact',     freq: 'monthly', priority: '0.3' },
+  { path: '/privacy',     freq: 'yearly',  priority: '0.2' },
+  { path: '/terms',       freq: 'yearly',  priority: '0.2' },
 ];
 
 router.get('/robots.txt', (_, res) => {

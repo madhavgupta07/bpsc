@@ -14,6 +14,13 @@ export default function Footer() {
           <Link to="/notes" className="hover:text-brand-600 dark:hover:text-brand-400">{t('nav.notes')}</Link>
           <Link to="/mock-tests" className="hover:text-brand-600 dark:hover:text-brand-400">{t('nav.mockTests')}</Link>
           <Link to="/leaderboard" className="hover:text-brand-600 dark:hover:text-brand-400">{t('nav.leaderboard')}</Link>
+          <Link to="/forum" className="hover:text-brand-600 dark:hover:text-brand-400">{t('nav.forum')}</Link>
+        </div>
+        <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs font-semibold text-slate-400 dark:text-zinc-500">
+          <Link to="/about" className="hover:text-brand-600 dark:hover:text-brand-400">{t('nav.about')}</Link>
+          <Link to="/contact" className="hover:text-brand-600 dark:hover:text-brand-400">{t('nav.contact')}</Link>
+          <Link to="/privacy" className="hover:text-brand-600 dark:hover:text-brand-400">{t('nav.privacy')}</Link>
+          <Link to="/terms" className="hover:text-brand-600 dark:hover:text-brand-400">{t('nav.terms')}</Link>
         </div>
         <div className="flex flex-col items-center gap-2">
           <span className="flex items-center gap-2 text-sm font-semibold text-slate-700 dark:text-zinc-300">

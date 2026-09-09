@@ -308,6 +308,44 @@ async function getSeoData(pathname) {
       return result;
     }
 
+    /* ---------- About ---------- */
+    if (pathname === '/about') {
+      result.title = 'About — Bihar STET & BPSC CS';
+      result.description = 'Learn about Bihar STET & BPSC CS — a free bilingual preparation platform for Bihar STET Paper II & BPSC TRE Computer Science. Our mission is to make quality CS study material accessible to every aspirant.';
+      result.keywords = 'about Bihar STET & BPSC CS, Bihar STET preparation platform, BPSC TRE CS study';
+      return result;
+    }
+
+    /* ---------- Contact ---------- */
+    if (pathname === '/contact') {
+      result.title = 'Contact Us — Bihar STET & BPSC CS';
+      result.description = 'Get in touch with Bihar STET & BPSC CS — ask a question, report an issue or share feedback. We typically reply within 24-48 hours.';
+      result.keywords = 'contact Bihar STET, Bihar STET & BPSC CS support, feedback, report issue';
+      return result;
+    }
+
+    /* ---------- Privacy policy ---------- */
+    if (pathname === '/privacy') {
+      result.title = 'Privacy Policy — Bihar STET & BPSC CS';
+      result.description = 'How Bihar STET & BPSC CS collects, uses and protects your data — including Google sign-in, progress tracking and analytics.';
+      return result;
+    }
+
+    /* ---------- Terms & conditions ---------- */
+    if (pathname === '/terms') {
+      result.title = 'Terms & Conditions — Bihar STET & BPSC CS';
+      result.description = 'The terms that govern your use of Bihar STET & BPSC CS — accounts, content usage, no guarantee of exam prediction accuracy, and liability limits.';
+      return result;
+    }
+
+    /* ---------- Forum ---------- */
+    if (pathname === '/forum') {
+      result.title = 'Discussion Forum — Bihar STET & BPSC CS';
+      result.description = 'Ask questions, share doubts and help fellow aspirants on the Bihar STET & BPSC TRE Computer Science community forum.';
+      result.keywords = 'Bihar STET forum, BPSC CS discussion, STET doubts, computer science questions';
+      return result;
+    }
+
     /* ---------- Login ---------- */
     if (pathname === '/login') {
       result.title = 'Sign In — Bihar STET & BPSC CS';

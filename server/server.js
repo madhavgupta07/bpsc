@@ -59,6 +59,8 @@ app.use('/api/mock-tests', require('./routes/mockTests'));
 app.use('/api/progress', require('./routes/progress'));
 app.use('/api/leaderboard', require('./routes/leaderboard'));
 app.use('/api/admin', require('./routes/admin'));
+app.use('/api/forum', require('./routes/forum'));
+app.use('/api/contact', require('./routes/contact'));
 
 /* ---------- SEO endpoints (root-level for crawlers) ---------- */
 app.use('/', require('./routes/sitemap'));

@@ -72,3 +72,21 @@ export const adminApi = {
   createMockTest: (body) => api.post('/admin/mock-tests', body).then((r) => r.data),
   deleteMockTest: (id) => api.delete(`/admin/mock-tests/${id}`).then((r) => r.data),
 };
+
+/* ---------- Contact (public) ---------- */
+export const contactApi = {
+  send: (body) => api.post('/contact', body).then((r) => r.data),
+};
+
+/* ---------- Forum (public reads, protected writes) ---------- */
+export const forumApi = {
+  list: (params) => api.get('/forum', { params }).then((r) => r.data),
+  get: (id) => api.get(`/forum/${id}`).then((r) => r.data),
+  create: (body) => api.post('/forum', body).then((r) => r.data),
+  toggleUpvote: (id) => api.post(`/forum/${id}/upvote`).then((r) => r.data),
+  addAnswer: (id, body) => api.post(`/forum/${id}/answers`, body).then((r) => r.data),
+  toggleAnswerUpvote: (postId, answerId) =>
+    api.post(`/forum/${postId}/answers/${answerId}/upvote`).then((r) => r.data),
+  toggleSolved: (id) => api.post(`/forum/${id}/solved`).then((r) => r.data),
+  remove: (id) => api.delete(`/forum/${id}`).then((r) => r.data),
+};

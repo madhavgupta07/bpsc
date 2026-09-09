@@ -22,6 +22,13 @@ import Login from './pages/Login';
 import AuthCallback from './pages/AuthCallback';
 import Admin from './pages/admin/Admin';
 import NotFound from './pages/NotFound';
+import About from './pages/About';
+import Contact from './pages/Contact';
+import Privacy from './pages/Privacy';
+import Terms from './pages/Terms';
+import Forum from './pages/Forum';
+import ForumNew from './pages/ForumNew';
+import ForumPost from './pages/ForumPost';
 
 /** Scrolls to top on navigation — standard SPA UX practice. */
 function ScrollToTop() {
@@ -55,11 +62,18 @@ export default function App() {
           <Route path="/quiz/:mode/:id?" element={<Quiz />} />
           <Route path="/mock-tests" element={<MockTests />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/forum" element={<Forum />} />
+          <Route path="/forum/:id" element={<ForumPost />} />
 
           {/* Authenticated routes */}
           <Route element={<ProtectedRoute />}>
             <Route path="/test/:id" element={<MockTestPlay />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/forum/new" element={<ForumNew />} />
           </Route>
 
           <Route path="/results" element={<Results />} />
