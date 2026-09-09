@@ -71,12 +71,14 @@ export default defineConfig({
   ],
   build: {
     chunkSizeWarningLimit: 600,
+    sourcemap: true,
     rollupOptions: {
       output: {
         manualChunks: {
           'react-vendor': ['react', 'react-dom', 'react-router-dom'],
           'motion': ['framer-motion'],
           'query': ['@tanstack/react-query'],
+          'i18n': ['i18next', 'react-i18next'],
         },
       },
     },

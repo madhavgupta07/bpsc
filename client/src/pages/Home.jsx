@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { motion } from 'framer-motion';
+import { lazy, Suspense } from 'react';
 import {
   ArrowRight, BookOpenText, History, Languages, LineChart, PlayCircle,
   ShieldCheck, Target,
@@ -12,6 +12,14 @@ import { useAuth } from '../context/AuthContext';
 import { useLocalized } from '../hooks/useLocalized';
 import { chaptersApi } from '../lib/api';
 import { asArray } from '../lib/apiClient';
+
+// Lazy-load framer-motion so it's not in the critical path for hero paint.
+const LazyMotionDiv = lazy(() =>
+  import('framer-motion').then((m) => ({ default: m.motion.div }))
+);
+const LazyMotionLi = lazy(() =>
+  import('framer-motion').then((m) => ({ default: m.motion.li }))
+);
 
 const fadeUp = {
   hidden: { opacity: 0, y: 14 },
@@ -94,39 +102,39 @@ export default function Home() {
           },
         ]}
       />
-      {/* ---------- Hero ---------- */}
+      {/* ---------- Hero (CSS-animated — no framer-motion reflow) ---------- */}
       <section className="border-b border-slate-200 dark:border-zinc-800">
         <div className="container-app py-14 sm:py-20">
-          <motion.p variants={fadeUp} initial="hidden" animate="show" custom={0}
-            className="text-[11px] font-bold uppercase tracking-[0.18em] text-brand-600 dark:text-brand-400">
+          <p style={{ animationDelay: '0ms' }}
+            className="animate-fade-up text-[11px] font-bold uppercase tracking-[0.18em] text-brand-600 dark:text-brand-400">
             Bihar STET · BPSC TRE · Computer Science (Class 11-12)
-          </motion.p>
+          </p>
 
-          <motion.h1 variants={fadeUp} initial="hidden" animate="show" custom={1}
-            className="mt-4 max-w-3xl text-3xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-5xl dark:text-zinc-50">
+          <h1 style={{ animationDelay: '60ms' }}
+            className="animate-fade-up mt-4 max-w-3xl text-3xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-5xl dark:text-zinc-50">
             {t('home.title1')}{' '}
-            <span className="text-slate-400 dark:text-zinc-500">—</span>{' '}
+            <span className="text-slate-500 dark:text-zinc-400">—</span>{' '}
             {t('home.title2')}
-          </motion.h1>
+          </h1>
 
-          <motion.p variants={fadeUp} initial="hidden" animate="show" custom={2}
-            className="mt-5 max-w-2xl text-base leading-relaxed text-slate-600 sm:text-lg dark:text-zinc-400">
+          <p style={{ animationDelay: '120ms' }}
+            className="animate-fade-up mt-5 max-w-2xl text-base leading-relaxed text-slate-600 sm:text-lg dark:text-zinc-400">
             {t('home.subtitle')}
-          </motion.p>
+          </p>
 
-          <motion.div variants={fadeUp} initial="hidden" animate="show" custom={3}
-            className="mt-8 flex flex-wrap items-center gap-3">
+          <div style={{ animationDelay: '180ms' }}
+            className="animate-fade-up mt-8 flex flex-wrap items-center gap-3">
             <Button as={Link} to="/quiz" size="lg">
               <PlayCircle className="size-4" aria-hidden="true" /> {t('home.startQuiz')}
             </Button>
             <Button as={Link} to="/notes" variant="outline" size="lg">
               {t('nav.notes')} <ArrowRight className="size-4" aria-hidden="true" />
             </Button>
-          </motion.div>
+          </div>
 
           {/* Inline stats */}
-          <motion.dl variants={fadeUp} initial="hidden" animate="show" custom={4}
-            className="mt-12 flex max-w-xl items-center gap-6 border-y border-slate-200 py-4 dark:border-zinc-800">
+          <dl style={{ animationDelay: '240ms' }}
+            className="animate-fade-up mt-12 flex max-w-xl items-center gap-6 border-y border-slate-200 py-4 dark:border-zinc-800">
             {[
               [String(chapters.length).padStart(2, '0'), t('home.statsChapters')],
               [totalTopics ? String(totalTopics) : '—', t('home.statsTopics')],
@@ -137,60 +145,64 @@ export default function Home() {
                 <dt className="mt-0.5 text-xs font-medium text-slate-500 dark:text-zinc-400">{label}</dt>
               </div>
             ))}
-          </motion.dl>
+          </dl>
         </div>
       </section>
 
       {/* ---------- Features ---------- */}
       <section className="container-app py-14 sm:py-16">
         <div className="max-w-2xl">
-          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-400 dark:text-zinc-500">
+          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500 dark:text-zinc-400">
             {t('home.featuresEyebrow')}
           </p>
           <h2 className="mt-2 text-xl font-extrabold tracking-tight sm:text-2xl">{t('home.featuresTitle')}</h2>
         </div>
 
-        <div className="mt-9 grid gap-x-10 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
-          {features.map((f, i) => (
-            <motion.div
-              key={f.t}
-              variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-40px' }} custom={i % 3}
-            >
-              <span className="flex size-9 items-center justify-center rounded-md bg-brand-50 text-brand-700 ring-1 ring-brand-100 dark:bg-brand-500/10 dark:text-brand-400 dark:ring-brand-500/20">
-                <f.icon className="size-[18px]" aria-hidden="true" />
-              </span>
-              <h3 className="mt-3.5 text-sm font-bold">{f.t}</h3>
-              <p className="mt-1 text-sm leading-relaxed text-slate-500 dark:text-zinc-400">{f.d}</p>
-            </motion.div>
-          ))}
-        </div>
+        <Suspense fallback={null}>
+          <div className="mt-9 grid gap-x-10 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
+            {features.map((f, i) => (
+              <LazyMotionDiv
+                key={f.t}
+                variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-40px' }} custom={i % 3}
+              >
+                <span className="flex size-9 items-center justify-center rounded-md bg-brand-50 text-brand-700 ring-1 ring-brand-100 dark:bg-brand-500/10 dark:text-brand-400 dark:ring-brand-500/20">
+                  <f.icon className="size-[18px]" aria-hidden="true" />
+                </span>
+                <h3 className="mt-3.5 text-sm font-bold">{f.t}</h3>
+                <p className="mt-1 text-sm leading-relaxed text-slate-500 dark:text-zinc-400">{f.d}</p>
+              </LazyMotionDiv>
+            ))}
+          </div>
+        </Suspense>
       </section>
 
       {/* ---------- Workflow ---------- */}
       <section className="border-y border-slate-200 bg-white py-12 sm:py-14 dark:border-zinc-800 dark:bg-zinc-900/40">
         <div className="container-app">
           <div className="max-w-2xl">
-            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-400 dark:text-zinc-500">
+            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500 dark:text-zinc-400">
               {t('home.howEyebrow')}
             </p>
             <h2 className="mt-2 text-xl font-extrabold tracking-tight sm:text-2xl">{t('home.howTitle')}</h2>
           </div>
 
-          <ol className="mt-9 grid gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
-            {steps.map((s, i) => (
-              <motion.li
-                key={s.n}
-                variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} custom={i}
-                className="border-t-2 border-slate-900 pt-4 dark:border-white"
-              >
-                <span className="font-mono text-xs font-bold tabular-nums text-brand-600 dark:text-brand-400">{s.n}</span>
-                <h3 className="mt-2 text-sm font-bold">
-                  <Link to={s.to} className="hover:text-brand-700 hover:underline dark:hover:text-brand-400">{s.t}</Link>
-                </h3>
-                <p className="mt-1.5 text-sm leading-relaxed text-slate-500 dark:text-zinc-400">{s.d}</p>
-              </motion.li>
-            ))}
-          </ol>
+          <Suspense fallback={null}>
+            <ol className="mt-9 grid gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
+              {steps.map((s, i) => (
+                <LazyMotionLi
+                  key={s.n}
+                  variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} custom={i}
+                  className="border-t-2 border-slate-900 pt-4 dark:border-white"
+                >
+                  <span className="font-mono text-xs font-bold tabular-nums text-brand-600 dark:text-brand-400">{s.n}</span>
+                  <h3 className="mt-2 text-sm font-bold">
+                    <Link to={s.to} className="hover:text-brand-700 hover:underline dark:hover:text-brand-400">{s.t}</Link>
+                  </h3>
+                  <p className="mt-1.5 text-sm leading-relaxed text-slate-500 dark:text-zinc-400">{s.d}</p>
+                </LazyMotionLi>
+              ))}
+            </ol>
+          </Suspense>
         </div>
       </section>
 
@@ -199,7 +211,7 @@ export default function Home() {
         <section id="syllabus-index" className="container-app py-12 sm:py-16">
           <div className="flex items-baseline justify-between">
             <div>
-              <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-400 dark:text-zinc-500">
+              <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500 dark:text-zinc-400">
                 {t('home.syllabusEyebrow')}
               </p>
               <h2 className="mt-2 text-lg font-extrabold tracking-tight">{t('nav.syllabus')}</h2>
@@ -213,19 +225,19 @@ export default function Home() {
             {chapters.map((c) => (
               <li key={c._id} className="border-b border-slate-100 dark:border-zinc-800">
                 <Link to={`/syllabus/${c._id}`} className="group flex items-center gap-4 py-3">
-                  <span className="w-8 shrink-0 font-mono text-xs font-bold tabular-nums text-slate-300 dark:text-zinc-600">
+                  <span className="w-8 shrink-0 font-mono text-xs font-bold tabular-nums text-slate-400 dark:text-zinc-500">
                     {String(c.chapterNumber).padStart(2, '0')}
                   </span>
                   <span className="min-w-0 flex-1 truncate text-sm font-semibold group-hover:text-brand-700 group-hover:underline dark:group-hover:text-brand-400">
                     {pick(c, 'title')}
                   </span>
-                  <span className="hidden shrink-0 text-xs tabular-nums text-slate-400 sm:block dark:text-zinc-500">
+                  <span className="hidden shrink-0 text-xs tabular-nums text-slate-500 sm:block dark:text-zinc-400">
                     {t('syllabus.weightage', { count: c.weightage })}
                   </span>
-                  <span className="hidden shrink-0 text-xs text-slate-400 md:block dark:text-zinc-500">
+                  <span className="hidden shrink-0 text-xs text-slate-500 md:block dark:text-zinc-400">
                     {t('syllabus.topicsCount', { count: c.topicCount ?? c.topics?.length ?? 0 })}
                   </span>
-                  <ArrowRight className="size-4 shrink-0 text-slate-300 transition-transform group-hover:translate-x-0.5 group-hover:text-brand-600 dark:text-zinc-600" aria-hidden="true" />
+                  <ArrowRight className="size-4 shrink-0 text-slate-400 transition-transform group-hover:translate-x-0.5 group-hover:text-brand-600 dark:text-zinc-500" aria-hidden="true" />
                 </Link>
               </li>
             ))}

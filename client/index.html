@@ -2,18 +2,9 @@
 <html lang="en">
 
 <head>
-  <!-- In client/index.html, inside <head> -->
-  <meta name="google-site-verification" content="bTXNPhRWUcIMZrTrZZIPTqGRsUTYYu07e4HNGO_RPto" />
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-4BZ7347FBF"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
-    gtag('config', 'G-4BZ7347FBF');
-  </script>
-
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="google-site-verification" content="bTXNPhRWUcIMZrTrZZIPTqGRsUTYYu07e4HNGO_RPto" />
   <meta name="description"
     content="Free bilingual (English/हिंदी) Bihar STET Paper II & BPSC TRE Computer Science preparation: 17 chapters of notes, 700+ practice questions, CBT mock tests and progress tracking. बिहार STET एवं BPSC TRE कंप्यूटर साइंस की पूरी तैयारी।" />
   <meta name="keywords"
@@ -23,12 +14,24 @@
   <meta name="theme-color" content="#4f46e5" />
   <link rel="icon"
     href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8E%93%3C/text%3E%3C/svg%3E" />
+  <title>Bihar STET & BPSC TRE Computer Science — Free Notes, Quizzes & Mock Tests | बिहार STET व BPSC कंप्यूटर साइंस</title>
+
+  <!-- Preconnect: fonts + API server (cut TTFB on subsequent requests) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
+  <link rel="preconnect" href="https://bpsc-server.onrender.com" crossorigin />
+
+  <!-- Google Fonts: non-render-blocking via preload + onload swap -->
+  <link rel="preload" as="style"
+    href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..800&family=Noto+Sans+Devanagari:wght@400..700&display=swap" />
+  <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..800&family=Noto+Sans+Devanagari:wght@400..700&display=swap"
-    rel="stylesheet" />
-  <title>Bihar STET & BPSC TRE Computer Science — Free Notes, Quizzes & Mock Tests | बिहार STET व BPSC कंप्यूटर साइंस</title>
+    media="print" onload="this.media='all'" />
+  <noscript>
+    <link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..800&family=Noto+Sans+Devanagari:wght@400..700&display=swap" />
+  </noscript>
+
   <script>
     // Apply persisted preferences before paint to avoid flash of wrong theme/language.
     try {
@@ -38,6 +41,20 @@
       }
       document.documentElement.lang = localStorage.getItem('stet.lang') || 'en';
     } catch (e) { }
+  </script>
+
+  <!-- Google Analytics: deferred until after page is interactive -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    (typeof requestIdleCallback === 'function' ? requestIdleCallback : setTimeout)(function () {
+      var s = document.createElement('script');
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=G-4BZ7347FBF';
+      s.async = true;
+      document.head.appendChild(s);
+      gtag('js', new Date());
+      gtag('config', 'G-4BZ7347FBF');
+    });
   </script>
 </head>
 
