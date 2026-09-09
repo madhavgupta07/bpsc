@@ -339,3 +339,107 @@ exports.deleteMockTest = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+/* ---------------- User Performance (admin) ---------------- */
+
+exports.getUserPerformance = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!mongoose.isValidObjectId(id)) {
+      return res.status(400).json({ message: 'Invalid user id' });
+    }
+
+    const user = await User.findById(id)
+      .select('name email avatar role createdAt stats')
+      .lean();
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    const progress = await UserProgress.findOne({ user: id })
+      .populate('quizHistory.chapter', 'title_en title_hi chapterNumber')
+      .populate('quizHistory.topic', 'name_en name_hi')
+      .populate('mockTestHistory.test', 'title_en title_hi')
+      .lean();
+
+    const quizHistory = progress?.quizHistory ?? [];
+    const mockTestHistory = progress?.mockTestHistory ?? [];
+
+    const quizzesTaken = quizHistory.length;
+    const testsTaken = mockTestHistory.length;
+    const totalQuizScore = quizHistory.reduce((s, q) => s + (q.score || 0), 0);
+    const totalQuizQuestions = quizHistory.reduce((s, q) => s + (q.total || 0), 0);
+    const totalMockScore = mockTestHistory.reduce((s, m) => s + (m.score || 0), 0);
+    const totalMockQuestions = mockTestHistory.reduce((s, m) => s + (m.total || 0), 0);
+    const totalScore = totalQuizScore + totalMockScore;
+    const totalQuestions = totalQuizQuestions + totalMockQuestions;
+    const accuracy = totalQuestions > 0 ? Math.round((totalScore / totalQuestions) * 100) : 0;
+
+    // Chapter-wise breakdown
+    const chapterMap = {};
+    for (const entry of quizHistory) {
+      const chId = entry.chapter?._id?.toString() || 'unknown';
+      if (!chapterMap[chId]) {
+        chapterMap[chId] = {
+          chapterId: chId,
+          title_en: entry.chapter?.title_en || 'Unknown',
+          title_hi: entry.chapter?.title_hi || '',
+          chapterNumber: entry.chapter?.chapterNumber || 0,
+          attempts: 0,
+          score: 0,
+          total: 0,
+        };
+      }
+      chapterMap[chId].attempts += 1;
+      chapterMap[chId].score += entry.score || 0;
+      chapterMap[chId].total += entry.total || 0;
+    }
+    const chapterBreakdown = Object.values(chapterMap)
+      .map((c) => ({ ...c, accuracy: c.total > 0 ? Math.round((c.score / c.total) * 100) : 0 }))
+      .sort((a, b) => b.score - a.score);
+
+    // Recent activity (last 20 combined, sorted by date desc)
+    const recentQuizzes = [...quizHistory]
+      .sort((a, b) => new Date(b.date) - new Date(a.date))
+      .slice(0, 10)
+      .map((q) => ({
+        chapterTitle_en: q.chapter?.title_en || null,
+        chapterTitle_hi: q.chapter?.title_hi || null,
+        topicName_en: q.topic?.name_en || null,
+        topicName_hi: q.topic?.name_hi || null,
+        score: q.score,
+        total: q.total,
+        date: q.date,
+        timeTaken: q.timeTaken,
+      }));
+
+    const recentMockTests = [...mockTestHistory]
+      .sort((a, b) => new Date(b.date) - new Date(a.date))
+      .slice(0, 10)
+      .map((m) => ({
+        testTitle_en: m.test?.title_en || null,
+        testTitle_hi: m.test?.title_hi || null,
+        score: m.score,
+        total: m.total,
+        date: m.date,
+        timeTaken: m.timeTaken,
+      }));
+
+    res.json({
+      user,
+      stats: {
+        quizzesTaken,
+        testsTaken,
+        totalScore,
+        totalQuestions,
+        accuracy,
+        streakDays: user.stats?.streakDays ?? 0,
+        longestStreak: user.stats?.longestStreak ?? 0,
+        lastActive: user.stats?.lastActive,
+      },
+      chapterBreakdown,
+      recentQuizzes,
+      recentMockTests,
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};

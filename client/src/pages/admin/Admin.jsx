@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
 import {
   BookOpen, FileText, HelpCircle, ListChecks, Plus, Search,
@@ -13,6 +14,7 @@ import { adminApi, chaptersApi } from '../../lib/api';
 import { asArray } from '../../lib/apiClient';
 import { useAuth } from '../../context/AuthContext';
 import { cn } from '../../lib/cn';
+import UserPerformanceDrawer from './UserPerformanceDrawer';
 
 const TABS = [
   ['overview', 'Overview', ListChecks],
@@ -29,6 +31,7 @@ const inputCls =
 export default function Admin() {
   const { user, initializing } = useAuth();
   const [tab, setTab] = useState('overview');
+  const [selectedUser, setSelectedUser] = useState(null);
 
   if (!initializing && user?.role !== 'admin') {
     return (
@@ -41,6 +44,8 @@ export default function Admin() {
       </div>
     );
   }
+
+  const openUser = (userId, name) => setSelectedUser({ userId, name });
 
   return (
     <div className="container-app max-w-6xl py-10">
@@ -77,13 +82,25 @@ export default function Admin() {
       </nav>
 
       <div className="mt-6">
-        {tab === 'overview' && <Overview />}
-        {tab === 'leaderboard' && <LeaderboardPanel />}
+        {tab === 'overview' && <Overview onOpenUser={openUser} />}
+        {tab === 'leaderboard' && <LeaderboardPanel onOpenUser={openUser} />}
         {tab === 'chapters' && <Chapters />}
         {tab === 'questions' && <Questions />}
         {tab === 'tests' && <MockTestsPanel />}
-        {tab === 'users' && <UsersPanel />}
+        {tab === 'users' && <UsersPanel onOpenUser={openUser} />}
       </div>
+
+      {/* Performance drawer */}
+      <AnimatePresence>
+        {selectedUser && (
+          <UserPerformanceDrawer
+            key={selectedUser.userId}
+            userId={selectedUser.userId}
+            name={selectedUser.name}
+            onClose={() => setSelectedUser(null)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
@@ -96,7 +113,7 @@ const RANK_BADGE = [
   'bg-gradient-to-br from-orange-300 to-amber-600 text-orange-950',
 ];
 
-function LeaderboardPanel() {
+function LeaderboardPanel({ onOpenUser }) {
   const [scope, setScope] = useState('overall');
   const { data, isLoading } = useQuery({
     queryKey: ['admin', 'leaderboard', scope],
@@ -137,7 +154,15 @@ function LeaderboardPanel() {
       ) : (
         <ol className="divide-y divide-slate-100 overflow-hidden rounded-2xl border border-slate-200 bg-white dark:divide-zinc-800 dark:border-zinc-800 dark:bg-zinc-900">
           {rows.map((row) => (
-            <li key={row.userId} className="flex flex-wrap items-center gap-x-4 gap-y-1 px-4 py-3">
+            <li
+              key={row.userId}
+              role="button"
+              tabIndex={0}
+              onClick={() => onOpenUser(row.userId, row.name)}
+              onKeyDown={(e) => e.key === 'Enter' && onOpenUser(row.userId, row.name)}
+              title="View user performance"
+              className="flex flex-wrap items-center gap-x-4 gap-y-1 px-4 py-3 transition-colors hover:bg-slate-50 dark:hover:bg-zinc-800/60"
+            >
               <span
                 className={cn(
                   'flex size-7 shrink-0 items-center justify-center rounded-lg text-xs font-extrabold tabular-nums',
@@ -160,6 +185,9 @@ function LeaderboardPanel() {
                 <p className="text-sm font-extrabold tabular-nums">{row.totalScore}</p>
                 <p className="text-[11px] tabular-nums text-slate-400">{row.accuracy}%</p>
               </div>
+              <span className="shrink-0 rounded-lg bg-brand-50 px-2.5 py-1 text-[11px] font-bold text-brand-700 dark:bg-brand-500/10 dark:text-brand-300">
+                View
+              </span>
             </li>
           ))}
         </ol>
@@ -180,7 +208,7 @@ function StatCardBox({ icon: Icon, label, value }) {
   );
 }
 
-function Overview() {
+function Overview({ onOpenUser }) {
   const { data, isLoading } = useQuery({ queryKey: ['admin', 'stats'], queryFn: adminApi.stats });
   if (isLoading) return <Skeleton className="h-48" />;
 
@@ -209,12 +237,17 @@ function Overview() {
         <h2 className="mb-3 text-sm font-bold uppercase tracking-wide text-slate-400">Newest users</h2>
         <ul className="divide-y divide-slate-100 overflow-hidden rounded-2xl border border-slate-200 bg-white dark:divide-zinc-800 dark:border-zinc-800 dark:bg-zinc-900">
           {(data?.recentUsers || []).map((u) => (
-            <li key={u._id} className="flex items-center justify-between px-4 py-2.5 text-sm">
-              <span className="font-semibold">{u.name}</span>
-              <span className="truncate pl-4 text-xs text-slate-400">{u.email}</span>
-              <span className="ml-3 shrink-0 text-[11px] tabular-nums text-slate-400">
-                {new Date(u.createdAt).toLocaleDateString()}
-              </span>
+            <li key={u._id}>
+              <button
+                onClick={() => onOpenUser(u._id, u.name)}
+                className="flex w-full items-center justify-between px-4 py-2.5 text-left transition-colors hover:bg-slate-50 dark:hover:bg-zinc-800/60"
+              >
+                <span className="font-semibold">{u.name}</span>
+                <span className="truncate pl-4 text-xs text-slate-400">{u.email}</span>
+                <span className="ml-3 shrink-0 text-[11px] tabular-nums text-slate-400">
+                  {new Date(u.createdAt).toLocaleDateString()}
+                </span>
+              </button>
             </li>
           ))}
         </ul>
@@ -475,7 +508,7 @@ function MockTestsPanel() {
 
 /* ================= Users ================= */
 
-function UsersPanel() {
+function UsersPanel({ onOpenUser }) {
   const qc = useQueryClient();
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
@@ -511,13 +544,26 @@ function UsersPanel() {
             {(data?.users || []).map((u) => (
               <li key={u._id} className="flex items-center gap-3 px-4 py-3">
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-semibold">
-                    {u.name}
-                    {u._id === me?._id && <span className="ml-2 text-[11px] font-bold text-brand-600">(you)</span>}
-                  </p>
-                  <p className="truncate text-xs text-slate-400">{u.email} · joined {new Date(u.createdAt).toLocaleDateString()}</p>
+                  <button
+                    type="button"
+                    onClick={() => onOpenUser(u._id, u.name)}
+                    className="block w-full text-left"
+                    title="View user performance"
+                  >
+                    <p className="truncate text-sm font-semibold hover:text-brand-600 dark:hover:text-brand-400">
+                      {u.name}
+                      {u._id === me?._id && <span className="ml-2 text-[11px] font-bold text-brand-600">(you)</span>}
+                    </p>
+                    <p className="truncate text-xs text-slate-400">{u.email} · joined {new Date(u.createdAt).toLocaleDateString()}</p>
+                  </button>
                 </div>
                 <span className="shrink-0 text-xs tabular-nums text-orange-500">🔥 {u.stats?.streakDays || 0}</span>
+                <button
+                  onClick={() => onOpenUser(u._id, u.name)}
+                  className="shrink-0 rounded-lg bg-brand-50 px-2.5 py-1 text-[11px] font-bold text-brand-700 hover:bg-brand-100 dark:bg-brand-500/10 dark:text-brand-300 dark:hover:bg-brand-500/20"
+                >
+                  View
+                </button>
                 <select
                   className="shrink-0 rounded-lg border border-slate-200 bg-white px-2 py-1 text-xs font-semibold dark:border-zinc-700 dark:bg-zinc-900"
                   value={u.role}
