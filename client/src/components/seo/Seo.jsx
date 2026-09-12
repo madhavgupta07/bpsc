@@ -1,9 +1,9 @@
 import { Helmet } from 'react-helmet-async';
 
 const SITE_NAME = 'Bihar STET & BPSC CS';
-const DEFAULT_TITLE = 'Bihar STET & BPSC TRE Computer Science — Free Notes, Quizzes & Mock Tests | बिहार STET व BPSC कंप्यूटर साइंस';
+const DEFAULT_TITLE = 'Bihar STET & BPSC TRE CS Prep | Free Notes & Mocks';
 const DEFAULT_DESCRIPTION =
-  'Free bilingual (English/हिंदी) preparation platform for Bihar STET Paper II & BPSC TRE (Class 11-12) Computer Science: 17 chapter notes, 700+ practice questions, CBT mock tests, and progress tracking. बिहार STET एवं BPSC TRE कंप्यूटर साइंस की पूरी तैयारी।';
+  'Free bilingual Bihar STET Paper II & BPSC TRE Computer Science prep: 17 chapters of notes, 700+ MCQs & CBT mock tests in English and Hindi.';
 const DEFAULT_KEYWORDS =
   'Bihar STET, BPSC TRE, BPSC Computer Science, BPSC TRE 3.0, BPSC TRE 4.0, STET Computer Science, Bihar STET syllabus, STET mock test, Bihar STET preparation, STET CS notes, बिहार STET, BPSC कंप्यूटर शिक्षक';
 
@@ -28,7 +28,9 @@ export default function Seo({
   noIndex = false,
   jsonLd = [],
 }) {
-  const fullTitle = title ? `${title} | ${SITE_NAME}` : DEFAULT_TITLE;
+  const fullTitle = title
+    ? (title.includes(SITE_NAME) || title.includes('|') ? title : `${title} | ${SITE_NAME}`)
+    : DEFAULT_TITLE;
   const canonical = `${window.location.origin}${path}`;
   const ogImage = image || `${window.location.origin}/icons/icon.svg`;
 

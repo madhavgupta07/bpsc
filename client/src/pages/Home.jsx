@@ -57,8 +57,8 @@ export default function Home() {
   return (
     <div>
       <Seo
-        title="Bihar STET & BPSC TRE Computer Science — Free Notes, Quizzes & Mock Tests"
-        description="Free bilingual (English/हिंदी) Bihar STET Paper II & BPSC TRE Computer Science preparation: 17 chapters of notes, 700+ practice questions, CBT mock tests and progress tracking. बिहार STET एवं BPSC TRE कंप्यूटर साइंस की तैयारी।"
+        title="Bihar STET & BPSC TRE CS Prep | Free Notes & Mocks"
+        description="Free bilingual Bihar STET Paper II & BPSC TRE Computer Science prep: 17 chapters of notes, 700+ MCQs & CBT mock tests in English and Hindi."
         path="/"
         keywords="Bihar STET, BPSC TRE, BPSC Computer Science, BPSC TRE 3.0, BPSC TRE 4.0, STET Computer Science, Bihar STET preparation, STET mock test, Bihar STET syllabus, STET CS notes, बिहार STET, BPSC कंप्यूटर शिक्षक"
         jsonLd={[
@@ -244,6 +244,128 @@ export default function Home() {
           </ul>
         </section>
       )}
+
+      {/* ---------- SEO Guide & Exam Overview Section ---------- */}
+      <section className="border-t border-slate-200 bg-slate-50/50 py-12 sm:py-16 dark:border-zinc-800 dark:bg-zinc-900/30">
+        <div className="container-app max-w-4xl">
+          <header className="text-center">
+            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-brand-600 dark:text-brand-400">
+              Exam Guide & Study Resources
+            </p>
+            <h2 className="mt-2 text-2xl font-extrabold tracking-tight sm:text-3xl">
+              Bihar STET & BPSC TRE Computer Science Preparation
+            </h2>
+            <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-zinc-400">
+              Comprehensive study material, chapter notes, and computer-based mock tests tailored specifically for candidates appearing in BSEB Bihar STET Paper II (Code 226) and BPSC TRE Higher Secondary Teacher Recruitment.
+            </p>
+          </header>
+
+          <div className="mt-10 grid gap-8 md:grid-cols-2">
+            <article className="rounded-xl border border-slate-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
+              <h3 className="text-base font-bold text-slate-900 dark:text-zinc-100">
+                Bihar STET Paper II Exam Pattern (Code 226)
+              </h3>
+              <p className="mt-2 text-xs leading-relaxed text-slate-600 dark:text-zinc-400">
+                The Bihar Secondary Teachers Eligibility Test (STET) Paper II for Higher Secondary (Class 11-12) Computer Science consists of 150 Multiple Choice Questions carrying 150 marks for a duration of 2.5 hours (150 minutes).
+              </p>
+              <ul className="mt-3 space-y-1.5 text-xs text-slate-600 dark:text-zinc-400">
+                <li className="flex items-center gap-2">
+                  <span className="size-1.5 rounded-full bg-brand-600"></span>
+                  <strong>Specified Subject (CS):</strong> 100 Marks (100 MCQs)
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="size-1.5 rounded-full bg-brand-600"></span>
+                  <strong>Art of Teaching:</strong> 30 Marks (30 MCQs)
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="size-1.5 rounded-full bg-brand-600"></span>
+                  <strong>General Knowledge & Reasoning:</strong> 20 Marks (20 MCQs)
+                </li>
+                <li className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-semibold">
+                  <span className="size-1.5 rounded-full bg-emerald-600"></span>
+                  No Negative Marking (0 mark penalty)
+                </li>
+              </ul>
+            </article>
+
+            <article className="rounded-xl border border-slate-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
+              <h3 className="text-base font-bold text-slate-900 dark:text-zinc-100">
+                BPSC TRE Computer Science (Class 11-12)
+              </h3>
+              <p className="mt-2 text-xs leading-relaxed text-slate-600 dark:text-zinc-400">
+                The Bihar Public Service Commission (BPSC TRE 3.0 / 4.0) conducts recruitment exams for Computer Science Teachers. The paper has 150 MCQs divided into 3 parts:
+              </p>
+              <ul className="mt-3 space-y-1.5 text-xs text-slate-600 dark:text-zinc-400">
+                <li className="flex items-center gap-2">
+                  <span className="size-1.5 rounded-full bg-brand-600"></span>
+                  <strong>Part I Language (English/Hindi):</strong> 30 Marks (Qualifying)
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="size-1.5 rounded-full bg-brand-600"></span>
+                  <strong>Part II General Studies:</strong> 40 Marks
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="size-1.5 rounded-full bg-brand-600"></span>
+                  <strong>Part III Computer Science Domain:</strong> 80 Marks
+                </li>
+                <li className="flex items-center gap-2 text-brand-600 dark:text-brand-400 font-semibold">
+                  <span className="size-1.5 rounded-full bg-brand-600"></span>
+                  Eligibility: B.Tech (CS/IT), MCA, M.Sc CS (B.Ed NOT required)
+                </li>
+              </ul>
+            </article>
+          </div>
+
+          {/* Visible FAQ Section */}
+          <div className="mt-12">
+            <h3 className="text-center text-xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+              Frequently Asked Questions (FAQ)
+            </h3>
+            <div className="mt-6 divide-y divide-slate-200 border-y border-slate-200 dark:divide-zinc-800 dark:border-zinc-800">
+              <details className="group py-4">
+                <summary className="flex cursor-pointer items-center justify-between font-semibold text-sm text-slate-900 dark:text-zinc-100">
+                  <span>Is B.Ed compulsory for Computer Science in Bihar STET or BPSC TRE?</span>
+                  <span className="ml-2 text-slate-400 transition-transform group-open:rotate-180">▼</span>
+                </summary>
+                <p className="mt-2 text-xs leading-relaxed text-slate-600 dark:text-zinc-400">
+                  No, B.Ed is <strong>NOT mandatory</strong> for Computer Science candidates in Bihar STET Paper II or BPSC TRE teacher recruitment. Candidates holding a B.Tech (CS/IT), MCA, M.Sc (Computer Science), or BCA + Post Graduate Degree are directly eligible to apply.
+                </p>
+              </details>
+
+              <details className="group py-4">
+                <summary className="flex cursor-pointer items-center justify-between font-semibold text-sm text-slate-900 dark:text-zinc-100">
+                  <span>What are the qualifying marks for Bihar STET Computer Science?</span>
+                  <summary className="sr-only">Qualifying marks detail</summary>
+                  <span className="ml-2 text-slate-400 transition-transform group-open:rotate-180">▼</span>
+                </summary>
+                <p className="mt-2 text-xs leading-relaxed text-slate-600 dark:text-zinc-400">
+                  The minimum qualifying percentage for STET Paper II is: General (UR) - 50% (75 marks out of 150), BC - 45.5% (68.25 marks), EBC - 42.5% (63.75 marks), and SC / ST / PwD / Women - 40% (60 marks out of 150).
+                </p>
+              </details>
+
+              <details className="group py-4">
+                <summary className="flex cursor-pointer items-center justify-between font-semibold text-sm text-slate-900 dark:text-zinc-100">
+                  <span>Which subjects are covered in the Bihar STET CS syllabus?</span>
+                  <span className="ml-2 text-slate-400 transition-transform group-open:rotate-180">▼</span>
+                </summary>
+                <p className="mt-2 text-xs leading-relaxed text-slate-600 dark:text-zinc-400">
+                  The syllabus covers 17 key topics including Object-Oriented Programming (C++ & Java), Data Structures & Algorithms, Database Management Systems (DBMS & SQL), Computer Networks, Operating Systems, Web Technologies (HTML/CSS/JS), Digital Logic & Boolean Algebra, Software Engineering, Data Communications, and Computer Architecture.
+                </p>
+              </details>
+
+              <details className="group py-4">
+                <summary className="flex cursor-pointer items-center justify-between font-semibold text-sm text-slate-900 dark:text-zinc-100">
+                  <span>Are the mock tests and notes available in Hindi and English?</span>
+                  <span className="ml-2 text-slate-400 transition-transform group-open:rotate-180">▼</span>
+                </summary>
+                <p className="mt-2 text-xs leading-relaxed text-slate-600 dark:text-zinc-400">
+                  Yes! All notes, chapter quizzes, and full-length CBT mock tests on this platform are 100% free and fully bilingual (English and Hindi), allowing candidates to switch languages smoothly mid-quiz.
+                </p>
+              </details>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* ---------- CTA ---------- */}
       {!user && (

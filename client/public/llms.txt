@@ -1,0 +1,30 @@
+# Bihar STET & BPSC TRE Computer Science Learning Platform
+> Free bilingual (English & Hindi) preparation platform for Bihar STET Paper II and BPSC TRE (Class 11-12) Computer Science exams.
+
+## Overview
+This platform provides complete, free study resources for candidates preparing for the Bihar Secondary Teachers Eligibility Test (STET) Paper II Computer Science (Code 226) conducted by BSEB and the Bihar Public Service Commission (BPSC TRE) Higher Secondary Computer Science Teacher recruitment.
+
+- **Website URL**: https://bpsc-stet.onrender.com
+- **Target Exams**: Bihar STET Paper II (Class 11-12), BPSC TRE 3.0 / 4.0 PGT Computer Science
+- **Languages Supported**: English and Hindi (bilingual interface & questions)
+- **Access**: 100% Free, no subscription or mandatory payment required.
+
+## Key Features
+- **17 Chapter-wise Notes**: Comprehensive notes covering Object-Oriented Programming (C++/Java), Data Structures, DBMS, SQL, Computer Networks, Operating Systems, Web Technologies, Digital Electronics, and Boolean Algebra.
+- **700+ Practice MCQs**: Chapter-wise practice questions with instant explanations in English & Hindi.
+- **CBT Mock Tests**: Full-length timed mock exams replicating the official BSEB STET & BPSC TRE Computer Based Test (CBT) interface.
+- **Exam Info & Pattern Guide**: Detailed breakdown of STET Paper II (150 MCQs, 2.5 hours, no negative marking) and BPSC TRE pattern (150 MCQs, 2.5 hours, 3-part format).
+- **Progress Tracking & Leaderboard**: Track test scores, performance analytics, and compare ranks on the leaderboard.
+
+## Exam Details & Eligibility
+- **Bihar STET Paper II CS**: Conducted by BSEB. 150 Marks (100 Subject CS + 30 Art of Teaching + 20 General Knowledge/Math/Reasoning).
+- **Eligibility**: B.Tech (CS/IT), MCA, M.Sc (CS/IT), or BCA + Post Graduate Degree. Note: B.Ed is NOT mandatory for Computer Science in Bihar STET or BPSC TRE.
+
+## Main Links
+- Home: https://bpsc-stet.onrender.com/
+- Study Notes: https://bpsc-stet.onrender.com/notes
+- Practice Quizzes: https://bpsc-stet.onrender.com/quiz
+- CBT Mock Tests: https://bpsc-stet.onrender.com/mock-tests
+- Full Syllabus: https://bpsc-stet.onrender.com/syllabus
+- Exam Info: https://bpsc-stet.onrender.com/exam-info
+- Leaderboard: https://bpsc-stet.onrender.com/leaderboard
