@@ -65,7 +65,10 @@ async function buildRanks(isWeekly) {
         localField: '_id',
         foreignField: '_id',
         as: 'user',
-        pipeline: [{ $project: { name: 1, avatar: 1, 'stats.streakDays': 1, email: 1 } }],
+        pipeline: [
+          { $match: { isDeleted: { $ne: true } } },
+          { $project: { name: 1, avatar: 1, 'stats.streakDays': 1, email: 1 } },
+        ],
       },
     },
     { $unwind: '$user' },
@@ -166,7 +169,10 @@ exports.getMockLeaderboard = async (req, res) => {
           localField: '_id',
           foreignField: '_id',
           as: 'user',
-          pipeline: [{ $project: { name: 1, avatar: 1, 'stats.streakDays': 1 } }],
+          pipeline: [
+            { $match: { isDeleted: { $ne: true } } },
+            { $project: { name: 1, avatar: 1, 'stats.streakDays': 1 } },
+          ],
         },
       },
       { $unwind: '$user' },
@@ -204,7 +210,9 @@ exports.getUserProfile = async (req, res) => {
     }
 
     const User = require('../models/User');
-    const user = await User.findById(userId).select('name avatar stats.streakDays stats.longestStreak').lean();
+    const user = await User.findOne({ _id: userId, isDeleted: { $ne: true } })
+      .select('name avatar stats.streakDays stats.longestStreak')
+      .lean();
     if (!user) return res.status(404).json({ message: 'User not found' });
 
     const progress = await UserProgress.findOne({ user: userId })

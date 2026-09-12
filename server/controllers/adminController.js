@@ -35,7 +35,7 @@ exports.getFullLeaderboard = async (req, res) => {
 exports.getStats = async (_, res) => {
   try {
     const [users, chapters, topics, questions, mockTests] = await Promise.all([
-      User.countDocuments(),
+      User.countDocuments({ isDeleted: { $ne: true } }),
       Chapter.countDocuments(),
       Topic.countDocuments(),
       Question.countDocuments(),
@@ -58,7 +58,7 @@ exports.getStats = async (_, res) => {
       },
     ]);
 
-    const recentUsers = await User.find()
+    const recentUsers = await User.find({ isDeleted: { $ne: true } })
       .sort({ createdAt: -1 })
       .limit(5)
       .select('name email role createdAt stats.streakDays');
@@ -84,15 +84,43 @@ exports.listUsers = async (req, res) => {
       const rx = new RegExp(req.query.search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
       filter.$or = [{ name: rx }, { email: rx }];
     }
+    if (req.query.status === 'deleted') filter.isDeleted = true;
+    else if (req.query.status === 'all') filter.isDeleted = undefined;
+    else filter.isDeleted = { $ne: true };
     const [users, total] = await Promise.all([
       User.find(filter)
         .sort({ createdAt: -1 })
         .skip((page - 1) * limit)
         .limit(limit)
-        .select('name email role avatar createdAt stats.streakDays'),
+        .select('name email role avatar createdAt stats.streakDays isDeleted deletedAt'),
       User.countDocuments(filter),
     ]);
     res.json({ users, total, page, pages: Math.ceil(total / limit) });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+exports.setUserActive = async (req, res) => {
+  try {
+    const { active } = req.body;
+    if (typeof active !== 'boolean') return res.status(400).json({ message: '`active` must be a boolean' });
+    if (req.params.id === req.user._id.toString()) {
+      return res.status(400).json({ message: 'You cannot deactivate your own account' });
+    }
+    const user = await User.findById(req.params.id);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    user.isDeleted = !active;
+    user.deletedAt = active ? null : new Date();
+    await user.save();
+    res.json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      isDeleted: user.isDeleted,
+      deletedAt: user.deletedAt,
+    });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

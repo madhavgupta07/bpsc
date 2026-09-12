@@ -12,6 +12,7 @@ router.get('/leaderboard', admin.getFullLeaderboard);
 
 /* Users */
 router.get('/users', admin.listUsers);
+router.put('/users/:id/active', admin.setUserActive);
 router.get('/users/:id/performance', admin.getUserPerformance);
 router.put('/users/:id/role', admin.setUserRole);
 

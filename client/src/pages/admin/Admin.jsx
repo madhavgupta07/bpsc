@@ -511,12 +511,13 @@ function MockTestsPanel() {
 function UsersPanel({ onOpenUser }) {
   const qc = useQueryClient();
   const [search, setSearch] = useState('');
+  const [status, setStatus] = useState('active');
   const [page, setPage] = useState(1);
   const { user: me } = useAuth();
 
   const { data, isLoading } = useQuery({
-    queryKey: ['admin', 'users', search, page],
-    queryFn: () => adminApi.users({ search: search || undefined, page, limit: 20 }),
+    queryKey: ['admin', 'users', search, status, page],
+    queryFn: () => adminApi.users({ search: search || undefined, status, page, limit: 20 }),
   });
 
   const setRole = useMutation({
@@ -525,56 +526,111 @@ function UsersPanel({ onOpenUser }) {
     onError: (e) => toast.error(e.message),
   });
 
+  const setActive = useMutation({
+    mutationFn: ({ id, active }) => adminApi.setUserActive(id, active),
+    onSuccess: () => { toast.success('User status updated'); qc.invalidateQueries({ queryKey: ['admin', 'users'] }); },
+    onError: (e) => toast.error(e.message),
+  });
+
   const pages = data?.pages || 1;
   return (
     <div className="space-y-4">
-      <div className="relative max-w-sm">
-        <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400" aria-hidden="true" />
-        <input
-          placeholder="Search name or email…"
-          className={cn(inputCls, 'pl-9')}
-          value={search}
-          onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-        />
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="relative max-w-sm flex-1">
+          <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400" aria-hidden="true" />
+          <input
+            placeholder="Search name or email…"
+            className={cn(inputCls, 'pl-9')}
+            value={search}
+            onChange={(e) => { setSearch(e.target.value); setPage(1); }}
+          />
+        </div>
+        <div className="flex w-fit rounded-xl border border-slate-200 bg-white p-1 dark:border-zinc-700 dark:bg-zinc-900">
+          {[['active', 'Active'], ['deleted', 'Deleted'], ['all', 'All']].map(([key, label]) => (
+            <button
+              key={key}
+              onClick={() => { setStatus(key); setPage(1); }}
+              aria-pressed={status === key}
+              className={cn(
+                'rounded-lg px-3 py-1.5 text-xs font-semibold transition-all',
+                status === key
+                  ? 'bg-brand-600 text-white shadow-sm'
+                  : 'text-slate-500 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-zinc-100',
+              )}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
       </div>
 
       {isLoading ? <Skeleton className="h-64" /> : (
         <>
           <ul className="divide-y divide-slate-100 overflow-hidden rounded-2xl border border-slate-200 bg-white dark:divide-zinc-800 dark:border-zinc-800 dark:bg-zinc-900">
-            {(data?.users || []).map((u) => (
-              <li key={u._id} className="flex items-center gap-3 px-4 py-3">
-                <div className="min-w-0 flex-1">
+            {(data?.users || []).map((u) => {
+              const deleted = u.isDeleted;
+              return (
+                <li key={u._id} className={cn('flex items-center gap-3 px-4 py-3', deleted && 'bg-slate-50 opacity-70 dark:bg-zinc-800/40')}>
+                  <div className="min-w-0 flex-1">
+                    <button
+                      type="button"
+                      onClick={() => onOpenUser(u._id, u.name)}
+                      className="block w-full text-left"
+                      title="View user performance"
+                    >
+                      <p className={cn('truncate text-sm font-semibold hover:text-brand-600 dark:hover:text-brand-400', deleted && 'line-through')}>
+                        {u.name}
+                        {u._id === me?._id && <span className="ml-2 text-[11px] font-bold text-brand-600">(you)</span>}
+                      </p>
+                      <p className="truncate text-xs text-slate-400">
+                        {u.email} · joined {new Date(u.createdAt).toLocaleDateString()}
+                        {deleted && u.deletedAt && <> · deleted {new Date(u.deletedAt).toLocaleDateString()}</>}
+                      </p>
+                    </button>
+                  </div>
+                  <span className="shrink-0 text-xs tabular-nums text-orange-500">🔥 {u.stats?.streakDays || 0}</span>
                   <button
-                    type="button"
-                    onClick={() => onOpenUser(u._id, u.name)}
-                    className="block w-full text-left"
-                    title="View user performance"
+                    onClick={() => {
+                      if (deleted) {
+                        setActive.mutate({ id: u._id, active: true });
+                      } else if (window.confirm(`Deactivate "${u.name}"? They will lose access to their account. This is reversible.`)) {
+                        setActive.mutate({ id: u._id, active: false });
+                      }
+                    }}
+                    disabled={u._id === me?._id || setActive.isPending}
+                    className={cn(
+                      'shrink-0 rounded-lg px-2.5 py-1 text-[11px] font-bold transition-colors',
+                      deleted
+                        ? 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100 dark:bg-emerald-500/10 dark:text-emerald-300 dark:hover:bg-emerald-500/20'
+                        : 'bg-rose-50 text-rose-600 hover:bg-rose-100 dark:bg-rose-500/10 dark:text-rose-300 dark:hover:bg-rose-500/20',
+                      (u._id === me?._id || setActive.isPending) && 'cursor-not-allowed opacity-50',
+                    )}
                   >
-                    <p className="truncate text-sm font-semibold hover:text-brand-600 dark:hover:text-brand-400">
-                      {u.name}
-                      {u._id === me?._id && <span className="ml-2 text-[11px] font-bold text-brand-600">(you)</span>}
-                    </p>
-                    <p className="truncate text-xs text-slate-400">{u.email} · joined {new Date(u.createdAt).toLocaleDateString()}</p>
+                    {deleted ? 'Reactivate' : 'Deactivate'}
                   </button>
-                </div>
-                <span className="shrink-0 text-xs tabular-nums text-orange-500">🔥 {u.stats?.streakDays || 0}</span>
-                <button
-                  onClick={() => onOpenUser(u._id, u.name)}
-                  className="shrink-0 rounded-lg bg-brand-50 px-2.5 py-1 text-[11px] font-bold text-brand-700 hover:bg-brand-100 dark:bg-brand-500/10 dark:text-brand-300 dark:hover:bg-brand-500/20"
-                >
-                  View
-                </button>
-                <select
-                  className="shrink-0 rounded-lg border border-slate-200 bg-white px-2 py-1 text-xs font-semibold dark:border-zinc-700 dark:bg-zinc-900"
-                  value={u.role}
-                  disabled={u._id === me?._id || setRole.isPending}
-                  onChange={(e) => setRole.mutate({ id: u._id, role: e.target.value })}
-                >
-                  <option value="user">user</option>
-                  <option value="admin">admin</option>
-                </select>
-              </li>
-            ))}
+                  <button
+                    onClick={() => onOpenUser(u._id, u.name)}
+                    className={cn(
+                      'shrink-0 rounded-lg px-2.5 py-1 text-[11px] font-bold',
+                      deleted
+                        ? 'bg-slate-100 text-slate-500 dark:bg-zinc-800 dark:text-zinc-400'
+                        : 'bg-brand-50 text-brand-700 hover:bg-brand-100 dark:bg-brand-500/10 dark:text-brand-300 dark:hover:bg-brand-500/20',
+                    )}
+                  >
+                    View
+                  </button>
+                  <select
+                    className="shrink-0 rounded-lg border border-slate-200 bg-white px-2 py-1 text-xs font-semibold dark:border-zinc-700 dark:bg-zinc-900"
+                    value={u.role}
+                    disabled={u._id === me?._id || deleted || setRole.isPending}
+                    onChange={(e) => setRole.mutate({ id: u._id, role: e.target.value })}
+                  >
+                    <option value="user">user</option>
+                    <option value="admin">admin</option>
+                  </select>
+                </li>
+              );
+            })}
           </ul>
           <div className="flex items-center justify-center gap-3">
             <Button variant="secondary" size="sm" disabled={page <= 1} onClick={() => setPage((p) => p - 1)}>Prev</Button>

@@ -44,6 +44,9 @@ router.post('/exchange', async (req, res) => {
   try {
     const user = await User.findById(entry.userId);
     if (!user) return res.status(401).json({ message: 'User not found' });
+    if (user.isDeleted) {
+      return res.status(401).json({ message: 'Your account has been deactivated. Contact the administrator.' });
+    }
     return res.json({ token: user.generateToken(), user });
   } catch (err) {
     return res.status(500).json({ message: err.message });

@@ -58,6 +58,7 @@ export const adminApi = {
     api.get('/admin/leaderboard', { params: { scope } }).then((r) => r.data),
   users: (params) => api.get('/admin/users', { params }).then((r) => r.data),
   setUserRole: (id, role) => api.put(`/admin/users/${id}/role`, { role }).then((r) => r.data),
+  setUserActive: (id, active) => api.put(`/admin/users/${id}/active`, { active }).then((r) => r.data),
   userPerformance: (id) => api.get(`/admin/users/${id}/performance`).then((r) => r.data),
   // Chapters
   createChapter: (body) => api.post('/admin/chapters', body).then((r) => r.data),

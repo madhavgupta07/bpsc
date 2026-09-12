@@ -10,6 +10,8 @@ const userSchema = new mongoose.Schema({
   avatar: { type: String, default: '' },
   preferredLanguage: { type: String, enum: ['en', 'hi'], default: 'en' },
   role: { type: String, enum: ['user', 'admin'], default: 'user' },
+  isDeleted: { type: Boolean, default: false },
+  deletedAt: { type: Date, default: null },
   stats: {
     totalAttempted: { type: Number, default: 0 },
     totalCorrect: { type: Number, default: 0 },
