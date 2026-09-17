@@ -107,6 +107,11 @@ if (isProd && !isVercel) {
   }
 }
 
+// 404 handler for unmatched requests
+app.use((req, res) => {
+  res.status(404).json({ message: `API endpoint ${req.originalUrl || req.url} not found` });
+});
+
 app.use(errorHandler);
 
 /* ---------- Node-cron background jobs (only for standalone server) ---------- */
