@@ -31,6 +31,8 @@ export default defineConfig({
       workbox: {
         // Precached app shell + hashed assets (injected automatically).
         navigateFallback: '/index.html',
+        // NEVER serve index.html for API/OAuth/Sitemap navigation — let it hit the network.
+        navigateFallbackDenylist: [/\/api\//, /\/sitemap\.xml$/, /\/robots\.txt$/],
         globPatterns: ['**/*.{js,css,html,svg,woff2}'],
         runtimeCaching: [
           {
