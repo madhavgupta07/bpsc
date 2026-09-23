@@ -1,5 +1,3 @@
-# Dev fallback — production robots.txt is served dynamically by the API
-# (server/routes/sitemap.js) with an absolute Sitemap URL.
 User-agent: *
 Allow: /
 Disallow: /quiz/
@@ -11,3 +9,6 @@ Disallow: /admin
 
 # Crawl-delay for polite crawling
 Crawl-delay: 2
+
+Sitemap: /sitemap.xml
+

@@ -22,7 +22,16 @@ const STATIC_ROUTES = [
   { path: '/terms',       freq: 'yearly',  priority: '0.2' },
 ];
 
-router.get('/robots.txt', (_, res) => {
+const getSiteUrl = (req) => {
+  const envUrl = process.env.SITE_URL || process.env.CLIENT_URL;
+  if (envUrl) return envUrl.replace(/\/$/, '');
+  const protocol = req.headers['x-forwarded-proto'] || req.protocol || 'https';
+  const host = req.headers['x-forwarded-host'] || req.get('host');
+  return `${protocol}://${host}`;
+};
+
+router.get('/robots.txt', (req, res) => {
+  const siteUrl = getSiteUrl(req);
   const lines = [
     'User-agent: *',
     'Allow: /',
@@ -35,22 +44,23 @@ router.get('/robots.txt', (_, res) => {
     '',
     '# Crawl-delay for polite crawling',
     'Crawl-delay: 2',
+    '',
+    `Sitemap: ${siteUrl}/sitemap.xml`,
   ];
-  if (SITE_URL) lines.push('', `Sitemap: ${SITE_URL}/sitemap.xml`);
   res.set('Cache-Control', 'public, max-age=3600');
   res.type('text/plain').send(lines.join('\n') + '\n');
 });
 
-router.get('/sitemap.xml', async (_, res) => {
+router.get('/sitemap.xml', async (req, res) => {
   try {
-    if (!SITE_URL) return res.status(500).type('text/plain').send('SITE_URL or CLIENT_URL not configured');
+    const siteUrl = getSiteUrl(req);
 
     const chapters = await Chapter.find({}, 'chapterNumber slug updatedAt').lean();
     const tests = await MockTest.find({ isActive: true }, 'type').lean();
     const today = new Date().toISOString().slice(0, 10);
 
     const entry = (path, freq = 'weekly', priority = '0.7', lastmod = today) =>
-      `  <url>\n    <loc>${SITE_URL}${path}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>${freq}</changefreq>\n    <priority>${priority}</priority>\n  </url>`;
+      `  <url>\n    <loc>${siteUrl}${path}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>${freq}</changefreq>\n    <priority>${priority}</priority>\n  </url>`;
 
     const urls = [
       // Static routes
