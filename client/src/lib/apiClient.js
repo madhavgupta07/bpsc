@@ -42,7 +42,7 @@ export function clearSessionToken() {
 
 const api = axios.create({
   baseURL: `${base}/api`,
-  timeout: 20000,
+  timeout: 60000,
 });
 
 api.interceptors.request.use((config) => {

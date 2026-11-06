@@ -15,4 +15,6 @@ const mockTestSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
+mockTestSchema.index({ isActive: 1 });
+
 module.exports = mongoose.model('MockTest', mockTestSchema);

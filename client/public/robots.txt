@@ -7,8 +7,4 @@ Disallow: /results
 Disallow: /auth/
 Disallow: /admin
 
-# Crawl-delay for polite crawling
-Crawl-delay: 2
-
-Sitemap: /sitemap.xml
-
+Sitemap: https://bpsc-stet.onrender.com/sitemap.xml

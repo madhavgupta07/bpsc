@@ -2,56 +2,60 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const User = require('../models/User');
 
-passport.use(
-  new GoogleStrategy(
-    {
-      clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: '/api/auth/google/callback',
-    },
-    async (accessToken, refreshToken, profile, done) => {
-      try {
-        let user = await User.findOne({ googleId: profile.id });
-        if (!user) {
-          const adminEmails = (process.env.ADMIN_EMAILS || '')
-            .split(',')
-            .map((e) => e.trim().toLowerCase())
-            .filter(Boolean);
-          const email = profile.emails[0].value;
-          user = await User.create({
-            name: profile.displayName,
-            email,
-            googleId: profile.id,
-            avatar: profile.photos[0]?.value || '',
-            role: adminEmails.includes(email.toLowerCase()) ? 'admin' : 'user',
-          });
-          // First sign-in = account created; give it a progress doc.
-          const { ensureProgressDoc } = require('../controllers/authController');
-          ensureProgressDoc(user._id);
-          // Welcome email — fire-and-forget, never blocks sign-in.
-          const { sendMail, configured } = require('./mailer');
-          if (configured) {
-            sendMail(require('../utils/emailTemplates').welcomeEmail(user));
+if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
+  passport.use(
+    new GoogleStrategy(
+      {
+        clientID: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        callbackURL: '/api/auth/google/callback',
+      },
+      async (accessToken, refreshToken, profile, done) => {
+        try {
+          let user = await User.findOne({ googleId: profile.id });
+          if (!user) {
+            const adminEmails = (process.env.ADMIN_EMAILS || '')
+              .split(',')
+              .map((e) => e.trim().toLowerCase())
+              .filter(Boolean);
+            const email = profile.emails[0].value;
+            user = await User.create({
+              name: profile.displayName,
+              email,
+              googleId: profile.id,
+              avatar: profile.photos[0]?.value || '',
+              role: adminEmails.includes(email.toLowerCase()) ? 'admin' : 'user',
+            });
+            // First sign-in = account created; give it a progress doc.
+            const { ensureProgressDoc } = require('../controllers/authController');
+            ensureProgressDoc(user._id);
+            // Welcome email — fire-and-forget, never blocks sign-in.
+            const { sendMail, configured } = require('./mailer');
+            if (configured) {
+              sendMail(require('../utils/emailTemplates').welcomeEmail(user));
+            }
+            const { notifyTelegram, esc } = require('../utils/telegram');
+            notifyTelegram(
+              `🆕 <b>New user signed up</b>\n👤 ${esc(user.name || '—')}\n📧 ${esc(user.email || '—')}`
+            );
+          } else {
+            // Treat sign-in as activity too — refreshes lastActive, keeps streak.
+            const { trackActivity } = require('../utils/streak');
+            trackActivity(user.stats, new Date());
+            await user.save();
+            const { notifyTelegram, esc } = require('../utils/telegram');
+            notifyTelegram(`✅ <b>User login</b>\n👤 ${esc(user.name || '—')}\n📧 ${esc(user.email || '—')}`);
           }
-          const { notifyTelegram, esc } = require('../utils/telegram');
-          notifyTelegram(
-            `🆕 <b>New user signed up</b>\n👤 ${esc(user.name || '—')}\n📧 ${esc(user.email || '—')}`
-          );
-        } else {
-          // Treat sign-in as activity too — refreshes lastActive, keeps streak.
-          const { trackActivity } = require('../utils/streak');
-          trackActivity(user.stats, new Date());
-          await user.save();
-          const { notifyTelegram, esc } = require('../utils/telegram');
-          notifyTelegram(`✅ <b>User login</b>\n👤 ${esc(user.name || '—')}\n📧 ${esc(user.email || '—')}`);
+          return done(null, user);
+        } catch (err) {
+          return done(err, null);
         }
-        return done(null, user);
-      } catch (err) {
-        return done(err, null);
       }
-    }
-  )
-);
+    )
+  );
+} else {
+  console.warn('⚠️ Google OAuth is disabled: GOOGLE_CLIENT_ID or GOOGLE_CLIENT_SECRET is missing.');
+}
 
 passport.serializeUser((user, done) => done(null, user.id));
 passport.deserializeUser(async (id, done) => {

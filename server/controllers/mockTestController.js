@@ -3,7 +3,7 @@ const Question = require('../models/Question');
 
 exports.getAllMockTests = async (req, res) => {
   try {
-    const tests = await MockTest.find({ isActive: true }).select('-questions');
+    const tests = await MockTest.find({ isActive: true }).select('-questions').lean();
     res.json(tests);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -12,7 +12,9 @@ exports.getAllMockTests = async (req, res) => {
 
 exports.getMockTestById = async (req, res) => {
   try {
-    const test = await MockTest.findById(req.params.id).populate('questions', '-correctAnswer -explanation_en -explanation_hi');
+    const test = await MockTest.findById(req.params.id)
+      .populate('questions', '-correctAnswer -explanation_en -explanation_hi')
+      .lean();
     if (!test) return res.status(404).json({ message: 'Mock test not found' });
     res.json(test);
   } catch (err) {
@@ -27,10 +29,25 @@ exports.submitMockTest = async (req, res) => {
       return res.status(400).json({ message: 'Answers array required' });
     }
 
+    // Extract valid question IDs and batch fetch all questions in a single DB query
+    const mongoose = require('mongoose');
+    const validIds = answers
+      .map((ans) => ans.questionId)
+      .filter((id) => id && mongoose.Types.ObjectId.isValid(id));
+
+    const questions = await Question.find({ _id: { $in: validIds } })
+      .select('correctAnswer explanation_en explanation_hi')
+      .lean();
+
+    const questionMap = new Map();
+    for (const q of questions) {
+      questionMap.set(q._id.toString(), q);
+    }
+
     let score = 0;
     const results = [];
     for (const ans of answers) {
-      const q = await Question.findById(ans.questionId);
+      const q = ans.questionId ? questionMap.get(ans.questionId.toString()) : null;
       if (q) {
         const isCorrect = q.correctAnswer === ans.selected;
         if (isCorrect) score++;

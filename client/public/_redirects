@@ -1,4 +1,17 @@
 # Render Static Site rewrite rules
+# Prerendered routes (/, /about, /notes/1…17, …) MUST resolve to their real
+# dist/<route>/index.html. A blanket /* → /index.html rewrite shadows them and
+# serves the homepage shell with a homepage canonical to every URL.
 /sitemap.xml  /sitemap.xml  200
 /robots.txt   /robots.txt   200
-/*            /index.html   200
+/syllabus/*   /index.html   200
+/quiz/*       /index.html   200
+/test/*       /index.html   200
+/forum/*      /index.html   200
+/profile      /index.html   200
+/results      /index.html   200
+/login        /index.html   200
+/register     /index.html   200
+/auth/*       /index.html   200
+/admin        /index.html   200
+/*            /index.html   404

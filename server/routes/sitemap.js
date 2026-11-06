@@ -42,9 +42,6 @@ router.get('/robots.txt', (req, res) => {
     'Disallow: /auth/',
     'Disallow: /admin',
     '',
-    '# Crawl-delay for polite crawling',
-    'Crawl-delay: 2',
-    '',
     `Sitemap: ${siteUrl}/sitemap.xml`,
   ];
   res.set('Cache-Control', 'public, max-age=3600');

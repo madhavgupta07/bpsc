@@ -46,10 +46,24 @@ exports.submitQuiz = async (req, res) => {
       return res.status(400).json({ message: 'Answers array required' });
     }
 
+    const mongoose = require('mongoose');
+    const validIds = answers
+      .map((ans) => ans.questionId)
+      .filter((id) => id && mongoose.Types.ObjectId.isValid(id));
+
+    const questions = await Question.find({ _id: { $in: validIds } })
+      .select('correctAnswer explanation_en explanation_hi')
+      .lean();
+
+    const questionMap = new Map();
+    for (const q of questions) {
+      questionMap.set(q._id.toString(), q);
+    }
+
     let score = 0;
     const results = [];
     for (const ans of answers) {
-      const q = await Question.findById(ans.questionId);
+      const q = ans.questionId ? questionMap.get(ans.questionId.toString()) : null;
       if (q) {
         const isCorrect = q.correctAnswer === ans.selected;
         if (isCorrect) score++;

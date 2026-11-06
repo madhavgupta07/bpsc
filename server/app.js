@@ -1,5 +1,10 @@
-require('dotenv').config();
 const path = require('path');
+const dotenv = require('dotenv');
+
+// Load environment variables from server/.env, workspace root, or cwd
+dotenv.config({ path: path.resolve(__dirname, '.env') });
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
+dotenv.config();
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');

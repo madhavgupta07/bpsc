@@ -12,4 +12,6 @@ const topicSchema = new mongoose.Schema({
   order: { type: Number, default: 0 },
 });
 
+topicSchema.index({ chapter: 1, order: 1 });
+
 module.exports = mongoose.model('Topic', topicSchema);

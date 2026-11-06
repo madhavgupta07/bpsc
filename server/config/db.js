@@ -1,9 +1,13 @@
 const mongoose = require('mongoose');
 const dns = require('dns');
 
-// Resolve mongodb+srv:// SRV records via Google DNS — some ISP/Windows
-// resolvers fail or hang on SRV lookups.
-dns.setServers(['8.8.8.8', '8.8.4.4']);
+// Resolve mongodb+srv:// SRV records via Google DNS for local ISP/Windows resolvers.
+// On Vercel (AWS Lambda), allow native DNS to avoid unnecessary outbound latency.
+if (!process.env.VERCEL) {
+  try {
+    dns.setServers(['8.8.8.8', '8.8.4.4']);
+  } catch {}
+}
 
 let cached = global.mongoose;
 
